@@ -44,7 +44,7 @@ jobs:
           else
             git checkout --orphan gh-pages
           fi
-          git rm -rq --ignore-unmatch .
+          git rm -rqf --ignore-unmatch .
           cp -a "$GITHUB_WORKSPACE/docs/build/site/." .
           git add -A
           if git diff --cached --quiet; then
