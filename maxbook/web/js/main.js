@@ -822,7 +822,8 @@ function commandDialog(item) {
   insert.addEventListener("click", () => go(false));
   insertRun.addEventListener("click", () => go(true));
   form.node.addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); go(true); } });
-  setTimeout(() => form.first().select(), 20);
+  // select at once (the dialog is already in the page): a delay would swallow fast typing
+  form.first().select();
 }
 
 // -- AI helper --------------------------------------------------------------
@@ -844,7 +845,7 @@ function aiConsent() {
   let ok = false;
   try { ok = localStorage.getItem("maxbook-ai-consent") === "yes"; } catch { /* ignore */ }
   if (ok) return true;
-  ok = confirm(`The AI helper sends the selected content (and, for questions, nearby Maxima definitions) to Anthropic's API (model ${S.ai.model}). Continue?`);
+  ok = confirm(`The AI helper sends the selected content, together with the notebook's Maxima input (up to the last 6000 characters, so answers can use your definitions), or the chosen image, to Anthropic's API (model ${S.ai.model}). Continue?`);
   if (ok) try { localStorage.setItem("maxbook-ai-consent", "yes"); } catch { /* ignore */ }
   return ok;
 }

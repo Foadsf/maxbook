@@ -7,7 +7,7 @@ module parses the subset of LaTeX that the editor emits and prints Maxima
 syntax.  Anything outside the subset raises :class:`ConversionError` with a
 message the notebook shows next to the cell; nothing is guessed silently.
 
-Conventions (documented in docs/math-input.md):
+Conventions (documented in docs/modules/ROOT/pages/reference/formula-syntax.adoc):
 
 * ``e`` and ``\\mathrm{e}`` are Euler's number ``%e``; ``\\pi`` is ``%pi``;
   ``\\imaginaryI`` / ``\\mathrm{i}`` is ``%i`` (a plain ``i`` stays a variable,
@@ -304,12 +304,28 @@ class Parser:
     def brace_text(self) -> str:
         return "".join(t.value for t in self.brace_group_tokens())
 
+    def arg_tokens(self) -> list[Tok]:
+        """A command argument: ``{...}`` or, as in TeX, one token.
+
+        MathLive writes a typed 1/2 as ``\\frac12``: each argument is then a
+        single digit, letter or command."""
+        if self.at("lbrace"):
+            return self.brace_group_tokens()
+        t = self.next()
+        if t.kind == "num" and len(t.value) > 1 and t.value[0].isdigit():
+            self.pos -= 1
+            self.toks[self.pos] = Tok("num", t.value[1:])
+            return [Tok("num", t.value[0])]
+        if t.kind in ("num", "letter", "cmd"):
+            return [t]
+        raise ConversionError(f"expected an argument in braces, found {t.value!r}")
+
     def sub_parser(self, toks: list[Tok]) -> Parser:
         return Parser(toks, self.known, 0, self.integrand_depth)
 
     def parse_group(self) -> Node:
-        """A ``{...}`` argument parsed as a full expression."""
-        p = self.sub_parser(self.brace_group_tokens())
+        """A ``{...}`` (or single-token) argument parsed as a full expression."""
+        p = self.sub_parser(self.arg_tokens())
         node = p.parse_expression()
         p.finish()
         return node
@@ -820,13 +836,30 @@ class Parser:
         if t.kind == "cmd" and t.value == r"\differentialD":
             return True
         if t.kind == "cmd" and t.value in (r"\mathrm", r"\operatorname", r"\text"):
-            return (self.at("lbrace", k=1) and self.at("letter", "d", 2) and self.at("rbrace", k=3))
+            return (self.at("lbrace", k=1) and self.at("letter", "d", 2)
+                    and (self.at("rbrace", k=3) or self._merged_differential()))
         return False
+
+    def _merged_differential(self) -> bool:
+        """``\\mathrm{dx}``: MathLive puts the variable typed into the template's
+        upright d into the same group."""
+        v = self.peek(3)
+        return (v is not None and (v.kind == "letter" or (v.kind == "cmd" and v.value[1:] in GREEK))
+                and self.at("rbrace", k=4))
 
     def consume_differential(self) -> Node:
         t = self.next()
         if t.kind == "cmd" and t.value in (r"\mathrm", r"\operatorname", r"\text"):
-            self.pos += 3
+            if self.at("rbrace", k=2):
+                self.pos += 3      # \mathrm{d} x
+            else:
+                self.pos += 2      # \mathrm{dx}: the variable, then the closing brace
+                var = self.consume_differential_variable()
+                self.pos += 1
+                return var
+        return self.consume_differential_variable()
+
+    def consume_differential_variable(self) -> Node:
         nxt = self.next()
         if nxt.kind == "letter":
             return Sym(nxt.value)
@@ -911,8 +944,8 @@ class Parser:
         return Call("limit", args)
 
     def parse_frac(self) -> Node:
-        num_toks = self.brace_group_tokens()
-        den_toks = self.brace_group_tokens()
+        num_toks = self.arg_tokens()
+        den_toks = self.arg_tokens()
         deriv = self.derivative_from_frac(num_toks, den_toks)
         if deriv is not None:
             return deriv

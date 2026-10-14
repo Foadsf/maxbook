@@ -101,6 +101,16 @@ CASES = [
     (r"\left[1,2,3\right]", "[1, 2, 3];"),
     (r"\left\lbrace 1,2\right\rbrace", "{1, 2};"),
     (r"3{,}5", "3.5;"),
+    # TeX's one-token arguments, as MathLive writes a typed 1/2
+    (r"\frac12g\cdot3^2", "1/2*g*3^2;"),
+    (r"\frac{1}{2}", "1/2;"),
+    (r"\frac1x", "1/x;"),
+    (r"\frac\pi4", "%pi/4;"),
+    (r"\frac123", "1/2*3;"),
+    (r"\sqrt2", "sqrt(2);"),
+    # the integration variable typed into the template's upright d
+    (r"\int x^2\,\mathrm{dx}", "integrate(x^2, x);"),
+    (r"\int_0^{\pi}\sin\theta\,\mathrm{d\theta}", "integrate(sin(theta), theta, 0, %pi);"),
 ]
 
 

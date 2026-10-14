@@ -101,7 +101,11 @@ export function tagLatex(latex, kindOf = () => undefined) {
         const inner = latex.slice(i + 1, end < 0 ? latex.length : end);
         const group = latex.slice(i, end < 0 ? latex.length : end + 1);
         i = end < 0 ? latex.length : end + 1;
-        if (NAME_GROUP.has(cmd) && /^[A-Za-z_%][A-Za-z0-9_%]*$/.test(inner) && inner !== "d") {
+        const merged = NAME_GROUP.has(cmd) && inner.match(/^d([A-Za-z])$/);
+        if (merged) {
+          // \mathrm{dx}: an integral's differential with the variable inside the group
+          out += `${cmd}{d}` + wrap(merged[1], kind(merged[1]));
+        } else if (NAME_GROUP.has(cmd) && /^[A-Za-z_%][A-Za-z0-9_%]*$/.test(inner) && inner !== "d") {
           const name = inner === "e" ? "%e" : inner === "i" ? "%i" : inner;
           const k = name.startsWith("%") ? "constant" : kind(name, latex[i] === "(" || latex.startsWith("\\left(", i) ? "function" : "free");
           out += wrap(name, k, cmd + group);

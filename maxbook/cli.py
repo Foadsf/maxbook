@@ -15,9 +15,15 @@ from .server import App, create_server
 
 
 def main(argv: list[str] | None = None) -> int:
+    # Print lines as they happen even when the output goes to a pipe or a log
+    # (the URL line is how scripts and the release smoke test find the server).
+    if sys.stdout is not None and hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(line_buffering=True)
     parser = argparse.ArgumentParser(
         prog="maxbook", description="Literate notebooks for the Maxima computer algebra system.")
-    parser.add_argument("file", nargs="?", help="notebook (.maxbook) or file to import (.wxm, .wxmx, .mac, .md)")
+    parser.add_argument("file", nargs="?",
+                        help="notebook (.maxbook; a new name starts a new notebook) or file to import "
+                             "(.wxm, .wxmx, .mac, .md, .tex)")
     parser.add_argument("--maxima", metavar="PATH", help="Maxima executable (default: auto-detect)")
     parser.add_argument("--port", type=int, default=0, help="port on 127.0.0.1 (default: any free port)")
     parser.add_argument("--window", choices=["auto", "native", "app", "browser", "none"], default="auto",
@@ -55,10 +61,12 @@ def main(argv: list[str] | None = None) -> int:
             print("pywebview is not installed; falling back to an app window.", file=sys.stderr)
         if args.window == "none":
             print(f"Open this URL: {url}")
-        elif args.window == "browser":
-            open_browser(url)
-        elif open_app_window(url) is None:  # auto, native or app
-            open_browser(url)
+        else:
+            if args.window == "browser":
+                open_browser(url)
+            elif open_app_window(url) is None:  # auto, native or app
+                open_browser(url)
+            print(f"If no window opened, open this URL in a browser: {url}")
         serve.join()
     except KeyboardInterrupt:
         pass

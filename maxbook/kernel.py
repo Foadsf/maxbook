@@ -91,11 +91,14 @@ def find_maxima(explicit: str | None = None) -> str | None:
         ]
         for pat in patterns:
             candidates.extend(sorted(glob.glob(pat), reverse=True))
-    else:
-        candidates.extend(["/Applications/Maxima.app/Contents/Resources/opt/bin/maxima"])
     found = shutil.which("maxima")
     if found:
         candidates.append(found)
+    if not IS_WINDOWS:
+        # A program started from Finder or a desktop launcher gets a short PATH
+        # without Homebrew's or MacPorts' folders, so look there explicitly.
+        candidates.extend(["/opt/homebrew/bin/maxima", "/usr/local/bin/maxima", "/opt/local/bin/maxima",
+                           "/Applications/Maxima.app/Contents/Resources/opt/bin/maxima"])
     for c in candidates:
         if c and Path(c).exists():
             return _resolve_scoop_shim(c) if c.lower().endswith(".cmd") else c
@@ -182,6 +185,11 @@ class MaximaKernel:
         # Makes maxima.bat load win_signals.lisp, so winkill.exe can interrupt a
         # computation in place (SBCL/CCL builds on Windows; ignored elsewhere).
         env = dict(os.environ, MAXIMA_SIGNALS_THREAD="1")
+        if sys.platform == "darwin":
+            # Started from Finder, PATH lacks Homebrew/MacPorts, where gnuplot lives.
+            dirs = env.get("PATH", "").split(os.pathsep)
+            env["PATH"] = os.pathsep.join(dirs + [d for d in ("/opt/homebrew/bin", "/usr/local/bin", "/opt/local/bin")
+                                                  if d not in dirs])
         self._buf, self._pos, self._eof = "", 0, False
         self._generation += 1
         self.pending_question = None

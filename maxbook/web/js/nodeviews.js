@@ -11,6 +11,10 @@ import { renderMath, tagLatex, stripClasses, ensureSymbolColours } from "./mathr
 
 const { Selection, NodeSelection } = pmState;
 MathfieldElement.soundsDirectory = null;
+const AMBIGUOUS_SHORTCUTS = ["gt", "lt", "in", "or", "of", "and", "not", "xx", "xin", "jj", "uu", "vv", "nn",
+  "ch", "sh", "th", "tg", "cm", "mm", "km", "kg", "mi", "ft", "lb",
+  // structures the template search inserts complete, with boxes to fill
+  "int", "sum", "prod", "lim", "sqrt", "frac"];
 
 export function el(tag, attrs = {}, ...children) {
   const node = document.createElement(tag);
@@ -296,6 +300,15 @@ class FormulaBase {
     mf.value = this.node.attrs.latex || "";
     this.mf = mf;
     this.mountEditor(mf);
+    // MathLive turns some letter pairs into symbols as you type ("gt" -> >,
+    // "in" -> ∈, "xx" -> ×).  In a notebook those are usually products of
+    // two variables (½gt²), so keep only unambiguous shortcuts.  (The field
+    // must be in the page before its shortcuts can be read.)
+    const shortcuts = { ...(mf.inlineShortcuts || {}) };
+    if (Object.keys(shortcuts).length) {
+      for (const k of AMBIGUOUS_SHORTCUTS) delete shortcuts[k];
+      mf.inlineShortcuts = shortcuts;
+    }
     mf.addEventListener("input", () => {
       setAttrs(this.view, this.getPos, { latex: mf.value, result: null });
       this.ctx.mathSearch.onInput(mf);
@@ -320,8 +333,17 @@ class FormulaBase {
     this.dom.classList.add("editing");
   }
 
+  /** The field's last keystrokes may not have reached the document yet (its
+   *  input event comes after the key): write the current value back now. */
+  sync() {
+    if (this.mf && this.mf.value !== this.node.attrs.latex) {
+      setAttrs(this.view, this.getPos, { latex: this.mf.value, result: null });
+    }
+  }
+
   stopEdit() {
     if (!this.mf) return;
+    this.sync();
     const latex = this.mf.value;
     this.ctx.mathSearch.close();
     this.ctx.clearActive(this);
@@ -336,11 +358,14 @@ class FormulaBase {
   key(e) {
     if (this.ctx.mathSearch.onKey(e, this.mf)) return;
     if (e.key === "Tab" && !e.shiftKey && !e.ctrlKey && !e.altKey) {
+      const latex = this.mf.value;
+      // A template still has empty boxes: let MathLive move to the next one.
+      if (latex.includes("\\placeholder")) return;
       e.preventDefault();
       e.stopPropagation();
-      const latex = this.mf.value;
       if (/=\s*$/.test(latex) || /\\coloneq|:=/.test(latex)) {
         if (!this.ctx.isHost) { this.ctx.toast("Only the host can compute"); return; }
+        this.sync();
         this.ctx.computeInPlace(this.node.attrs.id).then((ok) => {
           if (!ok || !this.mf) return;
           this.stopEdit();
@@ -484,6 +509,7 @@ export class MathBlockView extends FormulaBase {
       e.preventDefault();
       e.stopPropagation();
       if (!this.ctx.isHost) { this.ctx.toast("Only the host can run Maxima"); return; }
+      this.sync();
       setAttrs(this.view, this.getPos, { run: true }, true);
       this.ctx.runNode(this.node.attrs.id, { advance: e.shiftKey, insertAfter: e.altKey, from: this.getPos });
     }
