@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Architecture :: Maxbook</title>
+    <link rel="canonical" href="https://foadsf.github.io/maxbook/development/architecture/">
+    <link rel="prev" href="../../reference/troubleshooting/">
+    <link rel="next" href="../building/">
+    <meta name="description" content="How Maxbook is built: the Python server, the Maxima wire protocol, collaboration, the AI helper and the front end.">
+    <meta name="generator" content="Antora 3.2.0">
+    <link rel="stylesheet" href="../../_/css/site.css">
+    <link rel="stylesheet" href="../../_/css/tabs.css">
+    <link rel="stylesheet" href="../../_/css/maxbook.css">
+    <meta name="theme-color" content="#1d1c1a">
+    <meta property="og:site_name" content="Maxbook">
+    <meta property="og:title" content="Architecture">
+    <meta property="og:description" content="How Maxbook is built: the Python server, the Maxima wire protocol, collaboration, the AI helper and the front end.">
+    <script>try { var t = localStorage.getItem('maxbook-docs-theme'); if (t) document.documentElement.dataset.theme = t } catch (e) {}</script>
+    <link rel="icon" href="../../_/img/maxbook.svg" type="image/svg+xml">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar" aria-label="Site">
+    <div class="navbar-brand">
+      <a class="navbar-item mbx-brand" href="https://foadsf.github.io/maxbook/">
+        <img src="../../_/img/maxbook.svg" alt="" width="28" height="28">
+        <span>Maxbook</span>
+      </a>
+      <div class="navbar-item search hide-for-print">
+        <div id="search-field" class="field">
+          <input id="search-input" type="text" placeholder="Search the docs" aria-label="Search the documentation">
+        </div>
+      </div>
+      <button class="navbar-burger" aria-controls="topbar-nav" aria-expanded="false" aria-label="Toggle main menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="../../install/">Install</a>
+        <a class="navbar-item" href="../../tutorials/first-notebook/">Tutorials</a>
+        <a class="navbar-item" href="https://github.com/Foadsf/maxbook">GitHub</a>
+        <div class="navbar-item">
+          <button class="mbx-theme" type="button" aria-label="Switch between light and dark" title="Light / dark">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 13A9 9 0 1 1 11 3a7 7 0 0 0 10 10z"/></svg>
+          </button>
+        </div>
+        <div class="navbar-item">
+          <span class="control">
+            <a class="button is-primary mbx-download" href="https://github.com/Foadsf/maxbook/releases/latest">Download</a>
+          </span>
+        </div>
+      </div>
+    </div>
+  </nav>
+  <script>
+    document.querySelector('.mbx-theme').addEventListener('click', function () {
+      var root = document.documentElement
+      var dark = root.dataset.theme ? root.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches
+      root.dataset.theme = dark ? 'light' : 'dark'
+      try { localStorage.setItem('maxbook-docs-theme', root.dataset.theme) } catch (e) {}
+    })
+  </script>
+</header>
+<div class="body">
+<div class="nav-container" data-component="ROOT" data-version="">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <button class="nav-menu-toggle" aria-label="Toggle expand/collapse all" style="display: none"></button>
+    <h3 class="title"><a href="../../">Maxbook</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../">Overview</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../install/">Install</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Tutorials</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../tutorials/first-notebook/">Your first notebook</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../tutorials/formulas/">Computing with formulas</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../tutorials/maxima-blocks/">Maxima blocks, plots and questions</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../tutorials/menus/">Menus and the command search</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../tutorials/symbols/">Symbols and the Objects panel</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../tutorials/files/">Opening, saving and exporting</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../tutorials/together/">Editing together</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../tutorials/ai-helper/">The AI helper</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Reference</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../reference/keyboard/">Keyboard shortcuts</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../reference/formula-syntax/">Formula syntax</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../reference/command-line/">Command line and settings</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../reference/file-format/">The .maxbook format</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../reference/troubleshooting/">Troubleshooting</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Development</span>
+<ul class="nav-list">
+  <li class="nav-item is-current-page" data-depth="1">
+    <a class="nav-link" href="./">Architecture</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../building/">Building, testing and releasing</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../about/">About and licence</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">Maxbook</span>
+    <span class="version"></span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <div class="title"><a href="../../">Maxbook</a></div>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="../../" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="../../">Maxbook</a></li>
+    <li>Development</li>
+    <li><a href="./">Architecture</a></li>
+  </ul>
+</nav>
+<div class="edit-this-page"><a href="https://github.com/Foadsf/maxbook/edit/main/docs/modules/ROOT/pages/development/architecture.adoc">Edit this Page</a></div>
+</div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">Architecture</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">browser / native window ──HTTP (token)──▶ maxbook.server ──stdin/stdout──▶ maxima (+ maxbook-init.lisp)
+  web/js/*.js (ProseMirror, MathLive)       kernel.py, collab.py, ai.py          gnuplot (plots)
+                                                     └──HTTPS (optional)──▶ Anthropic API</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="python-side-maxbook"><a class="anchor" href="#python-side-maxbook"></a>Python side (<code>maxbook/</code>)</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The server uses only Python&#8217;s standard library; the AI helper is the only optional dependency.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 75%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Module</th>
+<th class="tableblock halign-left valign-top">Responsibility</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>cli.py</code>, <code><em>main</em>.py</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">command line; starts the server and the window; prints share links</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>launcher.py</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">pywebview window, Chromium <code>--app</code> window, or the default browser</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>server.py</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">static files, JSON API, token, role and Host checks, jobs, Stop and Restart</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>kernel.py</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">the Maxima process: start, send statements, parse frames, questions, interrupt, symbol table</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>collab.py</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">the shared document: orders ProseMirror steps from all windows, presence</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ai.py</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">the optional AI helper (Anthropic SDK), off unless configured</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>splitter.py</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">splits Maxima input into statements (strings, nested comments, escapes, <code>:lisp</code>)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>texfix.py</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">turns Maxima&#8217;s <code>tex1</code> output into LaTeX that browser renderers accept</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>latex2maxima.py</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">formulas to Maxima statements (see <a href="../../reference/formula-syntax/" class="xref page">Formula syntax</a>)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>document.py</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">the document model shared with the editor: node types, normalisation, walking</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>notebook.py</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">the <code>.maxbook</code> format: validation, atomic save, load and import, 0.1 files</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>formats.py</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">import <code>.wxm</code>, <code>.wxmx</code>, <code>.mac</code>, <code>.md</code>, <code>.tex</code>; export <code>.mac</code>, <code>.wxm</code>, <code>.wxmx</code>, <code>.md</code>, <code>.tex</code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect1">
+<h2 id="wire-protocol-with-maxima"><a class="anchor" href="#wire-protocol-with-maxima"></a>Wire protocol with Maxima</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Maxima is started as <code>maxima --very-quiet -p lisp/maxbook-init.lisp</code>, with <code>MAXIMA_SIGNALS_THREAD=1</code> so it can be interrupted on Windows.
+The init file:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>installs <code>*alt-display2d*</code> and <code>*alt-display1d*</code>, so every displayed result is written as a frame <code>STX OUT US label US tex US text US semtex ETX</code> (STX = U+0002, US = U+001F, ETX = U+0003).
+<code>semtex</code> is the same LaTeX with every symbol wrapped as <code>\class{mbk-sym mbk-KIND mbk-n-HEX}{…}</code>, where KIND is <code>variable</code>, <code>function</code>, <code>constant</code> or <code>free</code> and HEX spells the Maxima name as four hex digits per character;</p>
+</li>
+<li>
+<p>replaces the main prompt with a <code>PROMPT n</code> frame, which is how the kernel knows a statement has finished;</p>
+</li>
+<li>
+<p>sets <code>*prompt-prefix*</code> and <code>*prompt-suffix*</code> to <code>ASK</code> and <code>ASKEND</code> frames, so questions from <code>asksign</code>, <code>read()</code> and friends are recognisable;</p>
+</li>
+<li>
+<p>defines <code>maxbook_show_image(file)</code>, which emits an <code>IMG</code> frame (used by the inline plot functions in <code>lisp/maxbook.mac</code>);</p>
+</li>
+<li>
+<p>answers <code>:lisp (maxima::mbk-symbols)</code> with a <code>SYM</code> frame: JSON describing the session&#8217;s user variables, functions and declared constants.
+Names Maxbook itself defines, and names that appear while a file is loading (<code>load</code>, and the autoloads behind functions such as <code>eigenvalues</code>), are recorded as library names and left out;</p>
+</li>
+<li>
+<p>sends a <code>HELLO</code> frame with Maxima&#8217;s own (possibly translated) error markers, the version, the Lisp and the Lisp process id.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Text outside frames is ordinary output (print, warnings, error messages).
+A statement is an error when its text contains one of the markers from <code>HELLO</code>; the block then stops.
+Statements are sent one at a time, so input and output labels stay those of a normal Maxima session.</p>
+</div>
+<div class="sect2">
+<h3 id="windows-plotting-workaround"><a class="anchor" href="#windows-plotting-workaround"></a>Windows plotting workaround</h3>
+<div class="paragraph">
+<p>Maxima 5.50 with SBCL on Windows starts gnuplot as <code>gnuplot "-persist &lt;file&gt;"</code> (one quoted argument) when an output file is requested.
+gnuplot then ignores the script and waits on standard input, which hangs the session.
+Each session therefore sets <code>gnuplot_command</code> to the gnuplot bundled with Maxima followed by <code>-persist</code>, and <code>gnuplot_view_args</code> to <code>"~a"</code>.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="stopping"><a class="anchor" href="#stopping"></a>Stopping</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Stop interrupts the computation inside Maxima: on Windows with <code>winkill -INT &lt;pid&gt;</code> (shipped with Maxima; it signals the thread started by <code>MAXIMA_SIGNALS_THREAD</code>), elsewhere with SIGINT to the Lisp process.
+Maxima abandons the statement and returns to its prompt with every definition intact.
+GCL acts on the signal only when a blocked read returns, so when Stop arrives while Maxima waits for an answer, Maxbook also sends an empty line.
+If Maxima is not back within six seconds, or cannot be interrupted, it is killed and restarted, and the block says that definitions are gone.
+Stop with nothing running does nothing; Restart always starts a fresh Maxima.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="collaboration"><a class="anchor" href="#collaboration"></a>Collaboration</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Every window, including the host&#8217;s own, edits through <code>collab.py</code>, so two windows on one computer stay in sync.
+The server keeps the current document as a snapshot plus the steps since then, and accepts a client&#8217;s steps only if they are based on the latest version (prosemirror-collab&#8217;s central-authority scheme); a client that is behind receives the missing steps by long polling, rebases its own and sends again.
+Opening or creating a notebook replaces the shared document and the other windows reload it.
+A new or reloaded window joins the document that is already open instead of replacing it.</p>
+</div>
+<div class="paragraph">
+<p>Roles: the host token printed by the CLI is accepted only from the same computer.
+With <code>--share</code>, the server also listens on the network and accepts a separate guest token from the share link.
+Guests may only read and edit the document (session, kernel status, job progress, symbols, formula translation and the collaboration endpoints); running Maxima, files, export, Stop and Restart and the AI helper are host-only.
+Both tokens are checked in constant time, and the <code>Host</code> header must name this computer (a defence against DNS rebinding).</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="ai-helper"><a class="anchor" href="#ai-helper"></a>AI helper</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><code>ai.py</code> builds prompts for a few tasks (explain, steps, simplify and check, write Maxima code, ask, transcribe an image) and calls the Messages API through the official <code>anthropic</code> package, with adaptive thinking.
+Refusals and API errors are reported as messages, not inserted as content.
+The credentials stay in the server process; the browser only sees the answer as Markdown, which is inserted as ordinary document content.
+The helper is disabled, and its endpoints answer 503, unless the package and credentials are present.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="front-end-maxbookweb"><a class="anchor" href="#front-end-maxbookweb"></a>Front end (<code>maxbook/web/</code>)</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>ES modules, no build step at run time.
+ProseMirror and markdown-it are vendored as one bundle (<code>vendor/prosemirror/prosemirror.mjs</code>, built by <code>tools/vendor/build.mjs</code>); MathLive is vendored as published.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 75%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Module</th>
+<th class="tableblock halign-left valign-top">Responsibility</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>main.js</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">the application shell: running blocks and compute in place, files, export, menus, command search, sharing, AI</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>schema.js</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">the document schema (mirrors <code>document.py</code>)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>editor.js</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">the ProseMirror view: input rules (<code>$</code>, <code>&gt;&gt;</code>, <code>#</code>, lists&#8230;&#8203;), keys, placeholder, unique ids</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>nodeviews.js</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">interactive nodes: Maxima blocks (code editor, outputs, questions) and formulas (MathLive)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>markdown.js</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Markdown and 0.1 notebooks to documents (pasting, AI answers, imports)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>collab.js</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">the collaboration client</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>symbols.js</code>, <code>mathrender.js</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">symbol colours, hover cards, the Objects panel; static math rendering</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>dialogs.js</code>, <code>templates.js</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">command forms (the menus); template search</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>export.js</code>, <code>highlight.js</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">self-contained HTML export and PNG figures for LaTeX; Maxima syntax colouring</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>The page has a strict Content Security Policy (<code>script-src 'self'</code>).</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="api"><a class="anchor" href="#api"></a>API</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>All endpoints need the <code>X-Maxbook-Token</code> header.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 66.6667%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Endpoint</th>
+<th class="tableblock halign-left valign-top">Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>GET /api/session</code>, <code>GET /api/kernel</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">start-up data, Maxima status</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>POST /api/run</code>, <code>GET /api/job?id=&amp;since=</code>, <code>POST /api/answer</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">run Maxima input as a job, read its outputs incrementally, answer a question</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>POST /api/interrupt</code>, <code>POST /api/restart</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Stop, Restart</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>GET /api/symbols</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">the symbol table</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>POST /api/convert</code>, <code>POST /api/convert-latex</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">formula to Maxima; LaTeX text to document content</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>POST /api/open</code>, <code>POST /api/save</code>, <code>POST /api/export</code>, <code>POST /api/new</code>, <code>GET /api/fs</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">files</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>POST /api/collab/start|steps|snapshot|presence|leave</code>, <code>GET /api/collab/state|events</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">collaboration</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>POST /api/ai/ask|image</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">AI helper</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>POST /api/shutdown</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">quit</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<nav class="pagination">
+  <span class="prev"><a href="../../reference/troubleshooting/">Troubleshooting</a></span>
+  <span class="next"><a href="../building/">Building, testing and releasing</a></span>
+</nav>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <p>Maxbook is free software under the <a href="https://github.com/Foadsf/maxbook/blob/main/LICENSE">GNU GPL v3 or later</a>. Copyright &copy; 2026 Foad S. Farimani.</p>
+  <p>It talks to <a href="https://maxima.sourceforge.io/">Maxima</a> as a separate program and is not affiliated with any other notebook or math-editor product.
+  This site is built with <a href="https://antora.org/">Antora</a> and its default UI (MPL-2.0), themed for Maxbook.</p>
+</footer>
+<script id="site-script" src="../../_/js/site.js" data-ui-root-path="../../_"></script>
+<script async src="../../_/js/vendor/highlight.js"></script>
+<script src="../../_/js/tabs.js"></script>
+<script src="../../_/js/vendor/lunr.js"></script>
+<script src="../../_/js/search-ui.js" id="search-ui-script" data-site-root-path="../.." data-snippet-length="100" data-stylesheet="../../_/css/search.css"></script>
+<script async src="../../search-index.js"></script>
+  </body>
+</html>

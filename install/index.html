@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Install :: Maxbook</title>
+    <link rel="canonical" href="https://foadsf.github.io/maxbook/install/">
+    <link rel="prev" href="../">
+    <link rel="next" href="../tutorials/first-notebook/">
+    <meta name="description" content="Download Maxbook for Windows, macOS or Linux and install Maxima.">
+    <meta name="generator" content="Antora 3.2.0">
+    <link rel="stylesheet" href="../_/css/site.css">
+    <link rel="stylesheet" href="../_/css/tabs.css">
+    <link rel="stylesheet" href="../_/css/maxbook.css">
+    <meta name="theme-color" content="#1d1c1a">
+    <meta property="og:site_name" content="Maxbook">
+    <meta property="og:title" content="Install">
+    <meta property="og:description" content="Download Maxbook for Windows, macOS or Linux and install Maxima.">
+    <script>try { var t = localStorage.getItem('maxbook-docs-theme'); if (t) document.documentElement.dataset.theme = t } catch (e) {}</script>
+    <link rel="icon" href="../_/img/maxbook.svg" type="image/svg+xml">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar" aria-label="Site">
+    <div class="navbar-brand">
+      <a class="navbar-item mbx-brand" href="https://foadsf.github.io/maxbook/">
+        <img src="../_/img/maxbook.svg" alt="" width="28" height="28">
+        <span>Maxbook</span>
+      </a>
+      <div class="navbar-item search hide-for-print">
+        <div id="search-field" class="field">
+          <input id="search-input" type="text" placeholder="Search the docs" aria-label="Search the documentation">
+        </div>
+      </div>
+      <button class="navbar-burger" aria-controls="topbar-nav" aria-expanded="false" aria-label="Toggle main menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="./">Install</a>
+        <a class="navbar-item" href="../tutorials/first-notebook/">Tutorials</a>
+        <a class="navbar-item" href="https://github.com/Foadsf/maxbook">GitHub</a>
+        <div class="navbar-item">
+          <button class="mbx-theme" type="button" aria-label="Switch between light and dark" title="Light / dark">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 13A9 9 0 1 1 11 3a7 7 0 0 0 10 10z"/></svg>
+          </button>
+        </div>
+        <div class="navbar-item">
+          <span class="control">
+            <a class="button is-primary mbx-download" href="https://github.com/Foadsf/maxbook/releases/latest">Download</a>
+          </span>
+        </div>
+      </div>
+    </div>
+  </nav>
+  <script>
+    document.querySelector('.mbx-theme').addEventListener('click', function () {
+      var root = document.documentElement
+      var dark = root.dataset.theme ? root.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches
+      root.dataset.theme = dark ? 'light' : 'dark'
+      try { localStorage.setItem('maxbook-docs-theme', root.dataset.theme) } catch (e) {}
+    })
+  </script>
+</header>
+<div class="body">
+<div class="nav-container" data-component="ROOT" data-version="">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <button class="nav-menu-toggle" aria-label="Toggle expand/collapse all" style="display: none"></button>
+    <h3 class="title"><a href="../">Maxbook</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../">Overview</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="1">
+    <a class="nav-link" href="./">Install</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Tutorials</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../tutorials/first-notebook/">Your first notebook</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../tutorials/formulas/">Computing with formulas</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../tutorials/maxima-blocks/">Maxima blocks, plots and questions</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../tutorials/menus/">Menus and the command search</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../tutorials/symbols/">Symbols and the Objects panel</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../tutorials/files/">Opening, saving and exporting</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../tutorials/together/">Editing together</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../tutorials/ai-helper/">The AI helper</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Reference</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../reference/keyboard/">Keyboard shortcuts</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../reference/formula-syntax/">Formula syntax</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../reference/command-line/">Command line and settings</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../reference/file-format/">The .maxbook format</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../reference/troubleshooting/">Troubleshooting</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Development</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../development/architecture/">Architecture</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../development/building/">Building, testing and releasing</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../about/">About and licence</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">Maxbook</span>
+    <span class="version"></span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <div class="title"><a href="../">Maxbook</a></div>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="../" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="../">Maxbook</a></li>
+    <li><a href="./">Install</a></li>
+  </ul>
+</nav>
+<div class="edit-this-page"><a href="https://github.com/Foadsf/maxbook/edit/main/docs/modules/ROOT/pages/install.adoc">Edit this Page</a></div>
+</div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">Install</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>Maxbook has two parts:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Maxima</strong>, the computer algebra system that does the mathematics, and</p>
+</li>
+<li>
+<p><strong>Maxbook</strong>, the notebook you write in.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Maxbook is a single file you download and run; it finds the Maxima installed on your computer.
+If you already use wxMaxima, you already have Maxima and can skip to <a href="#download">2. Download Maxbook</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="1-install-maxima"><a class="anchor" href="#1-install-maxima"></a>1. Install Maxima</h2>
+<div class="sectionbody">
+<div id="tabs-1" class="openblock tabs is-loading">
+<div class="content">
+<div class="ulist tablist">
+<ul>
+<li id="tabs-1-windows" class="tab">
+<p>Windows</p>
+</li>
+<li id="tabs-1-macos" class="tab">
+<p>macOS</p>
+</li>
+<li id="tabs-1-linux" class="tab">
+<p>Linux</p>
+</li>
+</ul>
+</div>
+<div id="tabs-1-windows--panel" class="tabpanel" aria-labelledby="tabs-1-windows">
+<div class="paragraph">
+<p>Download the Windows installer (<code>maxima-&lt;version&gt;-win64.exe</code>) from the <a href="https://maxima.sourceforge.io/download.html">Maxima download page</a> and run it.
+It includes gnuplot, which draws Maxbook&#8217;s plots.</p>
+</div>
+<div class="paragraph">
+<p>Or, from a terminal, with the Windows package manager:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">winget install MaximaTeam.Maxima</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Maxbook looks for Maxima in <code>C:\maxima-*</code>, <code>Program Files\Maxima-*</code>, <code>%LOCALAPPDATA%\Programs\Maxima-*</code> and on <code>PATH</code>.</p>
+</div>
+</div>
+<div id="tabs-1-macos--panel" class="tabpanel" aria-labelledby="tabs-1-macos">
+<div class="paragraph">
+<p>With <a href="https://brew.sh/">Homebrew</a>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">brew install maxima gnuplot</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Maxbook looks for Maxima on <code>PATH</code> and in Homebrew&#8217;s and MacPorts' folders (<code>/opt/homebrew/bin</code>, <code>/usr/local/bin</code>, <code>/opt/local/bin</code>), so it also finds it when started from Finder.</p>
+</div>
+</div>
+<div id="tabs-1-linux--panel" class="tabpanel" aria-labelledby="tabs-1-linux">
+<div class="paragraph">
+<p>Use your distribution&#8217;s packages:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">sudo apt install maxima maxima-share gnuplot   # Debian, Ubuntu, Mint
+sudo dnf install maxima gnuplot                # Fedora
+sudo pacman -S maxima gnuplot                  # Arch, Manjaro</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>On Debian and Ubuntu, <code>maxima-share</code> holds packages such as <code>draw</code>, which Maxbook&#8217;s <code>idraw2d</code> and <code>idraw3d</code> use.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Check that it works by running <code>maxima --version</code> in a terminal (on Windows, Maxbook does not need Maxima on <code>PATH</code>).</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="download"><a class="anchor" href="#download"></a>2. Download Maxbook</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Download the file for your computer from the <a href="https://github.com/Foadsf/maxbook/releases/latest">latest release</a>:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 28.5714%;">
+<col style="width: 42.8571%;">
+<col style="width: 28.5715%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Computer</th>
+<th class="tableblock halign-left valign-top">File</th>
+<th class="tableblock halign-left valign-top">Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Windows, Intel or AMD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>maxbook-0.5.0-windows-x64.exe</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Windows 10 or 11</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Windows on Arm</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>maxbook-0.5.0-windows-arm64.exe</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Snapdragon laptops</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Mac with Apple silicon (M1 or newer)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>maxbook-0.5.0-macos-arm64</code></p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Mac with an Intel processor</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>maxbook-0.5.0-macos-x64</code></p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Linux, x86-64</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>maxbook-0.5.0-linux-x64</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">glibc 2.35 or newer: Ubuntu 22.04, Debian 12, Fedora 36 and later</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Linux, Arm 64-bit</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>maxbook-0.5.0-linux-arm64</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">the same; for example a Raspberry Pi 5 with a 64-bit OS</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Each file is the complete program: no installer, no Python, nothing to unpack.
+Put it wherever you like, for example in your home folder or on a USB stick.
+<code>SHA256SUMS.txt</code> in the release lets you check the download (<code>sha256sum -c SHA256SUMS.txt --ignore-missing</code> on Linux, <code>shasum -a 256 &lt;file&gt;</code> on macOS, <code>Get-FileHash &lt;file&gt;</code> in PowerShell).</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="3-start-it"><a class="anchor" href="#3-start-it"></a>3. Start it</h2>
+<div class="sectionbody">
+<div id="tabs-2" class="openblock tabs is-loading">
+<div class="content">
+<div class="ulist tablist">
+<ul>
+<li id="tabs-2-windows" class="tab">
+<p>Windows</p>
+</li>
+<li id="tabs-2-macos" class="tab">
+<p>macOS</p>
+</li>
+<li id="tabs-2-linux" class="tab">
+<p>Linux</p>
+</li>
+</ul>
+</div>
+<div id="tabs-2-windows--panel" class="tabpanel" aria-labelledby="tabs-2-windows">
+<div class="paragraph">
+<p>Double-click the <code>.exe</code>.</p>
+</div>
+<div class="paragraph">
+<p>The first time, Windows SmartScreen may say <strong>Windows protected your PC</strong>, because the program is new and not signed with a paid certificate.
+Click <strong>More info</strong>, then <strong>Run anyway</strong>.</p>
+</div>
+<div class="paragraph">
+<p>A console window opens and shows Maxbook&#8217;s address; then the notebook opens in its own window (in Edge or Chrome app mode, or your default browser).
+Closing the console window quits Maxbook.</p>
+</div>
+<div class="paragraph">
+<p>To open a file directly, drag a <code>.maxbook</code> file onto the <code>.exe</code>, or run it from a terminal:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">.\maxbook-0.5.0-windows-x64.exe C:\Users\you\Documents\notes.maxbook</code></pre>
+</div>
+</div>
+</div>
+<div id="tabs-2-macos--panel" class="tabpanel" aria-labelledby="tabs-2-macos">
+<div class="paragraph">
+<p>In Terminal, in the folder where you downloaded it:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">chmod +x maxbook-0.5.0-macos-arm64
+xattr -d com.apple.quarantine maxbook-0.5.0-macos-arm64
+./maxbook-0.5.0-macos-arm64</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>chmod</code> makes the file runnable.
+<code>xattr</code> removes the "downloaded from the internet" mark; without it macOS refuses to start a program that is not signed by an Apple-registered developer (alternatively, try to run it once, then allow it in <strong>System Settings › Privacy &amp; Security</strong>).</p>
+</div>
+</div>
+<div id="tabs-2-linux--panel" class="tabpanel" aria-labelledby="tabs-2-linux">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">chmod +x maxbook-0.5.0-linux-x64
+./maxbook-0.5.0-linux-x64</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Maxbook opens in Chrome, Chromium, Edge or Brave in app mode if one is installed, otherwise in your default browser.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>When it starts, the terminal shows something like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">Maxbook 0.5.0 at http://127.0.0.1:51234/ (Maxima: /usr/bin/maxima)
+AI helper: off - no Anthropic credentials (set ANTHROPIC_API_KEY, or MAXBOOK_AI=1 after `ant auth login`)
+Press Ctrl+C to quit.
+If no window opened, open this URL in a browser: http://127.0.0.1:51234/#token=...</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>and the notebook window opens with an empty notebook.
+The pill at the top right says <strong>Maxima &#160;·&#160;ready</strong> once Maxima has started.
+If it says <strong>not found</strong>, see <a href="../reference/troubleshooting/#maxima-not-found" class="xref page">Maxima not found</a>.</p>
+</div>
+<div class="paragraph">
+<p>Now take the tour: <a href="../tutorials/first-notebook/" class="xref page">Your first notebook</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="other-ways-to-install"><a class="anchor" href="#other-ways-to-install"></a>Other ways to install</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="with-python"><a class="anchor" href="#with-python"></a>With Python</h3>
+<div class="paragraph">
+<p>If you have Python 3.9 or newer, you can run Maxbook from its source instead of the single file.
+This is also how you get the newest changes.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">git clone https://github.com/Foadsf/maxbook
+cd maxbook
+python -m pip install -e .
+python -m maxbook</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Optional extras: <code>pip install -e ".[desktop]"</code> opens Maxbook in a native window (pywebview) instead of a browser window, and <code>pip install -e ".[ai]"</code> adds the <a href="../tutorials/ai-helper/" class="xref page">AI helper</a> (Python 3.10 or newer).
+The single-file programs include the AI helper but not the native window.</p>
+</div>
+<div class="paragraph">
+<p><code>pip</code> also installs a <code>maxbook</code> command.
+If your shell says it does not know <code>maxbook</code>, the folder pip puts commands in is not on your <code>PATH</code>; <code>python -m maxbook</code> always works.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="updating-and-uninstalling"><a class="anchor" href="#updating-and-uninstalling"></a>Updating and uninstalling</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>To update, download the new file and delete the old one.
+Your notebooks are ordinary files and are not touched.</p>
+</div>
+<div class="paragraph">
+<p>Maxbook keeps a small settings file (the list of recent notebooks) in <code>.maxbook</code> in your home folder; delete it to forget them.
+Single-file programs unpack themselves into a temporary folder while they run and remove it when they quit.</p>
+</div>
+</div>
+</div>
+<nav class="pagination">
+  <span class="prev"><a href="../">Overview</a></span>
+  <span class="next"><a href="../tutorials/first-notebook/">Your first notebook</a></span>
+</nav>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <p>Maxbook is free software under the <a href="https://github.com/Foadsf/maxbook/blob/main/LICENSE">GNU GPL v3 or later</a>. Copyright &copy; 2026 Foad S. Farimani.</p>
+  <p>It talks to <a href="https://maxima.sourceforge.io/">Maxima</a> as a separate program and is not affiliated with any other notebook or math-editor product.
+  This site is built with <a href="https://antora.org/">Antora</a> and its default UI (MPL-2.0), themed for Maxbook.</p>
+</footer>
+<script id="site-script" src="../_/js/site.js" data-ui-root-path="../_"></script>
+<script async src="../_/js/vendor/highlight.js"></script>
+<script src="../_/js/tabs.js"></script>
+<script src="../_/js/vendor/lunr.js"></script>
+<script src="../_/js/search-ui.js" id="search-ui-script" data-site-root-path=".." data-snippet-length="100" data-stylesheet="../_/css/search.css"></script>
+<script async src="../search-index.js"></script>
+  </body>
+</html>

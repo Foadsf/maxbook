@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>The AI helper :: Maxbook</title>
+    <link rel="canonical" href="https://foadsf.github.io/maxbook/tutorials/ai-helper/">
+    <link rel="prev" href="../together/">
+    <link rel="next" href="../../reference/keyboard/">
+    <meta name="description" content="Optional help from Anthropic's Claude: explanations, steps, checks, Maxima code and transcribing handwritten math.">
+    <meta name="generator" content="Antora 3.2.0">
+    <link rel="stylesheet" href="../../_/css/site.css">
+    <link rel="stylesheet" href="../../_/css/tabs.css">
+    <link rel="stylesheet" href="../../_/css/maxbook.css">
+    <meta name="theme-color" content="#1d1c1a">
+    <meta property="og:site_name" content="Maxbook">
+    <meta property="og:title" content="The AI helper">
+    <meta property="og:description" content="Optional help from Anthropic&#x27;s Claude: explanations, steps, checks, Maxima code and transcribing handwritten math.">
+    <script>try { var t = localStorage.getItem('maxbook-docs-theme'); if (t) document.documentElement.dataset.theme = t } catch (e) {}</script>
+    <link rel="icon" href="../../_/img/maxbook.svg" type="image/svg+xml">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar" aria-label="Site">
+    <div class="navbar-brand">
+      <a class="navbar-item mbx-brand" href="https://foadsf.github.io/maxbook/">
+        <img src="../../_/img/maxbook.svg" alt="" width="28" height="28">
+        <span>Maxbook</span>
+      </a>
+      <div class="navbar-item search hide-for-print">
+        <div id="search-field" class="field">
+          <input id="search-input" type="text" placeholder="Search the docs" aria-label="Search the documentation">
+        </div>
+      </div>
+      <button class="navbar-burger" aria-controls="topbar-nav" aria-expanded="false" aria-label="Toggle main menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="../../install/">Install</a>
+        <a class="navbar-item" href="../first-notebook/">Tutorials</a>
+        <a class="navbar-item" href="https://github.com/Foadsf/maxbook">GitHub</a>
+        <div class="navbar-item">
+          <button class="mbx-theme" type="button" aria-label="Switch between light and dark" title="Light / dark">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 13A9 9 0 1 1 11 3a7 7 0 0 0 10 10z"/></svg>
+          </button>
+        </div>
+        <div class="navbar-item">
+          <span class="control">
+            <a class="button is-primary mbx-download" href="https://github.com/Foadsf/maxbook/releases/latest">Download</a>
+          </span>
+        </div>
+      </div>
+    </div>
+  </nav>
+  <script>
+    document.querySelector('.mbx-theme').addEventListener('click', function () {
+      var root = document.documentElement
+      var dark = root.dataset.theme ? root.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches
+      root.dataset.theme = dark ? 'light' : 'dark'
+      try { localStorage.setItem('maxbook-docs-theme', root.dataset.theme) } catch (e) {}
+    })
+  </script>
+</header>
+<div class="body">
+<div class="nav-container" data-component="ROOT" data-version="">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <button class="nav-menu-toggle" aria-label="Toggle expand/collapse all" style="display: none"></button>
+    <h3 class="title"><a href="../../">Maxbook</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../">Overview</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../install/">Install</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Tutorials</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../first-notebook/">Your first notebook</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../formulas/">Computing with formulas</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../maxima-blocks/">Maxima blocks, plots and questions</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../menus/">Menus and the command search</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../symbols/">Symbols and the Objects panel</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../files/">Opening, saving and exporting</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../together/">Editing together</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="1">
+    <a class="nav-link" href="./">The AI helper</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Reference</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../reference/keyboard/">Keyboard shortcuts</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../reference/formula-syntax/">Formula syntax</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../reference/command-line/">Command line and settings</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../reference/file-format/">The .maxbook format</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../reference/troubleshooting/">Troubleshooting</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Development</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../development/architecture/">Architecture</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../development/building/">Building, testing and releasing</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../about/">About and licence</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">Maxbook</span>
+    <span class="version"></span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <div class="title"><a href="../../">Maxbook</a></div>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="../../" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="../../">Maxbook</a></li>
+    <li>Tutorials</li>
+    <li><a href="./">The AI helper</a></li>
+  </ul>
+</nav>
+<div class="edit-this-page"><a href="https://github.com/Foadsf/maxbook/edit/main/docs/modules/ROOT/pages/tutorials/ai-helper.adoc">Edit this Page</a></div>
+</div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">The AI helper</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>The AI helper is optional and <strong>off</strong> unless you set it up.
+It uses Anthropic&#8217;s Claude and adds its answers to your notebook as ordinary, editable content.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../_images/ai-menu.webp" alt="The AI menu: Explain the selection" width="Show the steps" height="Simplify and check">
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="what-it-does"><a class="anchor" href="#what-it-does"></a>What it does</h2>
+<div class="sectionbody">
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 75%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Explain the selection</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Explains the selected text, formula or result.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Show the steps</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Writes out the intermediate steps of a derivation or computation.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Simplify and check</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Suggests a simpler form and points out possible mistakes.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Write Maxima code…</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Turns your description ("solve the heat equation on [0,1] with &#8230;&#8203;") into a Maxima block.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Ask a question…</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Answers a question about the notebook, knowing its Maxima definitions.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Transcribe an image of math…</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Turns a photo or scan of handwritten or printed mathematics into text and formulas.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Select something first (text, a formula, or a whole block); without a selection the helper uses the block or paragraph the cursor is in.
+The answer is inserted below the selection.
+Read it like any other source: check its mathematics, ideally with Maxima.
+<span class="keyseq"><kbd>Ctrl</kbd>+<kbd>Z</kbd></span> removes it.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="setting-it-up"><a class="anchor" href="#setting-it-up"></a>Setting it up</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The single-file programs include the helper.
+When you run Maxbook from Python, install it with <code>pip install -e ".[ai]"</code> (Python 3.10 or newer).</p>
+</div>
+<div class="paragraph">
+<p>Then give Maxbook access to the Anthropic API in one of these ways, before starting it:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>set <code>ANTHROPIC_API_KEY</code> to an API key from your Anthropic developer account, or</p>
+</li>
+<li>
+<p>set <code>ANTHROPIC_AUTH_TOKEN</code>, or</p>
+</li>
+<li>
+<p>log in once with Anthropic&#8217;s <code>ant</code> command-line tool (<code>ant auth login</code>) and set <code>MAXBOOK_AI=1</code>.</p>
+</li>
+</ul>
+</div>
+<div id="tabs-1" class="openblock tabs is-loading">
+<div class="content">
+<div class="ulist tablist">
+<ul>
+<li id="tabs-1-windows-powershell" class="tab">
+<p>Windows (PowerShell)</p>
+</li>
+<li id="tabs-1-macos-and-linux" class="tab">
+<p>macOS and Linux</p>
+</li>
+</ul>
+</div>
+<div id="tabs-1-windows-powershell--panel" class="tabpanel" aria-labelledby="tabs-1-windows-powershell">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-powershell hljs" data-lang="powershell">$env:ANTHROPIC_API_KEY = "sk-ant-..."
+.\maxbook-0.5.0-windows-x64.exe</code></pre>
+</div>
+</div>
+</div>
+<div id="tabs-1-macos-and-linux--panel" class="tabpanel" aria-labelledby="tabs-1-macos-and-linux">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">export ANTHROPIC_API_KEY="sk-ant-..."
+./maxbook-0.5.0-linux-x64</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Maxbook prints whether the helper is on when it starts, and the AI menu explains why it is off if it is.
+<code>MAXBOOK_AI=0</code> switches it off even when a key is set; <code>MAXBOOK_AI_MODEL</code> chooses another Claude model (the default is <code>claude-opus-5-5</code>).</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="privacy"><a class="anchor" href="#privacy"></a>Privacy</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Nothing is sent anywhere until you choose an AI command, and Maxbook asks for your permission before the first one in each browser.</p>
+</li>
+<li>
+<p>What is sent: the selection (or your question or description) together with the notebook&#8217;s Maxima input, up to its last 6000 characters, so answers can use your definitions; for <strong>Transcribe</strong>, only the image.
+It goes to Anthropic&#8217;s API.
+Anthropic&#8217;s terms for API use apply.</p>
+</li>
+<li>
+<p>The API key stays in the Maxbook program on your computer; it is never sent to the browser, to guests, or into the notebook.</p>
+</li>
+<li>
+<p>Guests in a <a href="../together/" class="xref page">shared session</a> cannot use the helper.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Use of the API is billed by Anthropic to the account the key belongs to.</p>
+</div>
+</div>
+</div>
+<nav class="pagination">
+  <span class="prev"><a href="../together/">Editing together</a></span>
+  <span class="next"><a href="../../reference/keyboard/">Keyboard shortcuts</a></span>
+</nav>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <p>Maxbook is free software under the <a href="https://github.com/Foadsf/maxbook/blob/main/LICENSE">GNU GPL v3 or later</a>. Copyright &copy; 2026 Foad S. Farimani.</p>
+  <p>It talks to <a href="https://maxima.sourceforge.io/">Maxima</a> as a separate program and is not affiliated with any other notebook or math-editor product.
+  This site is built with <a href="https://antora.org/">Antora</a> and its default UI (MPL-2.0), themed for Maxbook.</p>
+</footer>
+<script id="site-script" src="../../_/js/site.js" data-ui-root-path="../../_"></script>
+<script async src="../../_/js/vendor/highlight.js"></script>
+<script src="../../_/js/tabs.js"></script>
+<script src="../../_/js/vendor/lunr.js"></script>
+<script src="../../_/js/search-ui.js" id="search-ui-script" data-site-root-path="../.." data-snippet-length="100" data-stylesheet="../../_/css/search.css"></script>
+<script async src="../../search-index.js"></script>
+  </body>
+</html>

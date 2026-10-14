@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>The .maxbook format :: Maxbook</title>
+    <link rel="canonical" href="https://foadsf.github.io/maxbook/reference/file-format/">
+    <link rel="prev" href="../command-line/">
+    <link rel="next" href="../troubleshooting/">
+    <meta name="description" content="The structure of Maxbook's notebook files.">
+    <meta name="generator" content="Antora 3.2.0">
+    <link rel="stylesheet" href="../../_/css/site.css">
+    <link rel="stylesheet" href="../../_/css/tabs.css">
+    <link rel="stylesheet" href="../../_/css/maxbook.css">
+    <meta name="theme-color" content="#1d1c1a">
+    <meta property="og:site_name" content="Maxbook">
+    <meta property="og:title" content="The .maxbook format">
+    <meta property="og:description" content="The structure of Maxbook&#x27;s notebook files.">
+    <script>try { var t = localStorage.getItem('maxbook-docs-theme'); if (t) document.documentElement.dataset.theme = t } catch (e) {}</script>
+    <link rel="icon" href="../../_/img/maxbook.svg" type="image/svg+xml">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar" aria-label="Site">
+    <div class="navbar-brand">
+      <a class="navbar-item mbx-brand" href="https://foadsf.github.io/maxbook/">
+        <img src="../../_/img/maxbook.svg" alt="" width="28" height="28">
+        <span>Maxbook</span>
+      </a>
+      <div class="navbar-item search hide-for-print">
+        <div id="search-field" class="field">
+          <input id="search-input" type="text" placeholder="Search the docs" aria-label="Search the documentation">
+        </div>
+      </div>
+      <button class="navbar-burger" aria-controls="topbar-nav" aria-expanded="false" aria-label="Toggle main menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="../../install/">Install</a>
+        <a class="navbar-item" href="../../tutorials/first-notebook/">Tutorials</a>
+        <a class="navbar-item" href="https://github.com/Foadsf/maxbook">GitHub</a>
+        <div class="navbar-item">
+          <button class="mbx-theme" type="button" aria-label="Switch between light and dark" title="Light / dark">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 13A9 9 0 1 1 11 3a7 7 0 0 0 10 10z"/></svg>
+          </button>
+        </div>
+        <div class="navbar-item">
+          <span class="control">
+            <a class="button is-primary mbx-download" href="https://github.com/Foadsf/maxbook/releases/latest">Download</a>
+          </span>
+        </div>
+      </div>
+    </div>
+  </nav>
+  <script>
+    document.querySelector('.mbx-theme').addEventListener('click', function () {
+      var root = document.documentElement
+      var dark = root.dataset.theme ? root.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches
+      root.dataset.theme = dark ? 'light' : 'dark'
+      try { localStorage.setItem('maxbook-docs-theme', root.dataset.theme) } catch (e) {}
+    })
+  </script>
+</header>
+<div class="body">
+<div class="nav-container" data-component="ROOT" data-version="">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <button class="nav-menu-toggle" aria-label="Toggle expand/collapse all" style="display: none"></button>
+    <h3 class="title"><a href="../../">Maxbook</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../">Overview</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../install/">Install</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Tutorials</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../tutorials/first-notebook/">Your first notebook</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../tutorials/formulas/">Computing with formulas</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../tutorials/maxima-blocks/">Maxima blocks, plots and questions</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../tutorials/menus/">Menus and the command search</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../tutorials/symbols/">Symbols and the Objects panel</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../tutorials/files/">Opening, saving and exporting</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../tutorials/together/">Editing together</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../tutorials/ai-helper/">The AI helper</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Reference</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../keyboard/">Keyboard shortcuts</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../formula-syntax/">Formula syntax</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../command-line/">Command line and settings</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="1">
+    <a class="nav-link" href="./">The .maxbook format</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../troubleshooting/">Troubleshooting</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Development</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../development/architecture/">Architecture</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../development/building/">Building, testing and releasing</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../about/">About and licence</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">Maxbook</span>
+    <span class="version"></span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <div class="title"><a href="../../">Maxbook</a></div>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="../../" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="../../">Maxbook</a></li>
+    <li>Reference</li>
+    <li><a href="./">The .maxbook format</a></li>
+  </ul>
+</nav>
+<div class="edit-this-page"><a href="https://github.com/Foadsf/maxbook/edit/main/docs/modules/ROOT/pages/reference/file-format.adoc">Edit this Page</a></div>
+</div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">The .maxbook format</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>A <code>.maxbook</code> file is UTF-8 JSON:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">{
+  "format": "maxbook",
+  "version": 2,
+  "title": "Free fall",
+  "doc": { "type": "doc", "attrs": { "title": "Free fall", "symbols": {} }, "content": [ ... ] },
+  "metadata": {}
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>doc</code> is the document as a tree of nodes, in the form used by the <a href="https://prosemirror.net/">ProseMirror</a> editor: each node has a <code>type</code>, optional <code>attrs</code> and, for containers, <code>content</code>.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 75%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Node</th>
+<th class="tableblock halign-left valign-top">Holds</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>heading</code> (<code>level</code> 1–4), <code>paragraph</code>, <code>blockquote</code>, <code>bullet_list</code>, <code>ordered_list</code>, <code>list_item</code>, <code>code_block</code>, <code>horizontal_rule</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Text, as <code>text</code> nodes with optional <code>marks</code> (<code>strong</code>, <code>em</code>, <code>code</code>, <code>link</code>) and <code>hard_break</code>.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>math_inline</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A formula in the text: <code>latex</code>, the Maxima <code>source</code> it translates to, and the <code>result</code> of compute in place (<code>latex</code>, <code>text</code>, or <code>error</code>).</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>math_block</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A display formula: like <code>math_inline</code>, plus <code>run</code> (true when it is evaluated), <code>outputs</code> and <code>inputs</code>.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>maxima</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A Maxima block: <code>source</code>, <code>outputs</code> and <code>inputs</code> (the input numbers of its statements).</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Each output is an object with a <code>kind</code>:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>result</code>: <code>label</code> (<code>%o4</code>), <code>latex</code>, <code>text</code> (Maxima&#8217;s one-line form) and, when available, <code>semantic</code> (LaTeX with the symbol tags used for colouring);</p>
+</li>
+<li>
+<p><code>text</code>: printed output;</p>
+</li>
+<li>
+<p><code>error</code>: an error message (<code>interrupted: true</code> when you pressed Stop);</p>
+</li>
+<li>
+<p><code>image</code>: a plot, with <code>mime</code> (<code>image/svg+xml</code> or <code>image/png</code>) and <code>data</code>.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Interactive questions are not saved.
+<code>doc.attrs.symbols</code> maps a name to <code>{"description": "..."}</code> (from the Objects panel).
+Every formula and block has an <code>id</code> that is unique in the notebook.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="compatibility"><a class="anchor" href="#compatibility"></a>Compatibility</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Notebooks from Maxbook 0.1 (<code>"version": 1</code>, a list of <code>cells</code>) open in 0.5; saving writes version 2.</p>
+</li>
+<li>
+<p>The format is plain JSON on purpose: it diffs well in version control, and other tools can read it.
+<code>python -c "import json; print(json.load(open('notes.maxbook'))['title'])"</code> is all it takes.</p>
+</li>
+<li>
+<p>For other programs, export instead (LaTeX, HTML, Markdown, <code>.mac</code>, <code>.wxm</code>, <code>.wxmx</code>): see <a href="../../tutorials/files/" class="xref page">Opening, saving and exporting</a>.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<nav class="pagination">
+  <span class="prev"><a href="../command-line/">Command line and settings</a></span>
+  <span class="next"><a href="../troubleshooting/">Troubleshooting</a></span>
+</nav>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <p>Maxbook is free software under the <a href="https://github.com/Foadsf/maxbook/blob/main/LICENSE">GNU GPL v3 or later</a>. Copyright &copy; 2026 Foad S. Farimani.</p>
+  <p>It talks to <a href="https://maxima.sourceforge.io/">Maxima</a> as a separate program and is not affiliated with any other notebook or math-editor product.
+  This site is built with <a href="https://antora.org/">Antora</a> and its default UI (MPL-2.0), themed for Maxbook.</p>
+</footer>
+<script id="site-script" src="../../_/js/site.js" data-ui-root-path="../../_"></script>
+<script async src="../../_/js/vendor/highlight.js"></script>
+<script src="../../_/js/tabs.js"></script>
+<script src="../../_/js/vendor/lunr.js"></script>
+<script src="../../_/js/search-ui.js" id="search-ui-script" data-site-root-path="../.." data-snippet-length="100" data-stylesheet="../../_/css/search.css"></script>
+<script async src="../../search-index.js"></script>
+  </body>
+</html>

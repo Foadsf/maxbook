@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Opening, saving and exporting :: Maxbook</title>
+    <link rel="canonical" href="https://foadsf.github.io/maxbook/tutorials/files/">
+    <link rel="prev" href="../symbols/">
+    <link rel="next" href="../together/">
+    <meta name="description" content="Open Maxbook notebooks, import wxMaxima, Maxima, Markdown and LaTeX files, save, and export to LaTeX, HTML, Markdown and wxMaxima.">
+    <meta name="generator" content="Antora 3.2.0">
+    <link rel="stylesheet" href="../../_/css/site.css">
+    <link rel="stylesheet" href="../../_/css/tabs.css">
+    <link rel="stylesheet" href="../../_/css/maxbook.css">
+    <meta name="theme-color" content="#1d1c1a">
+    <meta property="og:site_name" content="Maxbook">
+    <meta property="og:title" content="Opening, saving and exporting">
+    <meta property="og:description" content="Open Maxbook notebooks, import wxMaxima, Maxima, Markdown and LaTeX files, save, and export to LaTeX, HTML, Markdown and wxMaxima.">
+    <script>try { var t = localStorage.getItem('maxbook-docs-theme'); if (t) document.documentElement.dataset.theme = t } catch (e) {}</script>
+    <link rel="icon" href="../../_/img/maxbook.svg" type="image/svg+xml">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar" aria-label="Site">
+    <div class="navbar-brand">
+      <a class="navbar-item mbx-brand" href="https://foadsf.github.io/maxbook/">
+        <img src="../../_/img/maxbook.svg" alt="" width="28" height="28">
+        <span>Maxbook</span>
+      </a>
+      <div class="navbar-item search hide-for-print">
+        <div id="search-field" class="field">
+          <input id="search-input" type="text" placeholder="Search the docs" aria-label="Search the documentation">
+        </div>
+      </div>
+      <button class="navbar-burger" aria-controls="topbar-nav" aria-expanded="false" aria-label="Toggle main menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="../../install/">Install</a>
+        <a class="navbar-item" href="../first-notebook/">Tutorials</a>
+        <a class="navbar-item" href="https://github.com/Foadsf/maxbook">GitHub</a>
+        <div class="navbar-item">
+          <button class="mbx-theme" type="button" aria-label="Switch between light and dark" title="Light / dark">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 13A9 9 0 1 1 11 3a7 7 0 0 0 10 10z"/></svg>
+          </button>
+        </div>
+        <div class="navbar-item">
+          <span class="control">
+            <a class="button is-primary mbx-download" href="https://github.com/Foadsf/maxbook/releases/latest">Download</a>
+          </span>
+        </div>
+      </div>
+    </div>
+  </nav>
+  <script>
+    document.querySelector('.mbx-theme').addEventListener('click', function () {
+      var root = document.documentElement
+      var dark = root.dataset.theme ? root.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches
+      root.dataset.theme = dark ? 'light' : 'dark'
+      try { localStorage.setItem('maxbook-docs-theme', root.dataset.theme) } catch (e) {}
+    })
+  </script>
+</header>
+<div class="body">
+<div class="nav-container" data-component="ROOT" data-version="">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <button class="nav-menu-toggle" aria-label="Toggle expand/collapse all" style="display: none"></button>
+    <h3 class="title"><a href="../../">Maxbook</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../">Overview</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../install/">Install</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Tutorials</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../first-notebook/">Your first notebook</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../formulas/">Computing with formulas</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../maxima-blocks/">Maxima blocks, plots and questions</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../menus/">Menus and the command search</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../symbols/">Symbols and the Objects panel</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="1">
+    <a class="nav-link" href="./">Opening, saving and exporting</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../together/">Editing together</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../ai-helper/">The AI helper</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Reference</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../reference/keyboard/">Keyboard shortcuts</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../reference/formula-syntax/">Formula syntax</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../reference/command-line/">Command line and settings</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../reference/file-format/">The .maxbook format</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../reference/troubleshooting/">Troubleshooting</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Development</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../development/architecture/">Architecture</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../development/building/">Building, testing and releasing</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../about/">About and licence</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">Maxbook</span>
+    <span class="version"></span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <div class="title"><a href="../../">Maxbook</a></div>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="../../" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="../../">Maxbook</a></li>
+    <li>Tutorials</li>
+    <li><a href="./">Opening, saving and exporting</a></li>
+  </ul>
+</nav>
+<div class="edit-this-page"><a href="https://github.com/Foadsf/maxbook/edit/main/docs/modules/ROOT/pages/tutorials/files.adoc">Edit this Page</a></div>
+</div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">Opening, saving and exporting</h1>
+<div class="sect1">
+<h2 id="opening-and-importing"><a class="anchor" href="#opening-and-importing"></a>Opening and importing</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>Open</strong> (<span class="keyseq"><kbd>Ctrl</kbd>+<kbd>O</kbd></span>) shows the folders on your computer:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../_images/files-open.webp" alt="The Open dialog listing free-fall.maxbook" width="kinematics.wxm and welcome.maxbook">
+</div>
+</div>
+<div class="paragraph">
+<p>Double-click a file, or select it and click <strong>Open</strong>.
+Type a folder into the path field and press <kbd>Enter</kbd> to jump there; on Windows, the drop-down switches drives.</p>
+</div>
+<div class="paragraph">
+<p>Maxbook opens:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 75%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>.maxbook</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Maxbook notebooks (also those written by Maxbook 0.1, which are converted)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>.wxm</code>, <code>.wxmx</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">wxMaxima documents: text cells become text, input cells become Maxima blocks, titles and sections become headings</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>.mac</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Maxima batch files: comments become text, code becomes Maxima blocks</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>.md</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Markdown, with <code>```maxima</code> blocks as Maxima blocks and <code>$&#8230;&#8203;$</code> / <code>...</code> as formulas</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>.tex</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">LaTeX: sections, paragraphs, lists, inline and display math</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>An imported file is not changed: <strong>Save</strong> suggests a new <code>.maxbook</code> file next to it.</p>
+</div>
+<div class="paragraph">
+<p>You can also start Maxbook with a file: <code>maxbook notes.wxmx</code>.
+The <strong>Recent</strong> list on the left reopens the last notebooks.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="pasting"><a class="anchor" href="#pasting"></a>Pasting</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Paste Markdown or LaTeX into the document and it becomes formatted text, formulas and Maxima blocks.
+Plain text stays plain text.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="saving"><a class="anchor" href="#saving"></a>Saving</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>Save</strong> (<span class="keyseq"><kbd>Ctrl</kbd>+<kbd>S</kbd></span>) writes the notebook; <strong>Save as…</strong> (<span class="keyseq"><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>S</kbd></span>) asks for a new name.
+Maxbook asks before replacing an existing file.
+A dot next to the title means there are unsaved changes, and closing the window asks first.</p>
+</div>
+<div class="paragraph">
+<p>A <code>.maxbook</code> file is plain JSON with the results included, so it opens exactly as you left it and works well in version control.
+Its structure is described in <a href="../../reference/file-format/" class="xref page">The .maxbook format</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="exporting"><a class="anchor" href="#exporting"></a>Exporting</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>Export</strong> offers six formats:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../_images/files-export.webp" alt="The Export chooser: LaTeX document" width="HTML page" height="Markdown">
+</div>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 75%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>LaTeX document</strong> (<code>.tex</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A complete LaTeX document with your text, formulas, Maxima input and results; plots are written as PNG files into a folder next to it.
+It compiles with <code>pdflatex</code> (TeX Live or MiKTeX).</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>HTML page</strong> (<code>.html</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">One self-contained file with the fonts and plots inside, which looks like the notebook and works offline: easy to e-mail or put on a website.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Markdown</strong> (<code>.md</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Text with <code>$math$</code>, <code>```maxima</code> blocks and the results; good for README files and static-site generators.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Maxima batch file</strong> (<code>.mac</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">All computations in document order, with the text as comments: run it with <code>batch("file.mac")</code> in any Maxima.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>wxMaxima document</strong> (<code>.wxmx</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Opens in wxMaxima; wxMaxima recomputes the outputs.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>wxMaxima text file</strong> (<code>.wxm</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">wxMaxima&#8217;s plain-text format.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>To get a <strong>PDF</strong>, export LaTeX and compile it (<code>pdflatex file.tex</code>), or use <strong>Print / save as PDF</strong> from <span class="keyseq"><kbd>Ctrl</kbd>+<kbd>K</kbd></span>: printing hides the toolbars and side panels.</p>
+</div>
+</div>
+</div>
+<nav class="pagination">
+  <span class="prev"><a href="../symbols/">Symbols and the Objects panel</a></span>
+  <span class="next"><a href="../together/">Editing together</a></span>
+</nav>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <p>Maxbook is free software under the <a href="https://github.com/Foadsf/maxbook/blob/main/LICENSE">GNU GPL v3 or later</a>. Copyright &copy; 2026 Foad S. Farimani.</p>
+  <p>It talks to <a href="https://maxima.sourceforge.io/">Maxima</a> as a separate program and is not affiliated with any other notebook or math-editor product.
+  This site is built with <a href="https://antora.org/">Antora</a> and its default UI (MPL-2.0), themed for Maxbook.</p>
+</footer>
+<script id="site-script" src="../../_/js/site.js" data-ui-root-path="../../_"></script>
+<script async src="../../_/js/vendor/highlight.js"></script>
+<script src="../../_/js/tabs.js"></script>
+<script src="../../_/js/vendor/lunr.js"></script>
+<script src="../../_/js/search-ui.js" id="search-ui-script" data-site-root-path="../.." data-snippet-length="100" data-stylesheet="../../_/css/search.css"></script>
+<script async src="../../search-index.js"></script>
+  </body>
+</html>

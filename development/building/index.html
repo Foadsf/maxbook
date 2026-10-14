@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Building, testing and releasing :: Maxbook</title>
+    <link rel="canonical" href="https://foadsf.github.io/maxbook/development/building/">
+    <link rel="prev" href="../architecture/">
+    <link rel="next" href="../../about/">
+    <meta name="description" content="Run Maxbook from source, run the tests, build the documentation and the single-file programs, and make a release.">
+    <meta name="generator" content="Antora 3.2.0">
+    <link rel="stylesheet" href="../../_/css/site.css">
+    <link rel="stylesheet" href="../../_/css/tabs.css">
+    <link rel="stylesheet" href="../../_/css/maxbook.css">
+    <meta name="theme-color" content="#1d1c1a">
+    <meta property="og:site_name" content="Maxbook">
+    <meta property="og:title" content="Building, testing and releasing">
+    <meta property="og:description" content="Run Maxbook from source, run the tests, build the documentation and the single-file programs, and make a release.">
+    <script>try { var t = localStorage.getItem('maxbook-docs-theme'); if (t) document.documentElement.dataset.theme = t } catch (e) {}</script>
+    <link rel="icon" href="../../_/img/maxbook.svg" type="image/svg+xml">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar" aria-label="Site">
+    <div class="navbar-brand">
+      <a class="navbar-item mbx-brand" href="https://foadsf.github.io/maxbook/">
+        <img src="../../_/img/maxbook.svg" alt="" width="28" height="28">
+        <span>Maxbook</span>
+      </a>
+      <div class="navbar-item search hide-for-print">
+        <div id="search-field" class="field">
+          <input id="search-input" type="text" placeholder="Search the docs" aria-label="Search the documentation">
+        </div>
+      </div>
+      <button class="navbar-burger" aria-controls="topbar-nav" aria-expanded="false" aria-label="Toggle main menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="../../install/">Install</a>
+        <a class="navbar-item" href="../../tutorials/first-notebook/">Tutorials</a>
+        <a class="navbar-item" href="https://github.com/Foadsf/maxbook">GitHub</a>
+        <div class="navbar-item">
+          <button class="mbx-theme" type="button" aria-label="Switch between light and dark" title="Light / dark">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 13A9 9 0 1 1 11 3a7 7 0 0 0 10 10z"/></svg>
+          </button>
+        </div>
+        <div class="navbar-item">
+          <span class="control">
+            <a class="button is-primary mbx-download" href="https://github.com/Foadsf/maxbook/releases/latest">Download</a>
+          </span>
+        </div>
+      </div>
+    </div>
+  </nav>
+  <script>
+    document.querySelector('.mbx-theme').addEventListener('click', function () {
+      var root = document.documentElement
+      var dark = root.dataset.theme ? root.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches
+      root.dataset.theme = dark ? 'light' : 'dark'
+      try { localStorage.setItem('maxbook-docs-theme', root.dataset.theme) } catch (e) {}
+    })
+  </script>
+</header>
+<div class="body">
+<div class="nav-container" data-component="ROOT" data-version="">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <button class="nav-menu-toggle" aria-label="Toggle expand/collapse all" style="display: none"></button>
+    <h3 class="title"><a href="../../">Maxbook</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../">Overview</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../install/">Install</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Tutorials</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../tutorials/first-notebook/">Your first notebook</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../tutorials/formulas/">Computing with formulas</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../tutorials/maxima-blocks/">Maxima blocks, plots and questions</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../tutorials/menus/">Menus and the command search</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../tutorials/symbols/">Symbols and the Objects panel</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../tutorials/files/">Opening, saving and exporting</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../tutorials/together/">Editing together</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../tutorials/ai-helper/">The AI helper</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Reference</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../reference/keyboard/">Keyboard shortcuts</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../reference/formula-syntax/">Formula syntax</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../reference/command-line/">Command line and settings</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../reference/file-format/">The .maxbook format</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../reference/troubleshooting/">Troubleshooting</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Development</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../architecture/">Architecture</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="1">
+    <a class="nav-link" href="./">Building, testing and releasing</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../about/">About and licence</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">Maxbook</span>
+    <span class="version"></span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <div class="title"><a href="../../">Maxbook</a></div>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="../../" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="../../">Maxbook</a></li>
+    <li>Development</li>
+    <li><a href="./">Building, testing and releasing</a></li>
+  </ul>
+</nav>
+<div class="edit-this-page"><a href="https://github.com/Foadsf/maxbook/edit/main/docs/modules/ROOT/pages/development/building.adoc">Edit this Page</a></div>
+</div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">Building, testing and releasing</h1>
+<div class="sect1">
+<h2 id="run-from-source"><a class="anchor" href="#run-from-source"></a>Run from source</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">git clone https://github.com/Foadsf/maxbook
+cd maxbook
+python -m pip install -e ".[dev]"
+python -m maxbook examples/welcome.maxbook</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Maxbook itself needs only Python 3.9+ and Maxima.
+The front end has no build step; the vendored ProseMirror bundle is committed.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="tests"><a class="anchor" href="#tests"></a>Tests</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">python -m pytest
+ruff check maxbook tests</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>tests/test_kernel.py</code> drives a real Maxima and is skipped when none is installed.</p>
+</li>
+<li>
+<p><code>tests/test_formats.py</code> compiles the LaTeX export with <code>pdflatex</code> when it is available (or set <code>MAXBOOK_PDFLATEX</code>).</p>
+</li>
+<li>
+<p><code>tests/test_ai_collab.py</code> runs the AI helper against a fake client and tests the collaboration hub.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>CI (<code>.github/workflows/ci.yml</code>) runs the whole suite on Ubuntu with Maxima and TeX Live, and the Maxima-free part on Windows.
+The front end is checked by hand and by the screenshot tour below, which drives the real program.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="the-prosemirror-bundle"><a class="anchor" href="#the-prosemirror-bundle"></a>The ProseMirror bundle</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><code>maxbook/web/vendor/prosemirror/prosemirror.mjs</code> bundles ProseMirror and markdown-it, unmodified.
+To change versions, edit <code>tools/vendor/package.json</code>, then:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">cd tools/vendor
+npm ci
+node build.mjs</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The build also writes <code>PACKAGES.txt</code> and copies each package&#8217;s licence file next to the bundle.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="documentation"><a class="anchor" href="#documentation"></a>Documentation</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The documentation is AsciiDoc in <code>docs/</code> (an <a href="https://antora.org/">Antora</a> component).
+To build the site:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">cd docs
+npm ci
+npm run build</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The site is written to <code>docs/build/site</code>; open <code>index.html</code> in a browser.
+Pushing to <code>main</code> builds it and publishes it on the <code>gh-pages</code> branch, which GitHub Pages serves at <a href="https://foadsf.github.io/maxbook/" class="bare">foadsf.github.io/maxbook/</a> (<code>.github/workflows/docs.yml</code>).</p>
+</div>
+<div class="paragraph">
+<p>The look comes from Antora&#8217;s default UI with Maxbook&#8217;s theme: <code>docs/ui/ui-bundle.zip</code> is the default UI with its colours turned into CSS variables by <code>docs/tools/theme-ui.py</code> (for the light and dark themes), and <code>docs/ui/supplemental</code> holds the header, footer and styles.</p>
+</div>
+<div class="sect2">
+<h3 id="screenshots"><a class="anchor" href="#screenshots"></a>Screenshots</h3>
+<div class="paragraph">
+<p>Every screenshot is taken from the real program by <code>docs/tools/screenshots.py</code>: it starts Maxbook and Maxima with a fresh settings folder and a demo folder, drives a browser with real key strokes, and saves WebP images into <code>docs/modules/ROOT/images</code>.
+Local paths, the computer&#8217;s name and network addresses are replaced by neutral placeholders, and the script refuses to save a picture that still shows them.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">python -m pip install "playwright==1.63.0" pillow
+python docs/tools/screenshots.py                  # all scenarios
+python docs/tools/screenshots.py --only formulas  # one scenario</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>On Windows it drives the installed Microsoft Edge; elsewhere run <code>python -m playwright install chromium</code> once, or pass <code>--channel chrome</code>.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="single-file-programs"><a class="anchor" href="#single-file-programs"></a>Single-file programs</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><code>packaging/build.py</code> builds the program for the computer it runs on with PyInstaller and then tests it: it starts the binary, fetches the page, the editor bundle and the session API, and shuts it down.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">python -m pip install "pyinstaller==6.22.3" ".[ai]"
+python packaging/build.py</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The result is <code>dist/maxbook-&lt;version&gt;-&lt;os&gt;-&lt;arch&gt;</code> (<code>.exe</code> on Windows) with a <code>.sha256</code> file.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="releasing"><a class="anchor" href="#releasing"></a>Releasing</h2>
+<div class="sectionbody">
+<div class="olist arabic steps">
+<ol class="arabic">
+<li>
+<p>Update the version in <code>pyproject.toml</code>, <code>maxbook/<em>init</em>.py</code> and <code>docs/antora.yml</code> (<code>release-version</code>), and the notes in <code>packaging/RELEASE_NOTES.md</code>.</p>
+</li>
+<li>
+<p>Commit, then tag and push:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">git tag v0.5.0
+git push origin v0.5.0</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>The release workflow (<code>.github/workflows/release.yml</code>) builds and tests the program on Windows (x64, Arm), macOS (Apple silicon, Intel) and Linux (x64, Arm), and publishes a GitHub release with the six files and <code>SHA256SUMS.txt</code>.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>The programs are not code-signed, which is why Windows SmartScreen and macOS Gatekeeper ask for confirmation (see <a href="../../install/" class="xref page">Install</a>).</p>
+</div>
+</div>
+</div>
+<nav class="pagination">
+  <span class="prev"><a href="../architecture/">Architecture</a></span>
+  <span class="next"><a href="../../about/">About and licence</a></span>
+</nav>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <p>Maxbook is free software under the <a href="https://github.com/Foadsf/maxbook/blob/main/LICENSE">GNU GPL v3 or later</a>. Copyright &copy; 2026 Foad S. Farimani.</p>
+  <p>It talks to <a href="https://maxima.sourceforge.io/">Maxima</a> as a separate program and is not affiliated with any other notebook or math-editor product.
+  This site is built with <a href="https://antora.org/">Antora</a> and its default UI (MPL-2.0), themed for Maxbook.</p>
+</footer>
+<script id="site-script" src="../../_/js/site.js" data-ui-root-path="../../_"></script>
+<script async src="../../_/js/vendor/highlight.js"></script>
+<script src="../../_/js/tabs.js"></script>
+<script src="../../_/js/vendor/lunr.js"></script>
+<script src="../../_/js/search-ui.js" id="search-ui-script" data-site-root-path="../.." data-snippet-length="100" data-stylesheet="../../_/css/search.css"></script>
+<script async src="../../search-index.js"></script>
+  </body>
+</html>

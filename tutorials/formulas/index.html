@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Computing with formulas :: Maxbook</title>
+    <link rel="canonical" href="https://foadsf.github.io/maxbook/tutorials/formulas/">
+    <link rel="prev" href="../first-notebook/">
+    <link rel="next" href="../maxima-blocks/">
+    <meta name="description" content="Inline and display formulas, templates, compute in place, definitions and evaluated formulas.">
+    <meta name="generator" content="Antora 3.2.0">
+    <link rel="stylesheet" href="../../_/css/site.css">
+    <link rel="stylesheet" href="../../_/css/tabs.css">
+    <link rel="stylesheet" href="../../_/css/maxbook.css">
+    <meta name="theme-color" content="#1d1c1a">
+    <meta property="og:site_name" content="Maxbook">
+    <meta property="og:title" content="Computing with formulas">
+    <meta property="og:description" content="Inline and display formulas, templates, compute in place, definitions and evaluated formulas.">
+    <script>try { var t = localStorage.getItem('maxbook-docs-theme'); if (t) document.documentElement.dataset.theme = t } catch (e) {}</script>
+    <link rel="icon" href="../../_/img/maxbook.svg" type="image/svg+xml">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar" aria-label="Site">
+    <div class="navbar-brand">
+      <a class="navbar-item mbx-brand" href="https://foadsf.github.io/maxbook/">
+        <img src="../../_/img/maxbook.svg" alt="" width="28" height="28">
+        <span>Maxbook</span>
+      </a>
+      <div class="navbar-item search hide-for-print">
+        <div id="search-field" class="field">
+          <input id="search-input" type="text" placeholder="Search the docs" aria-label="Search the documentation">
+        </div>
+      </div>
+      <button class="navbar-burger" aria-controls="topbar-nav" aria-expanded="false" aria-label="Toggle main menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="../../install/">Install</a>
+        <a class="navbar-item" href="../first-notebook/">Tutorials</a>
+        <a class="navbar-item" href="https://github.com/Foadsf/maxbook">GitHub</a>
+        <div class="navbar-item">
+          <button class="mbx-theme" type="button" aria-label="Switch between light and dark" title="Light / dark">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 13A9 9 0 1 1 11 3a7 7 0 0 0 10 10z"/></svg>
+          </button>
+        </div>
+        <div class="navbar-item">
+          <span class="control">
+            <a class="button is-primary mbx-download" href="https://github.com/Foadsf/maxbook/releases/latest">Download</a>
+          </span>
+        </div>
+      </div>
+    </div>
+  </nav>
+  <script>
+    document.querySelector('.mbx-theme').addEventListener('click', function () {
+      var root = document.documentElement
+      var dark = root.dataset.theme ? root.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches
+      root.dataset.theme = dark ? 'light' : 'dark'
+      try { localStorage.setItem('maxbook-docs-theme', root.dataset.theme) } catch (e) {}
+    })
+  </script>
+</header>
+<div class="body">
+<div class="nav-container" data-component="ROOT" data-version="">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <button class="nav-menu-toggle" aria-label="Toggle expand/collapse all" style="display: none"></button>
+    <h3 class="title"><a href="../../">Maxbook</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../">Overview</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../install/">Install</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Tutorials</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../first-notebook/">Your first notebook</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="1">
+    <a class="nav-link" href="./">Computing with formulas</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../maxima-blocks/">Maxima blocks, plots and questions</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../menus/">Menus and the command search</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../symbols/">Symbols and the Objects panel</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../files/">Opening, saving and exporting</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../together/">Editing together</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../ai-helper/">The AI helper</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Reference</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../reference/keyboard/">Keyboard shortcuts</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../reference/formula-syntax/">Formula syntax</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../reference/command-line/">Command line and settings</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../reference/file-format/">The .maxbook format</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../reference/troubleshooting/">Troubleshooting</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Development</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../development/architecture/">Architecture</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../development/building/">Building, testing and releasing</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../about/">About and licence</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">Maxbook</span>
+    <span class="version"></span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <div class="title"><a href="../../">Maxbook</a></div>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="../../" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="../../">Maxbook</a></li>
+    <li>Tutorials</li>
+    <li><a href="./">Computing with formulas</a></li>
+  </ul>
+</nav>
+<div class="edit-this-page"><a href="https://github.com/Foadsf/maxbook/edit/main/docs/modules/ROOT/pages/tutorials/formulas.adoc">Edit this Page</a></div>
+</div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">Computing with formulas</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>Formulas in Maxbook are written visually, like in a word processor&#8217;s equation editor, and Maxima understands them.
+This page shows how to write them quickly and the three ways to compute with them.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="inline-and-display-formulas"><a class="anchor" href="#inline-and-display-formulas"></a>Inline and display formulas</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Type <code>$</code> in your text for a formula <strong>inside a sentence</strong>.</p>
+</li>
+<li>
+<p>Type <code>$</code> again in an empty formula, or press <span class="keyseq"><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>M</kbd></span>, for a <strong>display formula</strong> on its own line.</p>
+</li>
+<li>
+<p><span class="keyseq"><kbd>Ctrl</kbd>+<kbd>M</kbd></span> also starts an inline formula, and the format bar has buttons for both.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Leave a formula with <kbd>Esc</kbd>, <kbd>Enter</kbd> (inline formulas), or <kbd>→</kbd> at its end.
+Click a formula to edit it again.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="templates-type-a-word"><a class="anchor" href="#templates-type-a-word"></a>Templates: type a word</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Inside a formula, type a word such as <code>int</code>, <code>frac</code>, <code>sum</code>, <code>prod</code>, <code>lim</code>, <code>sqrt</code>, <code>matrix</code>, <code>det</code>, <code>binom</code> or <code>abs</code>.
+A list of matching templates opens:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../_images/formulas-search.webp" alt="Typing int in a formula lists the Integral and Definite integral templates">
+</div>
+</div>
+<div class="paragraph">
+<p>Press <kbd>Enter</kbd> or <kbd>Tab</kbd> to insert the highlighted template, <kbd>↑</kbd> and <kbd>↓</kbd> to choose another, or <kbd>Space</kbd> to keep the letters as they are.
+A template has empty boxes; <kbd>Tab</kbd> moves from one to the next (the box you are in is highlighted).
+Once no empty box is left, <kbd>Tab</kbd> does what it does in any formula: compute or leave it.</p>
+</div>
+<div class="paragraph">
+<p>While you edit a display formula, the line under it shows the Maxima input the formula stands for:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../_images/formulas-display.webp" alt="An integral being edited" width="with its Maxima translation integrate(x^2" height="x) under it">
+</div>
+</div>
+<div class="paragraph">
+<p>If the formula is not complete yet, the line says what is missing instead (for example "integral is missing its differential (dx)"), so you always see what will be evaluated before anything runs.
+The rules are listed in <a href="../../reference/formula-syntax/" class="xref page">Formula syntax</a>.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Some letter pairs are left alone on purpose: <code>gt</code> stays g·t and <code>in</code> stays i·n, because in a notebook they are usually products of two variables.
+Function names (<code>sin</code>, <code>ln</code>, <code>exp</code>&#8230;&#8203;) and Greek letters (<code>alpha</code>, <code>pi</code>&#8230;&#8203;) still turn into their symbols as you type.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="three-ways-to-compute"><a class="anchor" href="#three-ways-to-compute"></a>Three ways to compute</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="1-compute-in-place-then-tab"><a class="anchor" href="#1-compute-in-place-then-tab"></a>1. Compute in place: <code>=</code> then Tab</h3>
+<div class="paragraph">
+<p>End a formula with <code>=</code> and press <kbd>Tab</kbd>.
+Maxima&#8217;s value appears right after it, highlighted:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../_images/formulas-sum-typing.webp" alt="The Basel sum" width="written with the sum template" height="ending in an equals sign">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../_images/formulas-sum.webp" alt="The result pi squared over six appears after the sum">
+</div>
+</div>
+<div class="paragraph">
+<p>Asking for a value means "work it out": integrals, derivatives, limits and sums written as formulas are evaluated (Maxima&#8217;s <code>nouns</code> and <code>simpsum</code>), which is why the infinite sum above gives π²/6 rather than the sum again.
+If Maxima cannot translate or evaluate the formula, a ⚠ appears instead; hover it to read the message.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="2-definitions-then-tab"><a class="anchor" href="#2-definitions-then-tab"></a>2. Definitions: <code>:=</code> then Tab</h3>
+<div class="paragraph">
+<p>A formula with <code>:=</code> defines something in Maxima:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>a := 3</code> defines a variable (Maxima&#8217;s <code>a: 3</code>),</p>
+</li>
+<li>
+<p><code>f(x) := x^2 \sin x</code> defines a function.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>A green ✓ confirms the definition.
+Everything below can use it: other formulas, Maxima blocks and plots.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="3-evaluated-display-formulas-shiftenter"><a class="anchor" href="#3-evaluated-display-formulas-shiftenter"></a>3. Evaluated display formulas: Shift+Enter</h3>
+<div class="paragraph">
+<p>In a display formula, <span class="keyseq"><kbd>Shift</kbd>+<kbd>Enter</kbd></span> turns it into an <strong>evaluated</strong> formula: Maxima runs it like a Maxima block and shows the result below it, with its label.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../_images/formulas-evaluated.webp" alt="An evaluated display formula with the result x cubed over 3">
+</div>
+</div>
+<div class="paragraph">
+<p>The button at the top right of the block switches between <strong>Evaluated</strong> and <strong>Display only</strong>.
+A display-only formula is just typeset mathematics: nothing is sent to Maxima.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="run-all"><a class="anchor" href="#run-all"></a>Run all</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>Run all</strong> (or <span class="keyseq"><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Enter</kbd></span>) goes through the document from the top and recomputes, in order:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>every Maxima block,</p>
+</li>
+<li>
+<p>every display formula marked <strong>Evaluated</strong>,</p>
+</li>
+<li>
+<p>every formula ending in <code>=</code> or containing <code>:=</code>.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>It stops at the first error and scrolls to it.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="tips"><a class="anchor" href="#tips"></a>Tips</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><span class="keyseq"><kbd>Ctrl</kbd>+<kbd>K</kbd></span> searches all templates, also from outside a formula.</p>
+</li>
+<li>
+<p>A formula ending in <code>=</code> that you do not want computed is fine: it only computes when you press <kbd>Tab</kbd> in it or use <strong>Run all</strong>.</p>
+</li>
+<li>
+<p>In formulas, <code>e</code> is Euler&#8217;s number, <code>\pi</code> is π, and a plain <code>i</code> is a variable; use the template search for the imaginary unit (<code>imag</code>).</p>
+</li>
+<li>
+<p>Use a Maxima block for anything that is not one expression: loops, several statements, options such as <code>ratprint: false</code>.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<nav class="pagination">
+  <span class="prev"><a href="../first-notebook/">Your first notebook</a></span>
+  <span class="next"><a href="../maxima-blocks/">Maxima blocks, plots and questions</a></span>
+</nav>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <p>Maxbook is free software under the <a href="https://github.com/Foadsf/maxbook/blob/main/LICENSE">GNU GPL v3 or later</a>. Copyright &copy; 2026 Foad S. Farimani.</p>
+  <p>It talks to <a href="https://maxima.sourceforge.io/">Maxima</a> as a separate program and is not affiliated with any other notebook or math-editor product.
+  This site is built with <a href="https://antora.org/">Antora</a> and its default UI (MPL-2.0), themed for Maxbook.</p>
+</footer>
+<script id="site-script" src="../../_/js/site.js" data-ui-root-path="../../_"></script>
+<script async src="../../_/js/vendor/highlight.js"></script>
+<script src="../../_/js/tabs.js"></script>
+<script src="../../_/js/vendor/lunr.js"></script>
+<script src="../../_/js/search-ui.js" id="search-ui-script" data-site-root-path="../.." data-snippet-length="100" data-stylesheet="../../_/css/search.css"></script>
+<script async src="../../search-index.js"></script>
+  </body>
+</html>

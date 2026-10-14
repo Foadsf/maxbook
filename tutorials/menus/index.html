@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Menus and the command search :: Maxbook</title>
+    <link rel="canonical" href="https://foadsf.github.io/maxbook/tutorials/menus/">
+    <link rel="prev" href="../maxima-blocks/">
+    <link rel="next" href="../symbols/">
+    <meta name="description" content="Let Maxbook write the Maxima code: wxMaxima-style menus, forms and the command search.">
+    <meta name="generator" content="Antora 3.2.0">
+    <link rel="stylesheet" href="../../_/css/site.css">
+    <link rel="stylesheet" href="../../_/css/tabs.css">
+    <link rel="stylesheet" href="../../_/css/maxbook.css">
+    <meta name="theme-color" content="#1d1c1a">
+    <meta property="og:site_name" content="Maxbook">
+    <meta property="og:title" content="Menus and the command search">
+    <meta property="og:description" content="Let Maxbook write the Maxima code: wxMaxima-style menus, forms and the command search.">
+    <script>try { var t = localStorage.getItem('maxbook-docs-theme'); if (t) document.documentElement.dataset.theme = t } catch (e) {}</script>
+    <link rel="icon" href="../../_/img/maxbook.svg" type="image/svg+xml">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar" aria-label="Site">
+    <div class="navbar-brand">
+      <a class="navbar-item mbx-brand" href="https://foadsf.github.io/maxbook/">
+        <img src="../../_/img/maxbook.svg" alt="" width="28" height="28">
+        <span>Maxbook</span>
+      </a>
+      <div class="navbar-item search hide-for-print">
+        <div id="search-field" class="field">
+          <input id="search-input" type="text" placeholder="Search the docs" aria-label="Search the documentation">
+        </div>
+      </div>
+      <button class="navbar-burger" aria-controls="topbar-nav" aria-expanded="false" aria-label="Toggle main menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="../../install/">Install</a>
+        <a class="navbar-item" href="../first-notebook/">Tutorials</a>
+        <a class="navbar-item" href="https://github.com/Foadsf/maxbook">GitHub</a>
+        <div class="navbar-item">
+          <button class="mbx-theme" type="button" aria-label="Switch between light and dark" title="Light / dark">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 13A9 9 0 1 1 11 3a7 7 0 0 0 10 10z"/></svg>
+          </button>
+        </div>
+        <div class="navbar-item">
+          <span class="control">
+            <a class="button is-primary mbx-download" href="https://github.com/Foadsf/maxbook/releases/latest">Download</a>
+          </span>
+        </div>
+      </div>
+    </div>
+  </nav>
+  <script>
+    document.querySelector('.mbx-theme').addEventListener('click', function () {
+      var root = document.documentElement
+      var dark = root.dataset.theme ? root.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches
+      root.dataset.theme = dark ? 'light' : 'dark'
+      try { localStorage.setItem('maxbook-docs-theme', root.dataset.theme) } catch (e) {}
+    })
+  </script>
+</header>
+<div class="body">
+<div class="nav-container" data-component="ROOT" data-version="">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <button class="nav-menu-toggle" aria-label="Toggle expand/collapse all" style="display: none"></button>
+    <h3 class="title"><a href="../../">Maxbook</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../">Overview</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../install/">Install</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Tutorials</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../first-notebook/">Your first notebook</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../formulas/">Computing with formulas</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../maxima-blocks/">Maxima blocks, plots and questions</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="1">
+    <a class="nav-link" href="./">Menus and the command search</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../symbols/">Symbols and the Objects panel</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../files/">Opening, saving and exporting</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../together/">Editing together</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../ai-helper/">The AI helper</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Reference</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../reference/keyboard/">Keyboard shortcuts</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../reference/formula-syntax/">Formula syntax</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../reference/command-line/">Command line and settings</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../reference/file-format/">The .maxbook format</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../reference/troubleshooting/">Troubleshooting</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Development</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../development/architecture/">Architecture</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../development/building/">Building, testing and releasing</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../about/">About and licence</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">Maxbook</span>
+    <span class="version"></span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <div class="title"><a href="../../">Maxbook</a></div>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="../../" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="../../">Maxbook</a></li>
+    <li>Tutorials</li>
+    <li><a href="./">Menus and the command search</a></li>
+  </ul>
+</nav>
+<div class="edit-this-page"><a href="https://github.com/Foadsf/maxbook/edit/main/docs/modules/ROOT/pages/tutorials/menus.adoc">Edit this Page</a></div>
+</div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">Menus and the command search</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>You do not need to remember Maxima&#8217;s function names and argument orders.
+The menus in the format bar open short forms that write the Maxima code for you, much like wxMaxima&#8217;s dialogs.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="the-menus"><a class="anchor" href="#the-menus"></a>The menus</h2>
+<div class="sectionbody">
+<div class="imageblock">
+<div class="content">
+<img src="../../_images/menus-calculus.webp" alt="The Calculus menu: Integrate" width="Differentiate" height="Limit">
+</div>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 80%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Equations</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Solve, solve numerically, linear systems, polynomial roots, ordinary differential equations with initial conditions</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Algebra</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Rational simplification, expand, factor, partial fractions, substitution, trigonometric simplification, rectangular and polar form, numerical value</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Calculus</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Integrate, differentiate, limit, Taylor series, sum, product, Laplace transform and its inverse</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Matrix</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">New matrix, determinant, inverse, transpose, eigenvalues and eigenvectors, rank, characteristic polynomial</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Plot</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2D plots, parametric and implicit curves, 3D surfaces, data points</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect1">
+<h2 id="filling-in-a-form"><a class="anchor" href="#filling-in-a-form"></a>Filling in a form</h2>
+<div class="sectionbody">
+<div class="olist arabic steps">
+<ol class="arabic">
+<li>
+<p>Choose an entry, for example <strong>Calculus › Taylor series</strong>.</p>
+</li>
+<li>
+<p>Fill in the fields. The first is selected, ready for typing; <code>%</code> (the default) means "the last result".
+The box at the bottom shows the Maxima code as you type:</p>
+<div class="imageblock">
+<div class="content">
+<img src="../../_images/menus-dialog.webp" alt="The Taylor series form with expression exp(x)*cos(x)" width="variable x" height="around 0">
+</div>
+</div>
+</li>
+<li>
+<p>Click <strong>Insert and run</strong> (or press <kbd>Enter</kbd>), or <strong>Insert</strong> to add the code without running it.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>The code is inserted as an ordinary Maxima block after the cursor, so you can read it, change it and run it again:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../_images/menus-result.webp" alt="The inserted taylor(&#8230;&#8203;) block and its result">
+</div>
+</div>
+<div class="paragraph">
+<p>If the cursor is inside a Maxima block, the code is inserted there instead.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="the-command-search-ctrlk"><a class="anchor" href="#the-command-search-ctrlk"></a>The command search: Ctrl+K</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><span class="keyseq"><kbd>Ctrl</kbd>+<kbd>K</kbd></span> (or the magnifier at the top right) opens one search box for everything:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>commands such as <strong>Run everything</strong>, <strong>Export…</strong>, <strong>Toggle light/dark</strong>, <strong>Edit together</strong>,</p>
+</li>
+<li>
+<p>the menu forms (type <code>taylor</code>, <code>eigen</code>, <code>solve</code>&#8230;&#8203;),</p>
+</li>
+<li>
+<p>formula templates and Maxima snippets.</p>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../_images/menus-palette.webp" alt="Searching for matrix lists the matrix forms" width="matrix templates and the Maxima matrix snippet">
+</div>
+</div>
+<div class="paragraph">
+<p>Use <kbd>↑</kbd> and <kbd>↓</kbd> and <kbd>Enter</kbd>, or click.
+Each entry shows its keyboard shortcut, if it has one, on the right.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="formatting-text"><a class="anchor" href="#formatting-text"></a>Formatting text</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The left part of the format bar formats text: bold (<span class="keyseq"><kbd>Ctrl</kbd>+<kbd>B</kbd></span>), italic (<span class="keyseq"><kbd>Ctrl</kbd>+<kbd>I</kbd></span>), code (<kbd class="keyseq"><kbd>Ctrl</kbd>+<kbd>`</kbd></kbd>), headings 1–3 (<span class="keyseq"><kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>1</kbd></span> to <span class="keyseq"><kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>3</kbd></span>), plain text (<span class="keyseq"><kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>0</kbd></span>), bulleted and numbered lists, and quotes.
+Most of it also works by typing Markdown: <code>#</code> and a space for a heading, <code>-</code> or <code>1.</code> for lists, <code>&gt;</code> for a quote, <code>**bold**</code>, <code>`code`</code>, <code>---</code> for a line.
+See <a href="../../reference/keyboard/" class="xref page">Keyboard shortcuts</a>.</p>
+</div>
+</div>
+</div>
+<nav class="pagination">
+  <span class="prev"><a href="../maxima-blocks/">Maxima blocks, plots and questions</a></span>
+  <span class="next"><a href="../symbols/">Symbols and the Objects panel</a></span>
+</nav>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <p>Maxbook is free software under the <a href="https://github.com/Foadsf/maxbook/blob/main/LICENSE">GNU GPL v3 or later</a>. Copyright &copy; 2026 Foad S. Farimani.</p>
+  <p>It talks to <a href="https://maxima.sourceforge.io/">Maxima</a> as a separate program and is not affiliated with any other notebook or math-editor product.
+  This site is built with <a href="https://antora.org/">Antora</a> and its default UI (MPL-2.0), themed for Maxbook.</p>
+</footer>
+<script id="site-script" src="../../_/js/site.js" data-ui-root-path="../../_"></script>
+<script async src="../../_/js/vendor/highlight.js"></script>
+<script src="../../_/js/tabs.js"></script>
+<script src="../../_/js/vendor/lunr.js"></script>
+<script src="../../_/js/search-ui.js" id="search-ui-script" data-site-root-path="../.." data-snippet-length="100" data-stylesheet="../../_/css/search.css"></script>
+<script async src="../../search-index.js"></script>
+  </body>
+</html>

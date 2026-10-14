@@ -1,0 +1,128 @@
+/* Maxbook theme on top of the Antora default UI (whose colours are variables,
+   see docs/tools/theme-ui.py).  Light and dark follow the reader's system
+   unless the header toggle chose one. */
+:root {
+  --mbx-accent: #3b5bdb;
+  --mbx-accent-soft: #e7ecfd;
+  --mbx-accent-ink: #ffffff;
+  --mbx-navbar: #1d1c1a;
+  --mbx-navbar-ink: #f4f2ee;
+  --mbx-shadow: 0 1px 2px rgba(29, 28, 26, .06), 0 10px 30px rgba(29, 28, 26, .08);
+  --mbx-font-ui: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --mbx-font-prose: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+  --mbx-font-mono: ui-monospace, "Cascadia Code", "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+}
+:root[data-theme=dark] {
+  --mbx-accent: #8aa4ff; --mbx-accent-soft: #252d4a; --mbx-accent-ink: #0d1020;
+  --mbx-navbar: #0e0f12; --mbx-shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 10px 30px rgba(0, 0, 0, .3);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme=light]) {
+    --mbx-accent: #8aa4ff; --mbx-accent-soft: #252d4a; --mbx-accent-ink: #0d1020;
+    --mbx-navbar: #0e0f12; --mbx-shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 10px 30px rgba(0, 0, 0, .3);
+  }
+}
+
+/* ------------------------------------------------------------ type */
+html, body, .nav, .toolbar, .toc, #search-input { font-family: var(--mbx-font-ui); }
+.doc { font-family: var(--mbx-font-prose); font-size: 1.075rem; line-height: 1.65; }
+.doc h1, .doc h2, .doc h3, .doc h4, .doc h5, .doc h6,
+.doc .title, .doc table, .doc .admonitionblock td.content, .doc .colist, .doc .hero-actions,
+.doc .tabs, .doc .dlist dt { font-family: var(--mbx-font-ui); }
+.doc h1.page { font-size: 2.2rem; letter-spacing: -.015em; font-weight: 650; }
+.doc h2 { font-weight: 600; letter-spacing: -.005em; }
+.doc h3 { font-weight: 600; }
+.doc code, .doc pre, .doc kbd, .doc .literalblock pre { font-family: var(--mbx-font-mono); font-variant-ligatures: none; }
+.doc p code, .doc li code, .doc td code { font-size: .86em; border-radius: 4px; padding: .1em .35em; }
+.doc a { text-underline-offset: .15em; }
+.doc .paragraph.lead > p, .doc .lead { font-size: 1.2rem; color: var(--mbx-5d5d5d); }
+
+/* ------------------------------------------------------------ navbar */
+.navbar { background: var(--mbx-navbar); }
+.navbar .navbar-item, .navbar .navbar-link { color: var(--mbx-navbar-ink); }
+.navbar-end > a.navbar-item:hover, .navbar-end .navbar-item.has-dropdown:hover .navbar-link { background: rgba(255, 255, 255, .08); color: #fff; }
+.mbx-brand { gap: .55rem; font-weight: 650; font-size: 1.05rem; letter-spacing: .01em; }
+.mbx-brand img { display: block; }
+.navbar .button.is-primary.mbx-download {
+  background: var(--mbx-accent); color: var(--mbx-accent-ink); border: 0; border-radius: 8px; font-weight: 600;
+}
+.navbar .button.is-primary.mbx-download:hover { filter: brightness(1.08); }
+.mbx-theme {
+  background: transparent; border: 1px solid rgba(255, 255, 255, .25); border-radius: 8px; width: 34px; height: 30px;
+  display: inline-grid; place-items: center; cursor: pointer; color: var(--mbx-navbar-ink);
+}
+.mbx-theme svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.8; }
+.mbx-theme:hover { background: rgba(255, 255, 255, .1); }
+#search-input { border-radius: 8px; background: rgba(255, 255, 255, .95); }
+@media screen and (max-width: 1023.5px) {
+  .navbar-menu { background: var(--mbx-fff); }
+  .navbar-menu .navbar-item, .navbar-menu .navbar-link { color: var(--mbx-333); }
+  .mbx-theme { color: var(--mbx-333); border-color: var(--mbx-c1c1c1); }
+  .navbar-burger span { background: var(--mbx-navbar-ink); }
+}
+
+/* ------------------------------------------------------------ navigation */
+.nav-menu .nav-link, .nav-menu .nav-text { font-size: .9rem; }
+.nav-item.is-current-page > .nav-link { color: var(--mbx-accent); font-weight: 600; }
+.toc .toc-menu a.is-active { border-left-color: var(--mbx-accent); color: var(--mbx-accent); }
+
+/* ------------------------------------------------------------ screenshots and figures */
+.doc .imageblock img, .doc .image.screenshot img {
+  border: 1px solid var(--mbx-e1e1e1); border-radius: 12px; box-shadow: var(--mbx-shadow); background: #fff;
+}
+.doc .imageblock.plain img, .doc .imageblock.noframe img { border: 0; box-shadow: none; border-radius: 0; background: none; }
+.doc .imageblock { margin: 1.5rem 0; }
+.doc .imageblock .title { font-family: var(--mbx-font-ui); font-style: normal; font-size: .9rem; color: var(--mbx-8e8e8e); text-align: center; margin-top: .6rem; }
+.doc .imageblock.text-center .content { text-align: center; }
+
+/* ------------------------------------------------------------ admonitions: icons keep white glyphs */
+.doc .admonitionblock td.icon i { color: #fff; }
+.doc .admonitionblock > table { border-radius: 10px; }
+
+/* ------------------------------------------------------------ keys */
+.doc kbd {
+  font-size: .8em; border-radius: 5px; padding: .12em .45em; background: var(--mbx-fafafa);
+  border: 1px solid var(--mbx-c1c1c1); box-shadow: 0 1px 0 var(--mbx-c1c1c1); color: var(--mbx-333);
+}
+
+/* ------------------------------------------------------------ buttons in pages */
+.doc a.button, .doc .button a {
+  display: inline-block; padding: .55rem 1.1rem; border-radius: 10px; font-family: var(--mbx-font-ui);
+  font-weight: 600; text-decoration: none; border: 1px solid var(--mbx-c1c1c1); color: var(--mbx-333);
+  margin: .25rem .5rem .25rem 0; background: var(--mbx-fff);
+}
+.doc a.button:hover, .doc .button a:hover { border-color: var(--mbx-accent); color: var(--mbx-accent); }
+.doc a.button.primary, .doc .button.primary a {
+  background: var(--mbx-accent); border-color: var(--mbx-accent); color: var(--mbx-accent-ink);
+}
+.doc a.button.primary:hover, .doc .button.primary a:hover { filter: brightness(1.08); color: var(--mbx-accent-ink); }
+
+/* ------------------------------------------------------------ home page */
+.doc .hero { margin: .5rem 0 2rem; }
+.doc .hero .lead p { font-size: 1.3rem; line-height: 1.5; max-width: 40rem; }
+.doc .hero-actions p { margin-top: 1rem; }
+.doc .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: 1rem; margin: 1.5rem 0 2rem; }
+.doc .features > .content { display: contents; }
+.doc .features .openblock.card, .doc .features .card {
+  border: 1px solid var(--mbx-e1e1e1); border-radius: 12px; padding: .2rem 1.1rem 1rem; background: var(--mbx-fafafa);
+}
+.doc .features .card .title { text-align: left; font-family: var(--mbx-font-ui); font-weight: 650; font-size: 1.02rem; margin: .9rem 0 .2rem; color: var(--mbx-191919); font-style: normal; }
+.doc .features .card p { font-size: .98rem; margin: .3rem 0 0; }
+.doc .platforms { display: flex; flex-wrap: wrap; gap: .5rem; }
+
+/* ------------------------------------------------------------ step-by-step lists */
+.doc .olist.steps > ol { list-style: none; padding-left: 0; margin-left: 0; }
+.doc .olist.steps > ol > li { position: relative; padding-left: 2.6rem; margin: 1.1rem 0; }
+.doc .olist.steps > ol > li::before {
+  content: counter(list-item);  /* the built-in list counter, so start=4 continues a list */ position: absolute; left: 0; top: .05rem; width: 1.8rem; height: 1.8rem; border-radius: 50%;
+  background: var(--mbx-accent); color: var(--mbx-accent-ink); font: 600 .9rem/1.8rem var(--mbx-font-ui); text-align: center;
+}
+
+/* ------------------------------------------------------------ tables */
+.doc table.tableblock { border-radius: 8px; overflow: hidden; }
+.doc table.tableblock th { background: var(--mbx-fafafa); }
+
+@media print {
+  .navbar, .nav-container, .toolbar, .toc, footer.footer { display: none !important; }
+  .doc .imageblock img { box-shadow: none; }
+}

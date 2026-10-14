@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Maxima blocks, plots and questions :: Maxbook</title>
+    <link rel="canonical" href="https://foadsf.github.io/maxbook/tutorials/maxima-blocks/">
+    <link rel="prev" href="../formulas/">
+    <link rel="next" href="../menus/">
+    <meta name="description" content="Running Maxima input, answering Maxima's questions, stopping long computations and drawing plots.">
+    <meta name="generator" content="Antora 3.2.0">
+    <link rel="stylesheet" href="../../_/css/site.css">
+    <link rel="stylesheet" href="../../_/css/tabs.css">
+    <link rel="stylesheet" href="../../_/css/maxbook.css">
+    <meta name="theme-color" content="#1d1c1a">
+    <meta property="og:site_name" content="Maxbook">
+    <meta property="og:title" content="Maxima blocks, plots and questions">
+    <meta property="og:description" content="Running Maxima input, answering Maxima&#x27;s questions, stopping long computations and drawing plots.">
+    <script>try { var t = localStorage.getItem('maxbook-docs-theme'); if (t) document.documentElement.dataset.theme = t } catch (e) {}</script>
+    <link rel="icon" href="../../_/img/maxbook.svg" type="image/svg+xml">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar" aria-label="Site">
+    <div class="navbar-brand">
+      <a class="navbar-item mbx-brand" href="https://foadsf.github.io/maxbook/">
+        <img src="../../_/img/maxbook.svg" alt="" width="28" height="28">
+        <span>Maxbook</span>
+      </a>
+      <div class="navbar-item search hide-for-print">
+        <div id="search-field" class="field">
+          <input id="search-input" type="text" placeholder="Search the docs" aria-label="Search the documentation">
+        </div>
+      </div>
+      <button class="navbar-burger" aria-controls="topbar-nav" aria-expanded="false" aria-label="Toggle main menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="../../install/">Install</a>
+        <a class="navbar-item" href="../first-notebook/">Tutorials</a>
+        <a class="navbar-item" href="https://github.com/Foadsf/maxbook">GitHub</a>
+        <div class="navbar-item">
+          <button class="mbx-theme" type="button" aria-label="Switch between light and dark" title="Light / dark">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 13A9 9 0 1 1 11 3a7 7 0 0 0 10 10z"/></svg>
+          </button>
+        </div>
+        <div class="navbar-item">
+          <span class="control">
+            <a class="button is-primary mbx-download" href="https://github.com/Foadsf/maxbook/releases/latest">Download</a>
+          </span>
+        </div>
+      </div>
+    </div>
+  </nav>
+  <script>
+    document.querySelector('.mbx-theme').addEventListener('click', function () {
+      var root = document.documentElement
+      var dark = root.dataset.theme ? root.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches
+      root.dataset.theme = dark ? 'light' : 'dark'
+      try { localStorage.setItem('maxbook-docs-theme', root.dataset.theme) } catch (e) {}
+    })
+  </script>
+</header>
+<div class="body">
+<div class="nav-container" data-component="ROOT" data-version="">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <button class="nav-menu-toggle" aria-label="Toggle expand/collapse all" style="display: none"></button>
+    <h3 class="title"><a href="../../">Maxbook</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../">Overview</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../install/">Install</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Tutorials</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../first-notebook/">Your first notebook</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../formulas/">Computing with formulas</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="1">
+    <a class="nav-link" href="./">Maxima blocks, plots and questions</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../menus/">Menus and the command search</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../symbols/">Symbols and the Objects panel</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../files/">Opening, saving and exporting</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../together/">Editing together</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../ai-helper/">The AI helper</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Reference</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../reference/keyboard/">Keyboard shortcuts</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../reference/formula-syntax/">Formula syntax</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../reference/command-line/">Command line and settings</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../reference/file-format/">The .maxbook format</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../reference/troubleshooting/">Troubleshooting</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Development</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../development/architecture/">Architecture</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../development/building/">Building, testing and releasing</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../about/">About and licence</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">Maxbook</span>
+    <span class="version"></span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <div class="title"><a href="../../">Maxbook</a></div>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="../../" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="../../">Maxbook</a></li>
+    <li>Tutorials</li>
+    <li><a href="./">Maxima blocks, plots and questions</a></li>
+  </ul>
+</nav>
+<div class="edit-this-page"><a href="https://github.com/Foadsf/maxbook/edit/main/docs/modules/ROOT/pages/tutorials/maxima-blocks.adoc">Edit this Page</a></div>
+</div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">Maxima blocks, plots and questions</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>A <strong>Maxima block</strong> holds ordinary Maxima input, exactly what you would type at a Maxima prompt or in a wxMaxima input cell.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="creating-and-running-blocks"><a class="anchor" href="#creating-and-running-blocks"></a>Creating and running blocks</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Make a block with any of:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>&gt;&gt;</code> and a space at the start of an empty line,</p>
+</li>
+<li>
+<p><code>```</code> and a space (or <code>```maxima</code>),</p>
+</li>
+<li>
+<p><span class="keyseq"><kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>M</kbd></span>, or the <code>&gt;_</code> button in the format bar.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Then run it:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 75%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="keyseq"><kbd>Shift</kbd>+<kbd>Enter</kbd></span></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Run, and move to the text after the block.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="keyseq"><kbd>Ctrl</kbd>+<kbd>Enter</kbd></span></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Run, and stay in the block.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="keyseq"><kbd>Alt</kbd>+<kbd>Enter</kbd></span></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Run, and insert a new block below.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">▶ in the margin</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Run (shown when you point at the block).</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Statements run one at a time, as in a Maxima session: a statement ending in <code>;</code> shows its result, one ending in <code>$</code> runs silently, and the block stops at the first error.
+The margin shows the input labels (<code>%i5</code>, or <code>%i3–4</code> for several statements) and each result its <code>%o</code> label, so <code>%</code>, <code>%o4</code> and everything you define work across the whole notebook.</p>
+</div>
+<div class="paragraph">
+<p>Inside a block, <kbd>Tab</kbd> indents, <kbd>Esc</kbd> selects the whole block (then <kbd>Delete</kbd> removes it, <kbd>Enter</kbd> goes back in), and the arrow keys at the first or last line move out into the text.
+Pointing at a result shows <strong>LaTeX</strong> and <strong>Maxima</strong> buttons that copy it in either form.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="when-maxima-asks-a-question"><a class="anchor" href="#when-maxima-asks-a-question"></a>When Maxima asks a question</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Some computations depend on facts Maxima does not know, such as the sign of a parameter.
+Maxima then asks, and the question appears in the block:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../_images/blocks-question.webp" alt="Maxima asks: Is a equal to -1? with yes and no buttons and an answer field">
+</div>
+</div>
+<div class="paragraph">
+<p>Click one of the suggested answers or type your own (for example <code>positive</code>) and press <kbd>Enter</kbd>.
+The computation continues with your answer:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../_images/blocks-answered.webp" alt="The answer no and the result x to the power a+1 over a+1">
+</div>
+</div>
+<div class="paragraph">
+<p>To avoid the question next time, tell Maxima beforehand, for example <code>assume(a &gt; 0)$</code> or <code>declare(n, integer)$</code>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="stopping-a-long-computation"><a class="anchor" href="#stopping-a-long-computation"></a>Stopping a long computation</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>While Maxima works, the block shows <code>[*]</code> and the pill at the top says <strong>computing…</strong>:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../_images/blocks-running.webp" alt="A loop to a billion is running; the kernel pill says computing">
+</div>
+</div>
+<div class="paragraph">
+<p>Click <strong>Stop</strong> (the square button).
+Maxima abandons the computation but keeps everything defined so far:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../_images/blocks-stopped.webp" alt="The block says Stopped by you. Maxima kept its state; the variable keep is still 42">
+</div>
+</div>
+<div class="paragraph">
+<p>If Maxima does not react within a few seconds (some long-running library code cannot be interrupted), Maxbook restarts it and the block says that earlier definitions are gone.
+<strong>Restart</strong> (the circular arrow) always starts a fresh Maxima; use it when you want a clean session.
+Stop while Maxima asks a question also works.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="plots-in-the-notebook"><a class="anchor" href="#plots-in-the-notebook"></a>Plots in the notebook</h2>
+<div class="sectionbody">
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 66.6667%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>iplot2d(&#8230;&#8203;)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">like <code>plot2d</code>, drawn into the notebook</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>iplot3d(&#8230;&#8203;)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">like <code>plot3d</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>idraw2d(&#8230;&#8203;)</code>, <code>idraw3d(&#8230;&#8203;)</code>, <code>idraw(&#8230;&#8203;)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">like <code>draw2d</code>, <code>draw3d</code>, <code>draw</code> (the <code>draw</code> package is loaded when needed)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>wxplot2d</code>, <code>wxplot3d</code>, <code>wxdraw2d</code>, <code>wxdraw3d</code>, <code>wxdraw</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">aliases, so wxMaxima worksheets run unchanged</p></td>
+</tr>
+</tbody>
+</table>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-maxima hljs" data-lang="maxima">iplot3d(sin(x)*cos(y), [x, -3, 3], [y, -3, 3])$</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../_images/blocks-plot3d.webp" alt="A 3D surface plot of sin(x) cos(y)">
+</div>
+</div>
+<div class="paragraph">
+<p>Plots are SVG images made by gnuplot, so they stay sharp when you zoom or print.
+The ordinary <code>plot2d</code> and <code>draw2d</code> still open gnuplot&#8217;s own window, as they do in Maxima.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+End plot commands with <code>$</code>: the plot itself is the output, and the command&#8217;s return value is not interesting.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="turning-a-result-into-a-formula"><a class="anchor" href="#turning-a-result-into-a-formula"></a>Turning a result into a formula</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <strong>∑</strong> button on a block inserts a display formula after it, so you can typeset a result or continue the derivation in mathematical notation.
+Copying a result <strong>as LaTeX</strong> and pasting it into a formula also works.</p>
+</div>
+</div>
+</div>
+<nav class="pagination">
+  <span class="prev"><a href="../formulas/">Computing with formulas</a></span>
+  <span class="next"><a href="../menus/">Menus and the command search</a></span>
+</nav>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <p>Maxbook is free software under the <a href="https://github.com/Foadsf/maxbook/blob/main/LICENSE">GNU GPL v3 or later</a>. Copyright &copy; 2026 Foad S. Farimani.</p>
+  <p>It talks to <a href="https://maxima.sourceforge.io/">Maxima</a> as a separate program and is not affiliated with any other notebook or math-editor product.
+  This site is built with <a href="https://antora.org/">Antora</a> and its default UI (MPL-2.0), themed for Maxbook.</p>
+</footer>
+<script id="site-script" src="../../_/js/site.js" data-ui-root-path="../../_"></script>
+<script async src="../../_/js/vendor/highlight.js"></script>
+<script src="../../_/js/tabs.js"></script>
+<script src="../../_/js/vendor/lunr.js"></script>
+<script src="../../_/js/search-ui.js" id="search-ui-script" data-site-root-path="../.." data-snippet-length="100" data-stylesheet="../../_/css/search.css"></script>
+<script async src="../../search-index.js"></script>
+  </body>
+</html>

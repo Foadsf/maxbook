@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Your first notebook :: Maxbook</title>
+    <link rel="canonical" href="https://foadsf.github.io/maxbook/tutorials/first-notebook/">
+    <link rel="prev" href="../../install/">
+    <link rel="next" href="../formulas/">
+    <meta name="description" content="A ten-minute tour: text, formulas, a definition, a Maxima block, a plot and saving.">
+    <meta name="generator" content="Antora 3.2.0">
+    <link rel="stylesheet" href="../../_/css/site.css">
+    <link rel="stylesheet" href="../../_/css/tabs.css">
+    <link rel="stylesheet" href="../../_/css/maxbook.css">
+    <meta name="theme-color" content="#1d1c1a">
+    <meta property="og:site_name" content="Maxbook">
+    <meta property="og:title" content="Your first notebook">
+    <meta property="og:description" content="A ten-minute tour: text, formulas, a definition, a Maxima block, a plot and saving.">
+    <script>try { var t = localStorage.getItem('maxbook-docs-theme'); if (t) document.documentElement.dataset.theme = t } catch (e) {}</script>
+    <link rel="icon" href="../../_/img/maxbook.svg" type="image/svg+xml">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar" aria-label="Site">
+    <div class="navbar-brand">
+      <a class="navbar-item mbx-brand" href="https://foadsf.github.io/maxbook/">
+        <img src="../../_/img/maxbook.svg" alt="" width="28" height="28">
+        <span>Maxbook</span>
+      </a>
+      <div class="navbar-item search hide-for-print">
+        <div id="search-field" class="field">
+          <input id="search-input" type="text" placeholder="Search the docs" aria-label="Search the documentation">
+        </div>
+      </div>
+      <button class="navbar-burger" aria-controls="topbar-nav" aria-expanded="false" aria-label="Toggle main menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="../../install/">Install</a>
+        <a class="navbar-item" href="./">Tutorials</a>
+        <a class="navbar-item" href="https://github.com/Foadsf/maxbook">GitHub</a>
+        <div class="navbar-item">
+          <button class="mbx-theme" type="button" aria-label="Switch between light and dark" title="Light / dark">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 13A9 9 0 1 1 11 3a7 7 0 0 0 10 10z"/></svg>
+          </button>
+        </div>
+        <div class="navbar-item">
+          <span class="control">
+            <a class="button is-primary mbx-download" href="https://github.com/Foadsf/maxbook/releases/latest">Download</a>
+          </span>
+        </div>
+      </div>
+    </div>
+  </nav>
+  <script>
+    document.querySelector('.mbx-theme').addEventListener('click', function () {
+      var root = document.documentElement
+      var dark = root.dataset.theme ? root.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches
+      root.dataset.theme = dark ? 'light' : 'dark'
+      try { localStorage.setItem('maxbook-docs-theme', root.dataset.theme) } catch (e) {}
+    })
+  </script>
+</header>
+<div class="body">
+<div class="nav-container" data-component="ROOT" data-version="">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <button class="nav-menu-toggle" aria-label="Toggle expand/collapse all" style="display: none"></button>
+    <h3 class="title"><a href="../../">Maxbook</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../">Overview</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../install/">Install</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Tutorials</span>
+<ul class="nav-list">
+  <li class="nav-item is-current-page" data-depth="1">
+    <a class="nav-link" href="./">Your first notebook</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../formulas/">Computing with formulas</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../maxima-blocks/">Maxima blocks, plots and questions</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../menus/">Menus and the command search</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../symbols/">Symbols and the Objects panel</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../files/">Opening, saving and exporting</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../together/">Editing together</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../ai-helper/">The AI helper</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Reference</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../reference/keyboard/">Keyboard shortcuts</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../reference/formula-syntax/">Formula syntax</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../reference/command-line/">Command line and settings</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../reference/file-format/">The .maxbook format</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../reference/troubleshooting/">Troubleshooting</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Development</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../development/architecture/">Architecture</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../development/building/">Building, testing and releasing</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../about/">About and licence</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">Maxbook</span>
+    <span class="version"></span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <div class="title"><a href="../../">Maxbook</a></div>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="../../" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="../../">Maxbook</a></li>
+    <li>Tutorials</li>
+    <li><a href="./">Your first notebook</a></li>
+  </ul>
+</nav>
+<div class="edit-this-page"><a href="https://github.com/Foadsf/maxbook/edit/main/docs/modules/ROOT/pages/tutorials/first-notebook.adoc">Edit this Page</a></div>
+</div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">Your first notebook</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>In this tour you write a short note about a falling stone: some text, a formula, a value computed by Maxima, a small Maxima program and a plot.
+It takes about ten minutes.
+You need Maxbook and Maxima installed (<a href="../../install/" class="xref page">Install</a>).</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="start-a-new-notebook"><a class="anchor" href="#start-a-new-notebook"></a>Start a new notebook</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Start Maxbook with the name of a file that does not exist yet:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">maxbook free-fall.maxbook</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>(With the single-file program, use its file name instead of <code>maxbook</code>, for example <code>./maxbook-0.5.0-linux-x64 free-fall.maxbook</code>.
+You can also start it without a name and use <strong>Save</strong> later.)</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../_images/first-new.webp" alt="A new" width="empty notebook called free-fall">
+</div>
+</div>
+<div class="paragraph">
+<p>The window has three columns: the <strong>outline</strong> of your headings on the left, the <strong>document</strong> in the middle, and the <strong>Objects</strong> panel on the right, which lists what Maxima knows.
+At the top are the file commands, <strong>Run all</strong>, <strong>Stop</strong>, and the pill that shows whether Maxima is ready.
+Below them is the format bar: bold, italic, code, headings, lists, and the menus that write Maxima code for you.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="write-text-with-a-formula"><a class="anchor" href="#write-text-with-a-formula"></a>Write text with a formula</h2>
+<div class="sectionbody">
+<div class="olist arabic steps">
+<ol class="arabic">
+<li>
+<p>Click the heading and replace it with <strong>Free fall</strong>.
+Press <kbd>↓</kbd> to go to the empty line below it.</p>
+</li>
+<li>
+<p>Type "A stone dropped from rest falls a distance" and a space, then type <code>$</code>.
+A formula box opens where the cursor is.</p>
+</li>
+<li>
+<p>Type <code>d=1/2</code>, press <kbd>→</kbd> to leave the fraction, then type <code>gt^2</code>.
+Press <kbd>Esc</kbd> (or <kbd>→</kbd> at the end of the formula) to return to the text.</p>
+</li>
+<li>
+<p>Finish the sentence: type " after ", then <code>$</code>, <code>t</code>, <kbd>Esc</kbd>, and " seconds."</p>
+</li>
+</ol>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../_images/first-text.webp" alt="The heading and a sentence with two formulas">
+</div>
+</div>
+<div class="paragraph">
+<p>You type formulas the way you would say them: <code>/</code> makes a fraction, <code>^</code> a power, and <kbd>→</kbd> leaves a fraction or an exponent.
+Each name gets its own colour, the same everywhere in the notebook.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+Typing a word such as <code>frac</code>, <code>int</code>, <code>sum</code>, <code>sqrt</code> or <code>matrix</code> inside a formula opens a list of templates; see <a href="../formulas/" class="xref page">Computing with formulas</a>.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="let-maxima-compute-a-value"><a class="anchor" href="#let-maxima-compute-a-value"></a>Let Maxima compute a value</h2>
+<div class="sectionbody">
+<div class="olist arabic steps">
+<ol class="arabic">
+<li>
+<p>Press <kbd>Enter</kbd> for a new paragraph and type "On Earth," and a space.</p>
+</li>
+<li>
+<p>Type <code>$</code>, then <code>g:=9.81</code>, and press <kbd>Tab</kbd>.
+<code>:=</code> means "define": Maxima now knows <code>g</code>, and a green ✓ confirms it.</p>
+</li>
+<li>
+<p>Continue the sentence with ", so after three seconds the stone has fallen ", then type <code>$</code> and <code>1/2</code>, <kbd>→</kbd>, <code>g*3^2</code>, <kbd>→</kbd>, <code>=</code>.</p>
+</li>
+</ol>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../_images/first-inline-formula.webp" alt="A formula ending in an equals sign" width="still being edited">
+</div>
+</div>
+<div class="olist arabic steps">
+<ol class="arabic" start="4">
+<li>
+<p>Press <kbd>Tab</kbd>.
+Maxima works out the value and writes it after the <code>=</code>:</p>
+</li>
+</ol>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../_images/first-compute.webp" alt="The result 44.145 appears after the formula">
+</div>
+</div>
+<div class="paragraph">
+<p>This is <strong>compute in place</strong>: any formula that ends in <code>=</code> gets its value when you press <kbd>Tab</kbd>.
+If the formula changes, press <kbd>Tab</kbd> in it again; <strong>Run all</strong> recomputes every one of them.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="write-a-small-maxima-program"><a class="anchor" href="#write-a-small-maxima-program"></a>Write a small Maxima program</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Formulas are good for mathematics you want to read.
+For anything longer, use a <strong>Maxima block</strong>, which holds ordinary Maxima input.</p>
+</div>
+<div class="olist arabic steps">
+<ol class="arabic">
+<li>
+<p>Write a question as text, for example <code>How long does a fall from 20 metres take?</code>, and press <kbd>Enter</kbd>.</p>
+</li>
+<li>
+<p>Type <code>&gt;&gt;</code> and a space. A Maxima block appears.</p>
+</li>
+<li>
+<p>Type</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-maxima hljs" data-lang="maxima">t_fall(h) := sqrt(2*h/g)$
+t_fall(20);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>and press <span class="keyseq"><kbd>Shift</kbd>+<kbd>Enter</kbd></span> to run it.</p>
+</div>
+</li>
+</ol>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../_images/first-maxima-block.webp" alt="A Maxima block with its input and the result 2.019&#8230;&#8203;">
+</div>
+</div>
+<div class="paragraph">
+<p>The block uses <code>g</code>, which you defined in the text above: formulas and blocks share one Maxima session.
+Statements ending in <code>$</code> run silently; those ending in <code>;</code> show their result, with Maxima&#8217;s <code>%o</code> label.
+Hover over a result to copy it as LaTeX or as Maxima input.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="add-a-plot"><a class="anchor" href="#add-a-plot"></a>Add a plot</h2>
+<div class="sectionbody">
+<div class="olist arabic steps">
+<ol class="arabic">
+<li>
+<p>Type a sentence, press <kbd>Enter</kbd>, type <code>&gt;&gt;</code> and a space.</p>
+</li>
+<li>
+<p>Type <code>iplot2d(g*t^2/2, [t, 0, 3])$</code> and press <span class="keyseq"><kbd>Shift</kbd>+<kbd>Enter</kbd></span>.</p>
+</li>
+</ol>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../_images/first-plot.webp" alt="A plot of the distance fallen over three seconds">
+</div>
+</div>
+<div class="paragraph">
+<p><code>iplot2d</code> takes the same arguments as Maxima&#8217;s <code>plot2d</code> and draws into the notebook.
+There are also <code>iplot3d</code>, <code>idraw2d</code>, <code>idraw3d</code> and <code>idraw</code>; see <a href="../maxima-blocks/" class="xref page">Maxima blocks, plots and questions</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="save"><a class="anchor" href="#save"></a>Save</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Press <span class="keyseq"><kbd>Ctrl</kbd>+<kbd>S</kbd></span> (<span class="keyseq"><kbd>Cmd</kbd>+<kbd>S</kbd></span> on a Mac).
+Because you named the file when you started Maxbook, it is saved right away; otherwise Maxbook asks where.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../_images/first-saved.webp" alt="The finished notebook" width="with the Objects panel listing g and t_fall">
+</div>
+</div>
+<div class="paragraph">
+<p>Look at the <strong>Objects</strong> panel on the right: it lists the variable <code>g</code> with its value, the function <code>t_fall</code> with its definition, and the names that have no value yet (<code>d</code>, <code>t</code>).</p>
+</div>
+<div class="paragraph">
+<p>A <code>.maxbook</code> file keeps everything, results included, so it opens exactly as you left it.
+Next time, open it and press <strong>Run all</strong> to recompute it from the top.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="what-next"><a class="anchor" href="#what-next"></a>What next</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="../formulas/" class="xref page">Computing with formulas</a>: display formulas, templates, evaluating integrals and sums.</p>
+</li>
+<li>
+<p><a href="../maxima-blocks/" class="xref page">Maxima blocks, plots and questions</a>: questions from Maxima, stopping a long computation, 3D plots.</p>
+</li>
+<li>
+<p><a href="../menus/" class="xref page">Menus and the command search</a>: let Maxbook write the Maxima code.</p>
+</li>
+<li>
+<p><a href="../../reference/keyboard/" class="xref page">Keyboard shortcuts</a>.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<nav class="pagination">
+  <span class="prev"><a href="../../install/">Install</a></span>
+  <span class="next"><a href="../formulas/">Computing with formulas</a></span>
+</nav>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <p>Maxbook is free software under the <a href="https://github.com/Foadsf/maxbook/blob/main/LICENSE">GNU GPL v3 or later</a>. Copyright &copy; 2026 Foad S. Farimani.</p>
+  <p>It talks to <a href="https://maxima.sourceforge.io/">Maxima</a> as a separate program and is not affiliated with any other notebook or math-editor product.
+  This site is built with <a href="https://antora.org/">Antora</a> and its default UI (MPL-2.0), themed for Maxbook.</p>
+</footer>
+<script id="site-script" src="../../_/js/site.js" data-ui-root-path="../../_"></script>
+<script async src="../../_/js/vendor/highlight.js"></script>
+<script src="../../_/js/tabs.js"></script>
+<script src="../../_/js/vendor/lunr.js"></script>
+<script src="../../_/js/search-ui.js" id="search-ui-script" data-site-root-path="../.." data-snippet-length="100" data-stylesheet="../../_/css/search.css"></script>
+<script async src="../../search-index.js"></script>
+  </body>
+</html>
