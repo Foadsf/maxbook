@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "maxbook"
-version = "0.1.0"
+version = "0.5.0"
 description = "Literate notebooks for the Maxima computer algebra system"
 readme = "README.md"
 requires-python = ">=3.9"
@@ -25,6 +25,7 @@ Issues = "https://github.com/Foadsf/maxbook/issues"
 
 [project.optional-dependencies]
 desktop = ["pywebview>=5"]
+ai = ["anthropic>=1.14"]
 dev = ["pytest>=7", "ruff"]
 
 [project.scripts]
@@ -35,7 +36,7 @@ packages = ["maxbook"]
 
 [tool.setuptools.package-data]
 maxbook = ["lisp/*", "web/*", "web/css/*", "web/js/*", "web/vendor/mathlive/*",
-           "web/vendor/mathlive/fonts/*", "web/vendor/marked/*"]
+           "web/vendor/mathlive/fonts/*", "web/vendor/prosemirror/*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
@@ -49,3 +50,8 @@ select = ["E", "F", "W", "B", "UP", "SIM", "BLE", "RUF"]
 # readability over terseness: plain try/except, if/else blocks, list concatenation,
 # and Windows' own environment variable spelling are fine here
 ignore = ["SIM105", "SIM108", "SIM112", "SIM114", "RUF005"]
+
+[tool.ruff.lint.per-file-ignores]
+# the LaTeX exporter's character table and its test are about look-alike characters
+"maxbook/formats.py" = ["RUF001"]
+"tests/test_formats.py" = ["RUF001"]

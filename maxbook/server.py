@@ -2,11 +2,18 @@
 # Copyright (C) 2026 Foad S. Farimani
 """Local HTTP server: serves the web UI and a small JSON API.
 
-Security model: the server binds to 127.0.0.1 only, and every API request
-must carry the per-launch secret token (``X-Maxbook-Token``) and a Host header
-naming this server.  The token defeats cross-site requests from other pages
-in the browser; the Host check defeats DNS-rebinding.  This matters because
-Maxima can run shell commands via ``system()``.
+Security model: the server binds to 127.0.0.1 only (unless sharing is
+switched on), and every API request must carry a per-launch secret token
+(``X-Maxbook-Token``) and a Host header naming this server.  The token
+defeats cross-site requests from other pages in the browser; the Host check
+defeats DNS-rebinding.  This matters because Maxima can run shell commands
+via ``system()``.
+
+There are two tokens.  The host token (printed at start-up) allows
+everything.  The guest token (the share link, ``--share``) allows reading the
+document and editing it together, but not running Maxima, touching files or
+stopping the kernel, because running code means running it on the host's
+computer.
 """
 
 from __future__ import annotations
@@ -16,6 +23,7 @@ import json
 import mimetypes
 import os
 import secrets
+import socket
 import string
 import sys
 import threading
@@ -26,6 +34,7 @@ from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
 from . import __version__, formats
+from .collab import CollabError, CollabHub
 from .kernel import KernelError, MaximaKernel
 from .latex2maxima import ConversionError, collect_function_names, latex_to_maxima
 from .notebook import EXTENSION, NotebookError, atomic_write, load, new_notebook, save, validate
@@ -34,6 +43,14 @@ WEB_DIR = Path(__file__).with_name("web")
 CONFIG_DIR = Path(os.environ.get("MAXBOOK_HOME", Path.home() / ".maxbook"))
 MAX_BODY = 64 * 1024 * 1024
 OPENABLE = {EXTENSION, *formats.IMPORTERS}
+# What a guest (share link) may call.  Everything else is host-only.
+GUEST_ALLOWED = {
+    ("GET", "/api/session"), ("GET", "/api/kernel"), ("GET", "/api/job"), ("GET", "/api/symbols"),
+    ("POST", "/api/convert"), ("POST", "/api/convert-latex"),
+    ("GET", "/api/collab/state"), ("GET", "/api/collab/events"),
+    ("POST", "/api/collab/steps"), ("POST", "/api/collab/snapshot"), ("POST", "/api/collab/presence"),
+    ("POST", "/api/collab/leave"),
+}
 
 
 class ApiError(Exception):
@@ -58,8 +75,13 @@ class Job:
 
 class App:
     def __init__(self, maxima_path: str | None = None, initial_file: str | None = None,
-                 workdir: str | None = None):
+                 workdir: str | None = None, share: bool = False):
         self.token = secrets.token_urlsafe(24)
+        self.guest_token = secrets.token_urlsafe(24)
+        self.share = share
+        self.share_hosts: set[str] = set()
+        self.collab = CollabHub()
+        self.ai = None  # set by create_server
         self.kernel = MaximaKernel(maxima_path, workdir=workdir or os.getcwd())
         self.jobs: dict[str, Job] = {}
         self.current_job: Job | None = None
@@ -97,13 +119,23 @@ class App:
         self._kernel_thread = threading.Thread(target=run, daemon=True)
         self._kernel_thread.start()
 
-    def restart_kernel_async(self) -> None:
+    def _wait_for_job(self, seconds: float) -> bool:
+        deadline = time.monotonic() + seconds
+        while self.current_job and self.current_job.state == "running" and time.monotonic() < deadline:
+            time.sleep(0.05)
+        return not (self.current_job and self.current_job.state == "running")
+
+    def restart_kernel_async(self, soft: bool = False) -> None:
+        """Stop (soft=True: interrupt in place, restart only if that fails) or restart."""
+        running = self.current_job is not None and self.current_job.state == "running"
+        if soft and not running:
+            return  # nothing to stop; never throw away the session for it
+
         def run() -> None:
-            self.kernel.interrupt()
-            # Wait for a running cell to notice the dead process and unwind.
-            deadline = time.monotonic() + 15
-            while self.current_job and self.current_job.state == "running" and time.monotonic() < deadline:
-                time.sleep(0.05)
+            if soft and self.kernel.interrupt() and self._wait_for_job(6):
+                return
+            self.kernel.hard_stop()
+            self._wait_for_job(15)  # let a running cell notice the dead process and unwind
             try:
                 self.kernel.start()
             except KernelError as exc:
@@ -142,9 +174,15 @@ class App:
         return job
 
     # ---------------------------------------------------------------- api
-    def api(self, method: str, path: str, query: dict, body: dict) -> dict:
+    def api(self, method: str, path: str, query: dict, body: dict, role: str = "host") -> dict:
+        if role != "host" and (method, path) not in GUEST_ALLOWED:
+            raise ApiError("not allowed with a share link (only the host can do this)", 403)
+        if path.startswith("/api/collab/"):
+            return self.collab_api(method, path, query, body, role)
+        if path.startswith("/api/ai/"):
+            return self.ai_api(method, path, body)
         if method == "GET" and path == "/api/session":
-            return self.session()
+            return self.session() if role == "host" else self.guest_session()
         if method == "GET" and path == "/api/kernel":
             return self.kernel.info()
         if method == "POST" and path == "/api/run":
@@ -163,11 +201,20 @@ class App:
         if method == "POST" and path == "/api/answer":
             self.kernel.answer(str(body.get("text", "")))
             return {"ok": True}
-        if method == "POST" and path in ("/api/interrupt", "/api/restart"):
-            self.restart_kernel_async()
+        if method == "POST" and path == "/api/interrupt":
+            self.restart_kernel_async(soft=True)
             return {"ok": True}
+        if method == "POST" and path == "/api/restart":
+            self.restart_kernel_async(soft=False)
+            return {"ok": True}
+        if method == "GET" and path == "/api/symbols":
+            table = self.kernel.symbols()
+            return {"symbols": table if table is not None else self.kernel.symbol_table,
+                    "stale": table is None}
         if method == "POST" and path == "/api/convert":
             return self.convert(body)
+        if method == "POST" and path == "/api/convert-latex":
+            return formats.latex_to_cells(str(body.get("text", "")), "Pasted")
         if method == "POST" and path == "/api/open":
             return self.open_file(str(body.get("path", "")))
         if method == "POST" and path == "/api/save":
@@ -186,6 +233,12 @@ class App:
     def session(self) -> dict:
         nb, path, note, suggested = None, None, "", None
         initial = bool(self.initial_file)
+        target = Path(self.initial_file).expanduser().resolve() if self.initial_file else None
+        if target and not target.exists() and target.suffix.lower() == ".maxbook":
+            # like an editor: naming a new file starts a notebook that saves there
+            nb, path = new_notebook(target.stem), str(target)
+            note = f"New notebook. Save writes it to {target}"
+            self.initial_file = None
         if self.initial_file:
             try:
                 res = self.open_file(self.initial_file)
@@ -198,8 +251,77 @@ class App:
             nb = new_notebook("Untitled")
         return {"version": __version__, "kernel": self.kernel.info(), "notebook": nb,
                 "path": path, "note": note, "initial": initial, "suggested": suggested,
-                "recent": self.config.get("recent", []),
+                "recent": self.config.get("recent", []), "role": "host",
+                "share": self.share_info(), "ai": self.ai.info() if self.ai else {"enabled": False},
                 "home": str(Path.home()), "cwd": os.getcwd(), "platform": sys.platform}
+
+    def guest_session(self) -> dict:
+        return {"version": __version__, "kernel": self.kernel.info(), "role": "guest",
+                "collab": self.collab.state(), "platform": sys.platform, "ai": {"enabled": False}}
+
+    def share_info(self) -> dict:
+        if not self.share:
+            return {"enabled": False}
+        hosts = sorted(h for h in self.share_hosts if not h.startswith(("127.", "localhost")))
+        urls = [f"http://{h}:{self.port}/#token={self.guest_token}" for h in hosts]
+        return {"enabled": True, "urls": urls}
+
+    # ---------------------------------------------------------------- collab
+    def collab_api(self, method: str, path: str, query: dict, body: dict, role: str) -> dict:
+        sub = path[len("/api/collab/"):]
+        q = {k: v[0] for k, v in query.items()}
+        try:
+            if method == "POST" and sub == "start":
+                if role != "host":
+                    raise ApiError("only the host can replace the shared document", 403)
+                try:
+                    nb = validate(body.get("notebook"))
+                except NotebookError as exc:
+                    raise ApiError(str(exc)) from exc
+                if "doc" not in nb:
+                    raise ApiError("collaboration needs a document (version 2) notebook")
+                return self.collab.start(nb["doc"], body.get("path"))
+            if method == "GET" and sub == "state":
+                return self.collab.state()
+            if method == "POST" and sub == "steps":
+                version = self.collab.receive(str(body.get("docId", "")), int(body.get("version", -1)),
+                                              body.get("steps"), str(body.get("clientID", "")))
+                return {"version": version}
+            if method == "GET" and sub == "events":
+                return self.collab.events(q.get("docId", ""), int(q.get("version", "0")))
+            if method == "POST" and sub == "snapshot":
+                doc = body.get("doc")
+                if not isinstance(doc, dict):
+                    raise ApiError("snapshot needs a doc")
+                self.collab.snapshot(str(body.get("docId", "")), int(body.get("version", -1)), doc)
+                return {"ok": True}
+            if method == "POST" and sub == "presence":
+                users = self.collab.touch(str(body.get("clientID", "")), str(body.get("name", "")),
+                                          str(body.get("color", "")), role)
+                return {"users": users}
+            if method == "POST" and sub == "leave":
+                self.collab.leave(str(body.get("clientID", "")))
+                return {"ok": True}
+        except CollabError as exc:
+            raise ApiError(str(exc), exc.status) from exc
+        except (TypeError, ValueError) as exc:
+            raise ApiError(f"bad collaboration request: {exc}") from exc
+        raise ApiError("not found", 404)
+
+    # ---------------------------------------------------------------- AI
+    def ai_api(self, method: str, path: str, body: dict) -> dict:
+        if self.ai is None or not self.ai.enabled:
+            raise ApiError("the AI helper is not configured (set ANTHROPIC_API_KEY)", 503)
+        sub = path[len("/api/ai/"):]
+        try:
+            if method == "POST" and sub == "ask":
+                return self.ai.ask(str(body.get("task", "explain")), str(body.get("content", "")),
+                                   str(body.get("context", "")))
+            if method == "POST" and sub == "image":
+                return self.ai.image_to_markdown(str(body.get("image", "")))
+        except self.ai.Error as exc:
+            raise ApiError(str(exc), 502) from exc
+        raise ApiError("not found", 404)
 
     def convert(self, body: dict) -> dict:
         latex = str(body.get("latex", ""))
@@ -228,7 +350,9 @@ class App:
             raise ApiError(f"cannot open {p.name}: {exc}") from exc
         if p.suffix.lower() == EXTENSION:
             self.remember(str(p))
-            return {"notebook": nb, "path": str(p)}
+            note = ("This notebook uses the older cell format; it is shown as one document and "
+                    "will be saved in the current format.") if nb.get("version") == 1 else ""
+            return {"notebook": nb, "path": str(p), "note": note}
         target = p.with_suffix(EXTENSION)
         note = f"Imported {p.name}. Saving will create {target.name}; the original is not changed."
         return {"notebook": nb, "path": None, "suggested": str(target), "note": note}
@@ -242,6 +366,7 @@ class App:
         except (NotebookError, OSError) as exc:
             raise ApiError(f"cannot save: {exc}") from exc
         self.remember(str(p))
+        self.collab.set_path(str(p))
         return {"path": str(p)}
 
     def export(self, body: dict) -> dict:
@@ -251,6 +376,8 @@ class App:
             nb = validate(body.get("notebook"))
         except NotebookError as exc:
             raise ApiError(str(exc)) from exc
+        if "doc" not in nb:
+            raise ApiError("export needs a document (version 2) notebook")
         try:
             if fmt == "html":
                 html = str(body.get("html", ""))
@@ -312,7 +439,9 @@ def make_handler(app: App):
         # -- helpers ---------------------------------------------------------
         def _host_ok(self) -> bool:
             host = (self.headers.get("Host") or "").lower()
-            return host in (f"127.0.0.1:{app.port}", f"localhost:{app.port}")
+            if host in (f"127.0.0.1:{app.port}", f"localhost:{app.port}"):
+                return True
+            return app.share and host in {f"{h}:{app.port}" for h in app.share_hosts}
 
         def _send(self, status: int, payload: bytes, ctype: str, extra: dict | None = None) -> None:
             self.send_response(status)
@@ -357,8 +486,15 @@ def make_handler(app: App):
                     return self._send(405, b"method not allowed", "text/plain")
                 return self._static(url.path)
             token = self.headers.get("X-Maxbook-Token", "")
-            if not hmac.compare_digest(token, app.token):
+            if hmac.compare_digest(token, app.token):
+                role = "host"
+            elif app.share and hmac.compare_digest(token, app.guest_token):
+                role = "guest"
+            else:
                 return self._json(403, {"error": "missing or wrong token"})
+            if role == "host" and not self.client_address[0].startswith("127."):
+                # The host token is only honoured from this computer.
+                return self._json(403, {"error": "host access is only allowed from this computer"})
             body: dict = {}
             if method == "POST":
                 length = int(self.headers.get("Content-Length") or 0)
@@ -372,7 +508,7 @@ def make_handler(app: App):
                 if not isinstance(body, dict):
                     return self._json(400, {"error": "JSON object expected"})
             try:
-                result = app.api(method, url.path, parse_qs(url.query), body)
+                result = app.api(method, url.path, parse_qs(url.query), body, role)
                 self._json(200, result)
             except ApiError as exc:
                 self._json(exc.status, {"error": str(exc)})
@@ -389,9 +525,32 @@ def make_handler(app: App):
     return Handler
 
 
+def lan_addresses() -> set[str]:
+    """IPv4 addresses of this machine that other computers can reach."""
+    addrs: set[str] = set()
+    try:
+        for info in socket.getaddrinfo(socket.gethostname(), None, socket.AF_INET):
+            addrs.add(info[4][0])
+    except OSError:
+        pass
+    try:  # the address used for outbound traffic (no packet is sent)
+        with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s:
+            s.connect(("192.0.2.1", 9))
+            addrs.add(s.getsockname()[0])
+    except OSError:
+        pass
+    return {a for a in addrs if not a.startswith("127.")}
+
+
 def create_server(app: App, port: int = 0) -> ThreadingHTTPServer:
-    httpd = ThreadingHTTPServer(("127.0.0.1", port), make_handler(app))
+    bind = "0.0.0.0" if app.share else "127.0.0.1"
+    httpd = ThreadingHTTPServer((bind, port), make_handler(app))
     httpd.daemon_threads = True
     app.port = httpd.server_address[1]
     app.httpd = httpd
+    if app.share:
+        app.share_hosts = lan_addresses() | {socket.gethostname().lower()}
+    if app.ai is None:
+        from .ai import AIHelper
+        app.ai = AIHelper.from_environment()
     return httpd

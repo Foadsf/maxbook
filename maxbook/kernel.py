@@ -15,6 +15,7 @@ honest about losing the session state.
 from __future__ import annotations
 
 import glob
+import json
 import os
 import re
 import shutil
@@ -101,6 +102,12 @@ def find_maxima(explicit: str | None = None) -> str | None:
     return None
 
 
+def find_winkill(maxima_path: str) -> str | None:
+    """winkill.exe ships next to maxima.bat in Windows installers."""
+    p = Path(maxima_path).resolve().parent / "winkill.exe"
+    return str(p) if p.exists() else None
+
+
 def find_bundled_gnuplot(maxima_path: str) -> str | None:
     """Windows Maxima installers ship gnuplot next to Maxima."""
     prefix = Path(maxima_path).resolve().parent.parent
@@ -146,9 +153,13 @@ class MaximaKernel:
         self._linenum = 1
         self._tmp: tempfile.TemporaryDirectory | None = None
         self._run_lock = threading.Lock()
+        self._symbols_query = False
         self._answer: str | None = None
         self.pending_question: dict | None = None
         self.stop_requested = False
+        self.hard_stopped = False
+        self.lisp_pid: int | None = None
+        self.symbol_table: list[dict] = []
         self._generation = 0
 
     # ------------------------------------------------------------------ process
@@ -168,12 +179,16 @@ class MaximaKernel:
             kwargs["creationflags"] = subprocess.CREATE_NO_WINDOW | subprocess.CREATE_NEW_PROCESS_GROUP
         else:
             kwargs["start_new_session"] = True
+        # Makes maxima.bat load win_signals.lisp, so winkill.exe can interrupt a
+        # computation in place (SBCL/CCL builds on Windows; ignored elsewhere).
+        env = dict(os.environ, MAXIMA_SIGNALS_THREAD="1")
         self._buf, self._pos, self._eof = "", 0, False
         self._generation += 1
         self.pending_question = None
+        self.lisp_pid = None
         self.status = "starting"
         self.proc = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
-                                     stderr=subprocess.STDOUT, cwd=self.workdir, **kwargs)
+                                     stderr=subprocess.STDOUT, cwd=self.workdir, env=env, **kwargs)
         threading.Thread(target=self._reader, args=(self.proc, self._generation),
                          daemon=True).start()
         hello = self._wait_frame("HELLO", self.startup_timeout)
@@ -186,6 +201,11 @@ class MaximaKernel:
         fields = hello[1]
         self._markers = {"error": fields[0], "syntax": fields[1], "lisp": fields[2]}
         self.version, self.lisp = fields[3], fields[4]
+        try:
+            pid = int(fields[5])
+            self.lisp_pid = pid if pid > 0 else None
+        except (IndexError, ValueError):
+            self.lisp_pid = None
         prompt = self._wait_frame("PROMPT", self.startup_timeout)
         if prompt is None:
             self.kill()
@@ -210,6 +230,7 @@ class MaximaKernel:
             # stdin.  Put -persist into the command and pass the file alone.
             gp = _short_path(gnuplot).replace("\\", "/")
             lines.append(f':lisp (setq $gnuplot_command "{gp} -persist" $gnuplot_view_args "~a")')
+        lines.append(":lisp (maxima::mbk-mark-system)")
         for line in lines:
             res = self._exec(line, timeout=60)
             if res.error:
@@ -237,15 +258,70 @@ class MaximaKernel:
     def alive(self) -> bool:
         return self.proc is not None and self.proc.poll() is None
 
-    def interrupt(self) -> None:
-        """Stop the running computation.  The process is restarted by the caller."""
+    def interrupt(self) -> bool:
+        """Ask Maxima to abandon the current computation and keep its state.
+
+        Returns True when an interrupt was delivered.  The running cell then
+        ends with an "interrupted" output once Maxima is back at its prompt;
+        callers should fall back to :meth:`hard_stop` if that does not happen.
+        """
+        if not self.alive() or not self.lisp_pid:
+            return False
         self.stop_requested = True
+        try:
+            if IS_WINDOWS:
+                winkill = find_winkill(self.maxima_path or "")
+                if not winkill:
+                    return False
+                res = subprocess.run([winkill, "-INT", str(self.lisp_pid)], capture_output=True,
+                                     check=False, creationflags=subprocess.CREATE_NO_WINDOW)
+                ok = res.returncode == 0
+            else:
+                os.kill(self.lisp_pid, signal.SIGINT)
+                ok = True
+        except OSError:
+            ok = False
+        with self._cond:
+            self._cond.notify_all()  # wakes a cell that is waiting for an answer
+        return ok
+
+    def hard_stop(self) -> None:
+        """Kill Maxima (state is lost).  The caller restarts it."""
+        self.stop_requested = True
+        self.hard_stopped = True
         self.kill()
 
     def _exit_reason(self) -> str:
         if self.stop_requested:
-            return "stopped by you; Maxima was restarted, so earlier definitions are gone"
+            return "stopped by you; Maxima had to be restarted, so earlier definitions are gone"
         return "Maxima exited unexpectedly"
+
+    def can_interrupt(self) -> bool:
+        if not self.lisp_pid:
+            return False
+        return bool(find_winkill(self.maxima_path or "")) if IS_WINDOWS else True
+
+    def symbols(self, timeout: float = 20) -> list[dict] | None:
+        """User variables, functions and declared constants; None while busy."""
+        if not self._run_lock.acquire(blocking=False):
+            return None
+        self._symbols_query = True
+        try:
+            if not self.alive():
+                return []
+            self._exec(":lisp (maxima::mbk-symbols)", timeout=timeout)
+            return self.symbol_table
+        finally:
+            self._symbols_query = False
+            self._run_lock.release()
+
+    def _acquire_for_run(self) -> bool:
+        """Take the run lock; wait out a symbol-table query, but not a computation."""
+        if self._run_lock.acquire(timeout=0.25):
+            return True
+        if self._symbols_query:
+            return self._run_lock.acquire(timeout=30)
+        return False
 
     def kill(self) -> None:
         self.pending_question = None
@@ -339,7 +415,11 @@ class MaximaKernel:
                 return
             if self._is_error_text(text):
                 error = True
-                emit(Output("error", {"text": text}))
+                if self.stop_requested and "interrupt" in text.lower():
+                    emit(Output("error", {"text": "Stopped by you. Maxima kept its state.",
+                                          "interrupted": True}))
+                else:
+                    emit(Output("error", {"text": text}))
             else:
                 emit(Output("text", {"text": text}))
 
@@ -365,14 +445,26 @@ class MaximaKernel:
                     self._linenum = new_line
                     return StatementResult(outputs, error, number)
                 if kind == "OUT":
-                    label, tex, text = (fields + ["", "", ""])[:3]
+                    label, tex, text, semtex = (fields + ["", "", "", ""])[:4]
                     item = {"label": label, "latex": maxima_tex_to_latex(tex), "text": text}
+                    if semtex and semtex != tex:
+                        item["semantic"] = maxima_tex_to_latex(semtex)
                     if in_question is not None:
                         question_parts.append(item)
                     else:
                         emit(Output("result", item))
                 elif kind == "IMG":
                     emit(self._image_output(fields[0] if fields else ""))
+                elif kind == "SYM":
+                    try:
+                        table = json.loads(fields[0]) if fields else []
+                    except ValueError:
+                        table = []
+                    for entry in table:
+                        # the same clean-up as displayed results (matrices, \verb strings...)
+                        if entry.get("latex"):
+                            entry["latex"] = maxima_tex_to_latex(entry["latex"])
+                    self.symbol_table = table
                 elif kind == "ASK":
                     in_question = []
                     question_parts = []
@@ -382,6 +474,8 @@ class MaximaKernel:
                     in_question = None
                     emit(Output("question", q))
                     answer = self._await_answer(q)
+                    if answer is None:
+                        continue  # stopped while asking: the interrupt ends the statement
                     emit(Output("text", {"text": "» " + answer}))
                     self._cond.release()
                     try:
@@ -390,7 +484,8 @@ class MaximaKernel:
                     finally:
                         self._cond.acquire()
 
-    def _await_answer(self, question: dict) -> str:
+    def _await_answer(self, question: dict) -> str | None:
+        """The user's answer, or None when Stop was pressed meanwhile."""
         self.pending_question = question
         self.status = "asking"
         self._answer = None
@@ -398,6 +493,9 @@ class MaximaKernel:
             while self._answer is None:
                 if not self.alive():
                     raise KernelError(self._exit_reason())
+                if self.stop_requested:
+                    self.status = "busy"
+                    return None
                 self._cond.wait(0.25)
             answer, self._answer = self._answer, None
         finally:
@@ -437,9 +535,10 @@ class MaximaKernel:
     # ------------------------------------------------------------------ public
     def run_cell(self, source: str, on_output=None) -> dict:
         """Run all statements of a cell; stop at the first error."""
-        if not self._run_lock.acquire(blocking=False):
+        if not self._acquire_for_run():
             raise KernelError("kernel is busy")
         self.stop_requested = False
+        self.hard_stopped = False
         try:
             if not self.alive():
                 self.start()
@@ -488,4 +587,5 @@ class MaximaKernel:
             "maxima_path": self.maxima_path,
             "error": self.last_error,
             "question": self.pending_question,
+            "can_interrupt": self.can_interrupt(),
         }

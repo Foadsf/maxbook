@@ -1,37 +1,44 @@
 # Architecture
 
 ```
-browser / native window ──HTTP (127.0.0.1, token)──▶ maxbook.server ──stdin/stdout──▶ maxima (+ maxbook-init.lisp)
-        web/js/*.js                                     kernel.py                          gnuplot (plots)
+browser / native window ──HTTP (token)──▶ maxbook.server ──stdin/stdout──▶ maxima (+ maxbook-init.lisp)
+  web/js/*.js (ProseMirror, MathLive)       kernel.py, collab.py, ai.py          gnuplot (plots)
+                                                     └──HTTPS (optional)──▶ Anthropic API
 ```
 
 ## Python side (`maxbook/`)
 
 | Module | Responsibility |
 |---|---|
-| `cli.py`, `__main__.py` | command line, starts server and window |
+| `cli.py`, `__main__.py` | command line, starts server and window, prints share links |
 | `launcher.py` | pywebview window, Chromium `--app` window, or default browser |
-| `server.py` | static files, JSON API, token and Host checks, cell jobs |
-| `kernel.py` | the Maxima process: start, send statements, parse frames, questions, stop |
-| `splitter.py` | split cell text into Maxima statements (strings, nested comments, escapes, `:lisp`) |
+| `server.py` | static files, JSON API, token, role and Host checks, jobs, Stop/Restart |
+| `kernel.py` | the Maxima process: start, send statements, parse frames, questions, interrupt, symbol table |
+| `collab.py` | the shared document: orders ProseMirror steps from all windows, presence |
+| `ai.py` | the optional AI helper (Anthropic SDK), off unless configured |
+| `splitter.py` | split Maxima input into statements (strings, nested comments, escapes, `:lisp`) |
 | `texfix.py` | turn Maxima's `tex1` output into LaTeX that browser renderers accept |
-| `latex2maxima.py` | math-cell formulas to Maxima statements (see `math-input.md`) |
-| `notebook.py` | `.maxbook` format: validation, atomic save, load/import dispatch |
-| `formats.py` | import `.wxm`, `.wxmx`, `.mac`, `.md`; export `.mac`, `.wxm`, `.md`, `.tex` |
+| `latex2maxima.py` | formulas to Maxima statements (see `math-input.md`) |
+| `document.py` | the document model shared with the editor: node types, normalisation, walking |
+| `notebook.py` | `.maxbook` format: validation, atomic save, load/import dispatch, 0.1 files |
+| `formats.py` | import `.wxm`, `.wxmx`, `.mac`, `.md`, `.tex`; export `.mac`, `.wxm`, `.wxmx`, `.md`, `.tex` |
+
+## Document format
+
+A `.maxbook` file is JSON: `{"format": "maxbook", "version": 2, "title", "doc", "metadata"}`. `doc` is a ProseMirror document: paragraphs, headings, lists, quotes, code blocks and rules; `math_inline` and `math_block` formulas (`latex`, the Maxima `source` it translates to, the `result` of compute-in-place, and for display formulas evaluated with Shift+Enter, `outputs`); and `maxima` blocks (`source`, `outputs`, input numbers). Symbol descriptions from the Objects panel are in `doc.attrs.symbols`. Files written by 0.1 (`version: 1`, a list of cells) still open; the editor converts them and saves version 2.
 
 ## Wire protocol with Maxima
 
-Maxima is started as `maxima --very-quiet -p lisp/maxbook-init.lisp`. The init file:
+Maxima is started as `maxima --very-quiet -p lisp/maxbook-init.lisp`, with `MAXIMA_SIGNALS_THREAD=1` so it can be interrupted on Windows. The init file:
 
-- installs `*alt-display2d*` / `*alt-display1d*` so every displayed result is written as a frame `STX OUT US label US tex US text ETX` (STX = U+0002, US = U+001F, ETX = U+0003);
+- installs `*alt-display2d*` / `*alt-display1d*` so every displayed result is written as a frame `STX OUT US label US tex US text US semtex ETX` (STX = U+0002, US = U+001F, ETX = U+0003). `semtex` is the same LaTeX with every symbol wrapped as `\class{mbk-sym mbk-KIND mbk-n-HEX}{…}`, where KIND is `variable`, `function`, `constant` or `free` and HEX spells the Maxima name as four hex digits per character;
 - replaces the main prompt with a `PROMPT n` frame, which is how the kernel knows a statement has finished;
 - sets `*prompt-prefix*` / `*prompt-suffix*` to `ASK` / `ASKEND` frames, so questions from `asksign`, `read()` and friends are recognisable;
 - defines `maxbook_show_image(file)`, which emits an `IMG` frame (used by the inline plot functions in `lisp/maxbook.mac`);
-- sends a `HELLO` frame with Maxima's own (possibly translated) error markers and the version.
+- answers `:lisp (maxima::mbk-symbols)` with a `SYM` frame: JSON describing the session's user variables, functions and declared constants. Names Maxbook itself defines, and names that appear while a file is loading (`load`, and the autoloads behind functions such as `eigenvalues`), are recorded as library names and left out;
+- sends a `HELLO` frame with Maxima's own (possibly translated) error markers, the version, the Lisp and the Lisp process id.
 
-Text outside frames is ordinary output (print, warnings, error messages). A statement is an error when its text contains one of the markers from `HELLO`; the cell then stops.
-
-Statements are sent one at a time, so a cell can stop at the first error and input/output labels stay those of a normal Maxima session.
+Text outside frames is ordinary output (print, warnings, error messages). A statement is an error when its text contains one of the markers from `HELLO`; the block then stops. Statements are sent one at a time, so input/output labels stay those of a normal Maxima session.
 
 ### Windows plotting workaround
 
@@ -39,12 +46,36 @@ Maxima 5.50 with SBCL on Windows starts gnuplot as `gnuplot "-persist <file>"` (
 
 ## Stopping
 
-Maxima over a pipe has no portable interrupt, so Stop kills the process tree (`taskkill /T` on Windows, the process group elsewhere) and starts a new Maxima. The running cell reports that it was stopped and that definitions are gone.
+Stop interrupts the computation inside Maxima: on Windows with `winkill -INT <pid>` (shipped with Maxima; it signals the thread started by `MAXIMA_SIGNALS_THREAD`), elsewhere with SIGINT to the Lisp process. Maxima abandons the statement and returns to its prompt with every definition intact; the block says "Stopped by you. Maxima kept its state." If Maxima is not back within six seconds, or cannot be interrupted, it is killed and restarted, and the block says that definitions are gone. Stop with nothing running does nothing. Restart always starts a fresh Maxima.
+
+## Collaboration
+
+Every window, including the host's own, edits through `collab.py`, so two windows on one computer stay in sync. The server keeps the current document as a snapshot plus the steps since then, and accepts a client's steps only if they are based on the latest version (prosemirror-collab's central-authority scheme); a client that is behind receives the missing steps by long polling, rebases its own and sends again. Opening or creating a notebook replaces the shared document and the other windows reload it. A new or reloaded window joins the document that is already open instead of replacing it.
+
+Roles: the host token printed by the CLI is accepted only from the same computer. With `--share`, the server also listens on the network and accepts a separate guest token from the share link. Guests may only read and edit the document (session, kernel status, job progress, symbols, formula translation and the collaboration endpoints); running Maxima, files, export, Stop/Restart and the AI helper are host-only. Both tokens are checked in constant time, and the `Host` header must name this computer (DNS-rebinding defence).
+
+## AI helper
+
+`ai.py` builds prompts for a few tasks (explain, steps, simplify and check, write Maxima code, ask, transcribe an image) and calls the Messages API through the official `anthropic` package, with adaptive thinking. Refusals and API errors are reported as messages, not inserted as content. The credentials stay in the server process; the browser only sees the answer as Markdown, which is inserted as ordinary document content. The helper is disabled, and its endpoints answer 503, unless the package and credentials are present.
 
 ## Front end (`maxbook/web/`)
 
-Plain ES modules, no build step. `main.js` owns the notebook state and cell views; `markdown.js` renders Markdown with math via marked and MathLive; `highlight.js` colours Maxima code; `templates.js` holds the search-as-you-type templates; `export.js` builds the self-contained HTML export (fonts inlined) and rasterises SVG plots for the LaTeX export. The page has a strict Content Security Policy (`script-src 'self'`).
+ES modules, no build step at run time. ProseMirror and markdown-it are vendored as one bundle (`vendor/prosemirror/prosemirror.mjs`, built by `tools/vendor/build.mjs`); MathLive is vendored as published.
+
+| Module | Responsibility |
+|---|---|
+| `main.js` | the application shell: running blocks and compute-in-place, files, export, menus, palette, sharing, AI |
+| `schema.js` | the document schema (mirrors `document.py`) |
+| `editor.js` | the ProseMirror view: input rules (`$`, `>>`, `#`, lists…), keys, placeholder, unique ids |
+| `nodeviews.js` | interactive nodes: Maxima blocks (code editor, outputs, questions) and formulas (MathLive) |
+| `markdown.js` | Markdown and 0.1 notebooks to documents (pasting, AI answers, imports) |
+| `collab.js` | the collaboration client |
+| `symbols.js`, `mathrender.js` | symbol colours, hover cards, the Objects panel; static math rendering |
+| `dialogs.js`, `templates.js` | command forms (wxMaxima-style menus); search-as-you-type templates |
+| `export.js`, `highlight.js` | self-contained HTML export and PNG figures for LaTeX; Maxima syntax colouring |
+
+The page has a strict Content Security Policy (`script-src 'self'`).
 
 ## API
 
-All endpoints need `X-Maxbook-Token`. `GET /api/session`, `GET /api/kernel`, `POST /api/run` → job id, `GET /api/job?id=&since=` (incremental outputs, pending question), `POST /api/answer`, `POST /api/interrupt`, `POST /api/restart`, `POST /api/convert`, `POST /api/open`, `POST /api/save`, `POST /api/export`, `POST /api/new`, `GET /api/fs`, `POST /api/shutdown`.
+All endpoints need `X-Maxbook-Token`. `GET /api/session`, `GET /api/kernel`, `POST /api/run` → job id, `GET /api/job?id=&since=` (incremental outputs, pending question), `POST /api/answer`, `POST /api/interrupt` (Stop), `POST /api/restart`, `GET /api/symbols`, `POST /api/convert` (formula to Maxima), `POST /api/convert-latex` (LaTeX text to document content), `POST /api/open`, `POST /api/save`, `POST /api/export`, `POST /api/new`, `GET /api/fs`, `POST /api/shutdown`; `POST /api/collab/start|steps|snapshot|presence|leave`, `GET /api/collab/state|events`; `POST /api/ai/ask|image`.

@@ -23,6 +23,9 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--window", choices=["auto", "native", "app", "browser", "none"], default="auto",
                         help="how to show the UI (default: native window if pywebview is installed, "
                              "else a Chromium app window, else the default browser)")
+    parser.add_argument("--share", action="store_true",
+                        help="also listen on the local network and print a link others can use to edit "
+                             "the open notebook with you (they cannot run Maxima or touch your files)")
     parser.add_argument("--version", action="version", version=f"maxbook {__version__}")
     args = parser.parse_args(argv)
 
@@ -30,11 +33,17 @@ def main(argv: list[str] | None = None) -> int:
     if not maxima:
         print("warning: Maxima not found; the UI will open but cannot compute. "
               "Install Maxima or use --maxima PATH.", file=sys.stderr)
-    app = App(maxima_path=maxima, initial_file=args.file)
+    app = App(maxima_path=maxima, initial_file=args.file, share=args.share)
     httpd = create_server(app, args.port)
     url = f"http://127.0.0.1:{app.port}/#token={app.token}"
     app.start_kernel_async()
     print(f"Maxbook {__version__} at http://127.0.0.1:{app.port}/ (Maxima: {maxima or 'not found'})")
+    if args.share:
+        print("Sharing is ON. Anyone on your network with one of these links can read and edit the open")
+        print("notebook (not run Maxima, not open or save files). Share them only with people you trust:")
+        for link in app.share_info()["urls"] or ["(no network address found)"]:
+            print("  " + link)
+    print(f"AI helper: {'on (' + app.ai.model + ')' if app.ai.enabled else 'off - ' + app.ai.reason}")
     print("Press Ctrl+C to quit.")
 
     serve = threading.Thread(target=httpd.serve_forever, daemon=True)

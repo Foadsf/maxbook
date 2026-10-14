@@ -15,35 +15,64 @@
   <div class="brand"><img src="icon.svg" alt=""><b>Maxbook</b></div>
   <input id="title" class="doc-title" aria-label="Notebook title" spellcheck="false">
   <span id="dirty" class="dirty-dot" title="Unsaved changes" hidden></span>
+  <span id="role" class="role-badge" hidden>Guest</span>
   <div class="spacer"></div>
-  <div class="tb-group">
+  <div class="tb-group host-only">
     <button class="btn" data-cmd="new" title="New notebook (Ctrl+Alt+N)"><svg viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M12 12v6M9 15h6"/></svg><span class="lbl">New</span></button>
-    <button class="btn" data-cmd="open" title="Open or import (Ctrl+O)"><svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg><span class="lbl">Open</span></button>
+    <button class="btn" data-cmd="open" title="Open or import (Ctrl+O): .maxbook, .wxm, .wxmx, .mac, .md, .tex"><svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg><span class="lbl">Open</span></button>
     <button class="btn" data-cmd="save" title="Save (Ctrl+S)"><svg viewBox="0 0 24 24"><path d="M5 3h11l5 5v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M7 3v5h8V3M7 21v-7h10v7"/></svg><span class="lbl">Save</span></button>
     <button class="btn" data-cmd="export" title="Export (LaTeX, HTML, Markdown, Maxima, wxMaxima)"><svg viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg><span class="lbl">Export</span></button>
   </div>
-  <div class="tb-group">
-    <button class="btn primary" data-cmd="run-all" title="Run all cells (Ctrl+Shift+Enter)"><svg viewBox="0 0 24 24"><path d="M6 4l12 8-12 8z" fill="currentColor"/></svg><span class="lbl">Run all</span></button>
-    <button class="btn" data-cmd="interrupt" title="Stop the computation (restarts Maxima)"><svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/></svg><span class="lbl">Stop</span></button>
+  <div class="tb-group host-only">
+    <button class="btn primary" data-cmd="run-all" title="Run everything in order (Ctrl+Shift+Enter)"><svg viewBox="0 0 24 24"><path d="M6 4l12 8-12 8z" fill="currentColor"/></svg><span class="lbl">Run all</span></button>
+    <button class="btn" data-cmd="interrupt" title="Stop the computation (Maxima keeps its state when it can)"><svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/></svg><span class="lbl">Stop</span></button>
     <button class="btn" data-cmd="restart" title="Restart Maxima (clears all definitions)"><svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg></button>
   </div>
   <div class="tb-group">
+    <span id="users" class="users"></span>
+    <button class="btn host-only" data-cmd="share" id="share-btn" title="Edit together" hidden><svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg></button>
     <span id="kernel" class="kernel-pill" data-status="starting" title="Maxima"><i></i><span>Starting Maxima…</span></span>
     <button class="btn" data-cmd="palette" title="Search commands and templates (Ctrl+K)"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></button>
     <button class="btn" data-cmd="theme" title="Light / dark"><svg viewBox="0 0 24 24"><path d="M21 13A9 9 0 1 1 11 3a7 7 0 0 0 10 10z"/></svg></button>
-    <button class="btn" data-cmd="help" title="Keyboard shortcuts (F1)"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.7.3-1 1-1 1.7M12 17h.01"/></svg></button>
+    <button class="btn" data-cmd="help" title="Keyboard and tips (F1)"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.7.3-1 1-1 1.7M12 17h.01"/></svg></button>
   </div>
 </header>
+<nav class="formatbar" id="formatbar" aria-label="Formatting and commands">
+  <button class="fb" data-fmt="strong" title="Bold (Ctrl+B)"><b>B</b></button>
+  <button class="fb" data-fmt="em" title="Italic (Ctrl+I)"><i>I</i></button>
+  <button class="fb mono" data-fmt="code" title="Code (Ctrl+`)">`c`</button>
+  <span class="sep"></span>
+  <button class="fb" data-fmt="h1" title="Heading 1 (Ctrl+Alt+1)">H1</button>
+  <button class="fb" data-fmt="h2" title="Heading 2 (Ctrl+Alt+2)">H2</button>
+  <button class="fb" data-fmt="h3" title="Heading 3 (Ctrl+Alt+3)">H3</button>
+  <button class="fb" data-fmt="p" title="Plain text (Ctrl+Alt+0)">¶</button>
+  <button class="fb" data-fmt="ul" title="Bullet list (type - and space)">•</button>
+  <button class="fb" data-fmt="ol" title="Numbered list (type 1. and space)">1.</button>
+  <button class="fb" data-fmt="quote" title="Quote (type &gt; and space)">❝</button>
+  <span class="sep"></span>
+  <button class="fb accent" data-fmt="inline-math" title="Formula in the text (type $ or Ctrl+M)"><i>x</i>²</button>
+  <button class="fb accent" data-fmt="block-math" title="Display formula (Ctrl+Shift+M)">∑</button>
+  <button class="fb accent mono" data-fmt="maxima" title="Maxima block (type &gt;&gt; and space, or Ctrl+Alt+M)">&gt;_</button>
+  <span class="sep"></span>
+  <span id="menus" class="menus"></span>
+  <span class="spacer"></span>
+  <button class="fb" data-fmt="objects" title="Show or hide the symbols panel">Objects</button>
+</nav>
 <div id="layout" class="layout">
   <nav class="side" aria-label="Outline">
     <h3>Outline</h3>
     <div id="outline" class="outline"></div>
-    <div class="recent"><h3>Recent</h3><div id="recent"></div></div>
+    <div class="recent host-only"><h3>Recent</h3><div id="recent"></div></div>
   </nav>
   <main id="main" class="main">
     <div id="banner" class="banner" hidden></div>
-    <article id="paper" class="paper"></article>
+    <article id="paper" class="paper"><div id="editor"></div></article>
   </main>
+  <aside id="objects" class="objects" aria-label="Symbols">
+    <h3>Objects</h3>
+    <div class="obj-hint">What Maxima knows about the names in this notebook. Hover a symbol in any formula for details.</div>
+    <div id="objects-list"></div>
+  </aside>
 </div>
 <div id="toast" class="toast" role="status"></div>
 </body>

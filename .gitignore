@@ -12,3 +12,6 @@ _vendor_dl/
 *.aux
 *.log
 *.out
+
+# npm install output of the ProseMirror bundle build (tools/vendor)
+node_modules/

@@ -22,8 +22,9 @@ export class ApiError extends Error {
   constructor(message, status) { super(message); this.status = status; }
 }
 
-export async function api(method, path, body) {
-  const opts = { method, headers: { "X-Maxbook-Token": token } };
+export async function api(method, path, body, { keepalive = false } = {}) {
+  // keepalive lets a request made while the page closes still reach the server
+  const opts = { method, headers: { "X-Maxbook-Token": token }, keepalive };
   if (body !== undefined) {
     opts.headers["Content-Type"] = "application/json";
     opts.body = JSON.stringify(body);

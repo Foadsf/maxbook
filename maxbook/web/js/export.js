@@ -1,9 +1,10 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2026 Foad S. Farimani
 // Exports that need the browser: a self-contained HTML page (math rendered,
-// fonts embedded) and PNG versions of plots for the LaTeX bundle.
+// fonts embedded) and PNG versions of plots for the LaTeX bundle.  Both read
+// the document JSON.
 
-import { renderMarkdown, renderLatex } from "./markdown.js";
+import { renderMath, stripClasses } from "./mathrender.js";
 import { highlightMaxima } from "./highlight.js";
 
 const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -20,10 +21,7 @@ async function toDataUrl(url) {
 
 async function inlineFonts(css, base) {
   const urls = [...new Set([...css.matchAll(/url\((?:["']?)(fonts\/[^)"']+)(?:["']?)\)/g)].map((m) => m[1]))];
-  for (const u of urls) {
-    const data = await toDataUrl(base + u);
-    css = css.split(u).join(data);
-  }
+  for (const u of urls) css = css.split(u).join(await toDataUrl(base + u));
   return css;
 }
 
@@ -40,38 +38,87 @@ h1{font-size:30px;line-height:1.2;font-weight:600}h2{font-size:23px;font-weight:
 pre{font:13.5px/1.5 ui-monospace,"Cascadia Code",Menlo,Consolas,monospace;white-space:pre-wrap;margin:6px 0}
 pre.code{background:#f6f4ef;border:1px solid #e4e0d7;border-radius:8px;padding:9px 12px}
 pre.err{background:#fff1f0;color:#c92a2a;border-radius:8px;padding:6px 10px}
+blockquote{border-left:3px solid #d6d1c5;margin:8px 0;padding:2px 14px;color:#4a4843}
 .out{display:flex;gap:12px;align-items:center;margin:4px 0}.lbl{font:12px ui-monospace,Menlo,Consolas,monospace;color:#8a867d;min-width:56px;text-align:right}
 .m{overflow-x:auto;overflow-y:hidden;font-size:19px;padding:4px 0}.math-display{display:block;text-align:center;margin:10px 0;overflow-x:auto;overflow-y:hidden;padding:2px 0}
+.res{background:#e7ecfd;border-radius:4px;padding:0 3px}
 img{max-width:100%;border:1px solid #e4e0d7;border-radius:8px;background:#fff}
 .hl-c{color:#8a867d;font-style:italic}.hl-s{color:#2b8a3e}.hl-n{color:#c2410c}.hl-k{color:#7048e8;font-weight:600}.hl-f{color:#1c64c8}.hl-k2{color:#b8325a}
 footer{max-width:860px;margin:0 auto 32px;color:#8a867d;font:12px system-ui,sans-serif;text-align:right}
 @media print{body{background:#fff}main{border:0;margin:0;padding:0}}`;
 
-export async function buildHtmlExport(nb) {
+function inlineHTML(nodes) {
+  return (nodes || []).map((n) => {
+    if (n.type === "text") {
+      let s = esc(n.text);
+      for (const m of n.marks || []) {
+        if (m.type === "strong") s = `<strong>${s}</strong>`;
+        else if (m.type === "em") s = `<em>${s}</em>`;
+        else if (m.type === "code") s = `<code>${s}</code>`;
+        else if (m.type === "link") s = `<a href="${esc(m.attrs.href)}">${s}</a>`;
+      }
+      return s;
+    }
+    if (n.type === "hard_break") return "<br>";
+    if (n.type === "math_inline") return formulaHTML(n.attrs, false);
+    return "";
+  }).join("");
+}
+
+function formulaHTML(a, display) {
+  let html = renderMath(a.latex || "", display);
+  const r = a.result;
+  if (r && (r.latex || r.semantic) && /=\s*$/.test(a.latex || "")) {
+    html += `<span class="res">${renderMath(stripClasses(r.latex || r.semantic), display)}</span>`;
+  }
+  return html;
+}
+
+function outputsHTML(outputs) {
+  return (outputs || []).map((o) => {
+    if (o.kind === "result") {
+      return `<div class="out"><span class="lbl">${o.label ? "(" + esc(o.label) + ")" : ""}</span><div class="m">${o.latex ? renderMath(o.latex, true) : esc(o.text)}</div></div>`;
+    }
+    if (o.kind === "text") return `<pre>${esc(o.text)}</pre>`;
+    if (o.kind === "error") return `<pre class="err">${esc(o.text)}</pre>`;
+    if (o.kind === "image") return `<p><img alt="plot" src="${imageSrc(o)}"></p>`;
+    return "";
+  }).join("\n");
+}
+
+function blockHTML(n) {
+  const a = n.attrs || {};
+  const kids = (n.content || []).map(blockHTML).join("\n");
+  switch (n.type) {
+    case "paragraph": return `<p>${inlineHTML(n.content)}</p>`;
+    case "heading": return `<h${a.level}>${inlineHTML(n.content)}</h${a.level}>`;
+    case "blockquote": return `<blockquote>${kids}</blockquote>`;
+    case "bullet_list": return `<ul>${kids}</ul>`;
+    case "ordered_list": return `<ol start="${a.order || 1}">${kids}</ol>`;
+    case "list_item": return `<li>${kids}</li>`;
+    case "horizontal_rule": return "<hr>";
+    case "code_block": return `<pre class="code">${esc((n.content || []).map((t) => t.text).join(""))}</pre>`;
+    case "maxima":
+      return (a.source?.trim() ? `<pre class="code">${highlightMaxima(a.source)}</pre>` : "") + outputsHTML(a.outputs);
+    case "math_block":
+      return `<div class="math-display">${formulaHTML(a, true)}</div>` + outputsHTML(a.outputs);
+    default: return kids;
+  }
+}
+
+export async function buildHtmlExport(docJSON, title) {
   const base = new URL("vendor/mathlive/", location.href).href;
   const [fontsCss, staticCss] = await Promise.all([
     fetch(base + "mathlive-fonts.css").then((r) => r.text()),
     fetch(base + "mathlive-static.css").then((r) => r.text()),
   ]);
   const css = (await inlineFonts(fontsCss, base)) + "\n" + (await inlineFonts(staticCss, base)) + PAGE_CSS;
-  const parts = [];
-  for (const cell of nb.cells) {
-    if (cell.type === "markdown") { parts.push(renderMarkdown(cell.source || "")); continue; }
-    if (cell.type === "math" && cell.latex) parts.push(`<div class="math-display">${renderLatex(cell.latex, true)}</div>`);
-    else if (cell.source?.trim()) parts.push(`<pre class="code">${highlightMaxima(cell.source)}</pre>`);
-    for (const o of cell.outputs || []) {
-      if (o.kind === "result") {
-        parts.push(`<div class="out"><span class="lbl">${o.label ? "(" + esc(o.label) + ")" : ""}</span><div class="m">${o.latex ? renderLatex(o.latex, true) : esc(o.text)}</div></div>`);
-      } else if (o.kind === "text") parts.push(`<pre>${esc(o.text)}</pre>`);
-      else if (o.kind === "error") parts.push(`<pre class="err">${esc(o.text)}</pre>`);
-      else if (o.kind === "image") parts.push(`<p><img alt="plot" src="${imageSrc(o)}"></p>`);
-    }
-  }
+  const body = (docJSON.content || []).map(blockHTML).join("\n");
   return `<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>${esc(nb.title)}</title><style>${css}</style></head>
+<title>${esc(title)}</title><style>${css}</style></head>
 <body><main>
-${parts.join("\n")}
+${body}
 </main><footer>Exported from Maxbook</footer></body></html>
 `;
 }
@@ -97,14 +144,18 @@ function rasterize(src) {
   });
 }
 
-/** PNG data URLs for every image output, in notebook order. */
-export async function rasterizeImages(nb) {
+/** PNG data URLs for every image output, in document order (matches the LaTeX exporter). */
+export async function rasterizeImages(docJSON) {
   const out = [];
-  for (const cell of nb.cells) {
-    for (const o of cell.outputs || []) {
-      if (o.kind !== "image") continue;
-      out.push(o.mime === "image/png" ? `data:image/png;base64,${o.data}` : await rasterize(imageSrc(o)));
+  async function walk(n) {
+    if (n.type === "maxima" || n.type === "math_block") {
+      for (const o of n.attrs?.outputs || []) {
+        if (o.kind !== "image") continue;
+        out.push(o.mime === "image/png" ? `data:image/png;base64,${o.data}` : await rasterize(imageSrc(o)));
+      }
     }
+    for (const c of n.content || []) await walk(c);
   }
+  for (const b of docJSON.content || []) await walk(b);
   return out;
 }

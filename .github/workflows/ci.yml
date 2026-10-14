@@ -24,9 +24,13 @@ jobs:
       - name: Install LaTeX (to compile the LaTeX export)
         if: matrix.python == '3.12'
         run: |
-          sudo apt-get install -y --no-install-recommends texlive-latex-recommended texlive-latex-extra lmodern
+          sudo apt-get install -y --no-install-recommends texlive-latex-recommended texlive-latex-extra \
+            texlive-fonts-recommended lmodern
       - name: Install test tools
         run: python -m pip install pytest ruff
+      - name: Install the optional AI dependency (3.12 only; it needs Python 3.10+)
+        if: matrix.python == '3.12'
+        run: python -m pip install "anthropic>=1.14"
       - name: Lint
         run: ruff check maxbook tests
       - name: Tests (real Maxima)

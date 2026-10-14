@@ -1,178 +1,861 @@
 {
  "format": "maxbook",
- "version": 1,
+ "version": 2,
  "title": "Welcome to Maxbook",
- "cells": [
-  {
-   "id": "w01",
-   "type": "markdown",
-   "source": "# Welcome to Maxbook\n\nMaxbook is a notebook for **literate computing with Maxima**: prose, formulas and live computations in one document. Text cells are Markdown with LaTeX math, such as $e^{i\\pi}+1=0$ or\n\n$$\\int_0^\\infty e^{-x^2}\\,dx = \\frac{\\sqrt{\\pi}}{2}.$$\n\nPress **Shift+Enter** to run a cell, **Ctrl+K** to search commands and templates, and **Run all** to recompute the whole document."
-  },
-  {
-   "id": "w02",
-   "type": "markdown",
-   "source": "## Maxima cells\n\nA Maxima cell holds ordinary Maxima input. Each displayed result gets its `%o` label, and you can copy it as LaTeX or as Maxima text."
-  },
-  {
-   "id": "w03",
-   "type": "code",
-   "source": "f(x) := x^2 * sin(x)$\nintegrate(f(x), x);\ndiff(f(x), x, 2);",
-   "outputs": [
-    {
-     "kind": "result",
-     "label": "%o2",
-     "latex": "2\\,x\\,\\sin x+\\left(2-x^2\\right)\\,\\cos x",
-     "text": "2*x*sin(x)+(2-x^2)*cos(x)"
+ "doc": {
+  "type": "doc",
+  "attrs": {
+   "title": "Welcome to Maxbook",
+   "symbols": {
+    "f": {
+     "description": "The example function x² sin x, defined below"
     },
-    {
-     "kind": "result",
-     "label": "%o3",
-     "latex": "-\\left(x^2\\,\\sin x\\right)+2\\,\\sin x+4\\,x\\,\\cos x",
-     "text": "-(x^2*sin(x))+2*sin(x)+4*x*cos(x)"
+    "A": {
+     "description": "A symmetric 2×2 matrix"
     }
-   ],
-   "inputs": [
-    1,
-    2,
-    3
-   ]
+   }
   },
-  {
-   "id": "w04",
-   "type": "markdown",
-   "source": "## Math cells\n\nA math cell is edited as a formula. Type a word such as `int`, `frac`, `sum`, `lim` or `matrix` and pick a template; **Tab** jumps between the empty boxes. The Maxima translation is shown under the formula, so you always see what will be evaluated."
-  },
-  {
-   "id": "w05",
-   "type": "math",
-   "source": "integrate(sin(x)/x, x, 0, inf);",
-   "latex": "\\int_{0}^{\\infty}\\frac{\\sin x}{x}\\,\\mathrm{d}x",
-   "outputs": [
-    {
-     "kind": "result",
-     "label": "%o4",
-     "latex": "\\frac{\\pi}{2}",
-     "text": "%pi/2"
-    }
-   ],
-   "inputs": [
-    4
-   ]
-  },
-  {
-   "id": "w06",
-   "type": "math",
-   "source": "sum(1/k^2, k, 1, inf);",
-   "latex": "\\sum_{k=1}^{\\infty}\\frac{1}{k^2}",
-   "outputs": [
-    {
-     "kind": "result",
-     "label": "%o5",
-     "latex": "\\sum_{k=1}^{\\infty }{\\frac{1}{k^2}}",
-     "text": "'sum(1/k^2,k,1,inf)"
-    }
-   ],
-   "inputs": [
-    5
-   ]
-  },
-  {
-   "id": "w07",
-   "type": "code",
-   "source": "/* simpsum evaluates the symbolic sum above */\nsum(1/k^2, k, 1, inf), simpsum;",
-   "outputs": [
-    {
-     "kind": "result",
-     "label": "%o6",
-     "latex": "\\frac{\\pi^2}{6}",
-     "text": "%pi^2/6"
-    }
-   ],
-   "inputs": [
-    6
-   ]
-  },
-  {
-   "id": "w08",
-   "type": "markdown",
-   "source": "## Linear algebra\n\nMatrices typed in a math cell become Maxima `matrix(...)` objects."
-  },
-  {
-   "id": "w09",
-   "type": "math",
-   "source": "A: matrix([2, 1], [1, 3]);",
-   "latex": "A\\coloneq\\begin{pmatrix}2 & 1\\\\ 1 & 3\\end{pmatrix}",
-   "outputs": [
-    {
-     "kind": "result",
-     "label": "%o7",
-     "latex": "\\begin{pmatrix} 2&1\\\\ 1&3\\end{pmatrix}",
-     "text": "matrix([2,1],[1,3])"
-    }
-   ],
-   "inputs": [
-    7
-   ]
-  },
-  {
-   "id": "w10",
-   "type": "code",
-   "source": "eigenvalues(A);\nA^^-1;",
-   "outputs": [
-    {
-     "kind": "result",
-     "label": "%o8",
-     "latex": "\\left[ \\left[ -\\left(\\frac{\\sqrt{5}-5}{2}\\right) , \\frac{\\sqrt{5}+5}{2} \\right]  , \\left[ 1 , 1 \\right]  \\right]",
-     "text": "[[-((sqrt(5)-5)/2),(sqrt(5)+5)/2],[1,1]]"
+  "content": [
+   {
+    "type": "heading",
+    "attrs": {
+     "level": 1
     },
-    {
-     "kind": "result",
-     "label": "%o9",
-     "latex": "\\begin{pmatrix} \\frac{3}{5}&-\\left(\\frac{1}{5}\\right)\\\\ -\\left(\\frac{1}{5}\\right)&\\frac{2}{5}\\end{pmatrix}",
-     "text": "matrix([3/5,-(1/5)],[-(1/5),2/5])"
+    "content": [
+     {
+      "type": "text",
+      "text": "Welcome to Maxbook"
+     }
+    ]
+   },
+   {
+    "type": "paragraph",
+    "content": [
+     {
+      "type": "text",
+      "text": "Maxbook is a notebook for "
+     },
+     {
+      "type": "text",
+      "text": "literate computing with Maxima",
+      "marks": [
+       {
+        "type": "strong"
+       }
+      ]
+     },
+     {
+      "type": "text",
+      "text": ": one continuous document in which prose, formulas and computations live together. Write as you would write a paper; Maxima does the algebra."
+     }
+    ]
+   },
+   {
+    "type": "heading",
+    "attrs": {
+     "level": 2
+    },
+    "content": [
+     {
+      "type": "text",
+      "text": "Formulas in the text"
+     }
+    ]
+   },
+   {
+    "type": "paragraph",
+    "content": [
+     {
+      "type": "text",
+      "text": "Type "
+     },
+     {
+      "type": "text",
+      "text": "$",
+      "marks": [
+       {
+        "type": "code"
+       }
+      ]
+     },
+     {
+      "type": "text",
+      "text": " to write a formula inside a sentence, such as "
+     },
+     {
+      "type": "math_inline",
+      "attrs": {
+       "id": "52bc5ae465f6",
+       "latex": "e^{i\\pi}+1=0",
+       "source": "",
+       "result": null
+      }
+     },
+     {
+      "type": "text",
+      "text": ". End a formula with "
+     },
+     {
+      "type": "text",
+      "text": "=",
+      "marks": [
+       {
+        "type": "code"
+       }
+      ]
+     },
+     {
+      "type": "text",
+      "text": " and press "
+     },
+     {
+      "type": "text",
+      "text": "Tab",
+      "marks": [
+       {
+        "type": "strong"
+       }
+      ]
+     },
+     {
+      "type": "text",
+      "text": ", and Maxima writes the result in place: "
+     },
+     {
+      "type": "math_inline",
+      "attrs": {
+       "id": "e4edcb4038e9",
+       "latex": "\\int_0^1x^2\\,dx=",
+       "source": "integrate(x^2, x, 0, 1);",
+       "result": {
+        "latex": "\\frac{1}{3}",
+        "semantic": "\\frac{1}{3}",
+        "text": "1/3"
+       }
+      }
+     },
+     {
+      "type": "text",
+      "text": " and "
+     },
+     {
+      "type": "math_inline",
+      "attrs": {
+       "id": "d04550595ed9",
+       "latex": "\\sum_{k=1}^{\\infty}\\frac{1}{k^2}=",
+       "source": "sum(1/k^2, k, 1, inf);",
+       "result": {
+        "latex": "\\frac{\\pi^2}{6}",
+        "semantic": "\\frac{\\class{mbk-sym mbk-constant mbk-n-002500700069}{\\pi}^2}{6}",
+        "text": "%pi^2/6"
+       }
+      }
+     },
+     {
+      "type": "text",
+      "text": ". Type "
+     },
+     {
+      "type": "text",
+      "text": "$",
+      "marks": [
+       {
+        "type": "code"
+       }
+      ]
+     },
+     {
+      "type": "text",
+      "text": " twice for a display formula:"
+     }
+    ]
+   },
+   {
+    "type": "math_block",
+    "attrs": {
+     "id": "66dcfe03a2c8",
+     "source": "",
+     "outputs": [],
+     "inputs": [],
+     "latex": "\\int_0^{\\infty}e^{-x^2}\\,dx=\\frac{\\sqrt{\\pi}}{2}",
+     "run": false,
+     "result": null
     }
-   ],
-   "inputs": [
-    8,
-    9
-   ]
-  },
-  {
-   "id": "w11",
-   "type": "markdown",
-   "source": "## Inline plots\n\n`iplot2d`, `iplot3d`, `idraw2d` and `idraw3d` take the same arguments as `plot2d`, `plot3d`, `draw2d` and `draw3d`, and draw into the notebook. Worksheets written for wxMaxima keep working: `wxplot2d` and friends are aliases."
-  },
-  {
-   "id": "w12",
-   "type": "code",
-   "source": "iplot2d([sin(x), cos(2*x)/2], [x, -2*%pi, 2*%pi])$",
-   "outputs": [
-    {
-     "kind": "image",
-     "mime": "image/svg+xml",
-     "data": "<?xml version=\"1.0\" encoding=\"windows-1252\"  standalone=\"no\"?>\n<svg \n width=\"600\" height=\"480\"\n viewBox=\"0 0 600 480\"\n xmlns=\"http://www.w3.org/2000/svg\"\n xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n>\n\n<title>Gnuplot</title>\n<desc>Produced by GNUPLOT 6.0 patchlevel 5 </desc>\n\n<g id=\"gnuplot_canvas\">\n\n<rect x=\"0\" y=\"0\" width=\"600\" height=\"480\" fill=\"none\"/>\n<defs>\n\n\t<circle id='gpDot' r='0.5' stroke-width='0.5' stroke='currentColor'/>\n\t<path id='gpPt0' stroke-width='0.190' stroke='currentColor' d='M-1,0 h2 M0,-1 v2'/>\n\t<path id='gpPt1' stroke-width='0.190' stroke='currentColor' d='M-1,-1 L1,1 M1,-1 L-1,1'/>\n\t<path id='gpPt2' stroke-width='0.190' stroke='currentColor' d='M-1,0 L1,0 M0,-1 L0,1 M-1,-1 L1,1 M-1,1 L1,-1'/>\n\t<rect id='gpPt3' stroke-width='0.190' stroke='currentColor' x='-1' y='-1' width='2' height='2'/>\n\t<rect id='gpPt4' stroke-width='0.190' stroke='currentColor' fill='currentColor' x='-1' y='-1' width='2' height='2'/>\n\t<circle id='gpPt5' stroke-width='0.190' stroke='currentColor' cx='0' cy='0' r='1'/>\n\t<use xlink:href='#gpPt5' id='gpPt6' fill='currentColor' stroke='none'/>\n\t<path id='gpPt7' stroke-width='0.190' stroke='currentColor' d='M0,-1.33 L-1.33,0.67 L1.33,0.67 z'/>\n\t<use xlink:href='#gpPt7' id='gpPt8' fill='currentColor' stroke='none'/>\n\t<use xlink:href='#gpPt7' id='gpPt9' stroke='currentColor' transform='rotate(180)'/>\n\t<use xlink:href='#gpPt9' id='gpPt10' fill='currentColor' stroke='none'/>\n\t<use xlink:href='#gpPt3' id='gpPt11' stroke='currentColor' transform='rotate(45)'/>\n\t<use xlink:href='#gpPt11' id='gpPt12' fill='currentColor' stroke='none'/>\n\t<path id='gpPt13' stroke-width='0.190' stroke='currentColor' d='M0,1.330 L1.265,0.411 L0.782,-1.067 L-0.782,-1.076 L-1.265,0.411 z'/>\n\t<use xlink:href='#gpPt13' id='gpPt14' fill='currentColor' stroke='none'/>\n\t<filter id='textbox' filterUnits='objectBoundingBox' x='0' y='0' height='1' width='1'>\n\t  <feFlood flood-color='white' flood-opacity='1' result='bgnd'/>\n\t  <feComposite in='SourceGraphic' in2='bgnd' operator='atop'/>\n\t</filter>\n\t<filter id='greybox' filterUnits='objectBoundingBox' x='0' y='0' height='1' width='1'>\n\t  <feFlood flood-color='lightgrey' flood-opacity='1' result='grey'/>\n\t  <feComposite in='SourceGraphic' in2='grey' operator='atop'/>\n\t</filter>\n</defs>\n<g fill=\"none\" color=\"white\" stroke=\"currentColor\" stroke-width=\"1.00\" stroke-linecap=\"butt\" stroke-linejoin=\"miter\">\n</g>\n<g fill=\"none\" color=\"black\" stroke=\"currentColor\" stroke-width=\"1.00\" stroke-linecap=\"butt\" stroke-linejoin=\"miter\">\n\t<g stroke='none' shape-rendering='crispEdges'>\n\t\t<polygon fill = 'rgb(255, 255, 255)' points = '0.00,480.00 599.99,480.00 599.99,0.01 0.00,0.01 '/>\n\t</g>\n</g>\n<g fill=\"none\" color=\"gray\" stroke=\"currentColor\" stroke-width=\"1.00\" stroke-linecap=\"butt\" stroke-linejoin=\"miter\">\n\t<path stroke='black' stroke-dasharray='2,4'  d='M63.63,216.90 L570.62,216.90  '/></g>\n<g fill=\"none\" color=\"gray\" stroke=\"currentColor\" stroke-width=\"1.00\" stroke-linecap=\"butt\" stroke-linejoin=\"miter\">\n\t<path stroke='black' stroke-dasharray='2,4'  d='M317.13,407.03 L317.13,26.78  '/></g>\n<g fill=\"none\" color=\"black\" stroke=\"currentColor\" stroke-width=\"1.00\" stroke-linecap=\"butt\" stroke-linejoin=\"miter\">\n\t<path stroke='black'  d='M63.63,26.78 L63.63,407.03 L570.62,407.03 L570.62,26.78 L63.63,26.78 Z  '/></g>\n<g fill=\"none\" color=\"black\" stroke=\"currentColor\" stroke-width=\"1.00\" stroke-linecap=\"butt\" stroke-linejoin=\"miter\">\n</g>\n\t<g id=\"gnuplot_plot_1\"  fill=\"none\"><title>gnuplot_plot_1</title>\n<g fill=\"none\" color=\"black\" stroke=\"currentColor\" stroke-width=\"1.00\" stroke-linecap=\"butt\" stroke-linejoin=\"miter\">\n\t<g transform=\"translate(491.59,52.33)\" stroke=\"none\" fill=\"black\" font-family=\"Arial\" font-size=\"14.00\"  text-anchor=\"end\">\n\t\t<text>sin(x)</text>\n\t</g>\n</g>\n<g fill=\"none\" color=\"black\" stroke=\"currentColor\" stroke-width=\"1.00\" stroke-linecap=\"butt\" stroke-linejoin=\"miter\">\n\t<path stroke='rgb(  0,   0, 255)'  d='M501.38,47.78 L551.04,47.78 M63.63,216.90 L64.72,212.22 L65.82,207.55 L66.91,202.88 L68.00,198.22 L69.09,193.57\n\t\tL70.19,188.94 L71.28,184.33 L72.37,179.75 L73.46,175.19 L74.56,170.67 L75.65,166.17 L76.74,161.72 L77.83,157.30\n\t\tL78.93,152.93 L80.02,148.61 L81.11,144.33 L82.21,140.11 L83.30,135.94 L84.39,131.84 L85.48,127.80 L86.58,123.82\n\t\tL87.67,119.91 L88.76,116.07 L89.85,112.31 L90.95,108.62 L92.04,105.01 L93.13,101.48 L94.22,98.04 L95.32,94.69\n\t\tL96.41,91.42 L97.50,88.25 L98.59,85.17 L99.69,82.19 L100.78,79.31 L101.87,76.53 L102.97,73.85 L104.06,71.27\n\t\tL105.15,68.81 L106.24,66.45 L107.34,64.20 L108.43,62.06 L109.52,60.04 L110.61,58.13 L111.71,56.34 L112.80,54.67\n\t\tL113.89,53.11 L114.98,51.68 L116.08,50.36 L118.26,48.11 L120.45,46.34 L122.63,45.08 L124.82,44.32 L125.91,44.13\n\t\tL127.00,44.06 L128.10,44.13 L129.19,44.32 L130.28,44.63 L131.37,45.08 L132.47,45.65 L133.56,46.34 L134.65,47.16\n\t\tL135.74,48.11 L136.84,49.17 L137.93,50.36 L139.02,51.68 L140.12,53.11 L141.21,54.67 L142.30,56.34 L143.39,58.13\n\t\tL144.49,60.04 L145.58,62.06 L146.67,64.20 L147.76,66.45 L148.86,68.81 L149.95,71.27 L151.04,73.85 L152.13,76.53\n\t\tL153.23,79.31 L154.32,82.19 L155.41,85.17 L156.51,88.25 L157.60,91.42 L158.69,94.69 L159.78,98.04 L160.88,101.48\n\t\tL161.97,105.01 L163.06,108.62 L164.15,112.31 L165.25,116.07 L166.34,119.91 L167.43,123.82 L168.52,127.80 L169.62,131.84\n\t\tL170.71,135.94 L171.80,140.11 L172.90,144.33 L173.99,148.61 L175.08,152.93 L176.17,157.30 L177.27,161.72 L178.36,166.17\n\t\tL179.45,170.67 L180.54,175.19 L181.64,179.75 L182.73,184.33 L183.82,188.94 L184.91,193.57 L186.01,198.22 L187.10,202.88\n\t\tL188.19,207.55 L189.28,212.22 L190.38,216.91 L191.47,221.59 L192.56,226.26 L193.66,230.93 L194.75,235.59 L195.84,240.24\n\t\tL196.93,244.87 L198.03,249.48 L199.12,254.06 L200.21,258.62 L201.30,263.14 L202.40,267.64 L203.49,272.09 L204.58,276.51\n\t\tL205.67,280.88 L206.77,285.20 L207.86,289.48 L208.95,293.70 L210.05,297.87 L211.14,301.97 L212.23,306.01 L213.32,309.99\n\t\tL214.42,313.90 L215.51,317.74 L216.60,321.50 L217.69,325.19 L218.79,328.80 L219.88,332.33 L220.97,335.77 L222.06,339.12\n\t\tL223.16,342.39 L224.25,345.56 L225.34,348.64 L226.43,351.62 L227.53,354.50 L228.62,357.28 L229.71,359.96 L230.81,362.54\n\t\tL231.90,365.00 L232.99,367.36 L234.08,369.61 L235.18,371.75 L236.27,373.77 L237.36,375.68 L238.45,377.47 L239.55,379.14\n\t\tL240.64,380.70 L241.73,382.13 L242.82,383.45 L243.92,384.64 L245.01,385.70 L246.10,386.65 L247.20,387.47 L248.29,388.16\n\t\tL249.38,388.73 L250.47,389.18 L251.57,389.49 L252.11,389.60 L252.66,389.68 L253.20,389.73 L253.75,389.75 L254.30,389.73\n\t\tL254.84,389.68 L255.39,389.60 L255.94,389.49 L257.03,389.18 L258.12,388.73 L259.21,388.16 L260.31,387.47 L261.40,386.65\n\t\tL262.49,385.70 L263.59,384.64 L264.68,383.45 L265.77,382.13 L266.86,380.70 L267.96,379.14 L269.05,377.47 L270.14,375.68\n\t\tL271.23,373.77 L272.33,371.75 L273.42,369.61 L274.51,367.36 L275.60,365.00 L276.70,362.54 L277.79,359.96 L278.88,357.28\n\t\tL279.97,354.50 L281.07,351.62 L282.16,348.64 L283.25,345.56 L284.35,342.39 L285.44,339.12 L286.53,335.77 L287.62,332.33\n\t\tL288.72,328.80 L289.81,325.19 L290.90,321.50 L291.99,317.74 L293.09,313.90 L294.18,309.99 L295.27,306.01 L296.36,301.97\n\t\tL297.46,297.87 L298.55,293.70 L299.64,289.48 L300.74,285.20 L301.83,280.88 L302.92,276.51 L304.01,272.09 L305.11,267.64\n\t\tL306.20,263.14 L307.29,258.62 L308.38,254.06 L309.48,249.48 L310.57,244.87 L311.66,240.24 L312.75,235.59 L313.85,230.93\n\t\tL314.94,226.26 L316.03,221.59 L317.13,216.90 L318.22,212.22 L319.31,207.55 L320.40,202.88 L321.50,198.22 L322.59,193.57\n\t\tL323.68,188.94 L324.77,184.33 L325.87,179.75 L326.96,175.19 L328.05,170.67 L329.14,166.17 L330.24,161.72 L331.33,157.30\n\t\tL332.42,152.93 L333.51,148.61 L334.61,144.33 L335.70,140.11 L336.79,135.94 L337.89,131.84 L338.98,127.80 L340.07,123.82\n\t\tL341.16,119.91 L342.26,116.07 L343.35,112.31 L344.44,108.62 L345.53,105.01 L346.63,101.48 L347.72,98.04 L348.81,94.69\n\t\tL349.90,91.42 L351.00,88.25 L352.09,85.17 L353.18,82.19 L354.28,79.31 L355.37,76.53 L356.46,73.85 L357.55,71.27\n\t\tL358.65,68.81 L359.74,66.45 L360.83,64.20 L361.92,62.06 L363.02,60.04 L364.11,58.13 L365.20,56.34 L366.29,54.67\n\t\tL367.39,53.11 L368.48,51.68 L369.57,50.36 L371.76,48.11 L373.94,46.34 L376.13,45.08 L378.31,44.32 L379.41,44.13\n\t\tL380.50,44.06 L381.59,44.13 L382.68,44.32 L383.78,44.63 L384.87,45.08 L385.96,45.65 L387.05,46.34 L388.15,47.16\n\t\tL389.24,48.11 L390.33,49.17 L391.43,50.36 L392.52,51.68 L393.61,53.11 L394.70,54.67 L395.80,56.34 L396.89,58.13\n\t\tL397.98,60.04 L399.07,62.06 L400.17,64.20 L401.26,66.45 L402.35,68.81 L403.44,71.27 L404.54,73.85 L405.63,76.53\n\t\tL406.72,79.31 L407.82,82.19 L408.91,85.17 L410.00,88.25 L411.09,91.42 L412.19,94.69 L413.28,98.04 L414.37,101.48\n\t\tL415.46,105.01 L416.56,108.62 L417.65,112.31 L418.74,116.07 L419.83,119.91 L420.93,123.82 L422.02,127.80 L423.11,131.84\n\t\tL424.20,135.94 L425.30,140.11 L426.39,144.33 L427.48,148.61 L428.58,152.93 L429.67,157.30 L430.76,161.72 L431.85,166.17\n\t\tL432.95,170.67 L434.04,175.19 L435.13,179.75 L436.22,184.33 L437.32,188.94 L438.41,193.57 L439.50,198.22 L440.59,202.88\n\t\tL441.69,207.55 L442.78,212.22 L443.87,216.90 L444.97,221.59 L446.06,226.26 L447.15,230.93 L448.24,235.59 L449.34,240.24\n\t\tL450.43,244.87 L451.52,249.48 L452.61,254.06 L453.71,258.62 L454.80,263.14 L455.89,267.64 L456.98,272.09 L458.08,276.51\n\t\tL459.17,280.88 L460.26,285.20 L461.35,289.48 L462.45,293.70 L463.54,297.87 L464.63,301.97 L465.73,306.01 L466.82,309.99\n\t\tL467.91,313.90 L469.00,317.74 L470.10,321.50 L471.19,325.19 L472.28,328.80 L473.37,332.33 L474.47,335.77 L475.56,339.12\n\t\tL476.65,342.39 L477.74,345.56 L478.84,348.64 L479.93,351.62 L481.02,354.50 L482.12,357.28 L483.21,359.96 L484.30,362.54\n\t\tL485.39,365.00 L486.49,367.36 L487.58,369.61 L488.67,371.75 L489.76,373.77 L490.86,375.68 L491.95,377.47 L493.04,379.14\n\t\tL494.13,380.70 L495.23,382.13 L496.32,383.45 L497.41,384.64 L498.51,385.70 L499.60,386.65 L500.69,387.47 L501.78,388.16\n\t\tL502.88,388.73 L503.97,389.18 L505.06,389.49 L505.61,389.60 L506.15,389.68 L506.70,389.73 L507.25,389.75 L507.79,389.73\n\t\tL508.34,389.68 L508.89,389.60 L509.43,389.49 L510.52,389.18 L511.62,388.73 L512.71,388.16 L513.80,387.47 L514.89,386.65\n\t\tL515.99,385.70 L517.08,384.64 L518.17,383.45 L519.27,382.13 L520.36,380.70 L521.45,379.14 L522.54,377.47 L523.64,375.68\n\t\tL524.73,373.77 L525.82,371.75 L526.91,369.61 L528.01,367.36 L529.10,365.00 L530.19,362.54 L531.28,359.96 L532.38,357.28\n\t\tL533.47,354.50 L534.56,351.62 L535.66,348.64 L536.75,345.56 L537.84,342.39 L538.93,339.12 L540.03,335.77 L541.12,332.33\n\t\tL542.21,328.80 L543.30,325.19 L544.40,321.50 L545.49,317.74 L546.58,313.90 L547.67,309.99 L548.77,306.01 L549.86,301.97\n\t\tL550.95,297.87 L552.04,293.70 L553.14,289.48 L554.23,285.20 L555.32,280.88 L556.42,276.51 L557.51,272.09 L558.60,267.64\n\t\tL559.69,263.14 L560.79,258.62 L561.88,254.06 L562.97,249.48 L564.06,244.87 L565.16,240.24 L566.25,235.59 L567.34,230.93\n\t\tL568.43,226.26 L569.53,221.59 L570.62,216.91  '/></g>\n\t</g>\n\t<g id=\"gnuplot_plot_2\"  fill=\"none\"><title>gnuplot_plot_2</title>\n<g fill=\"none\" color=\"black\" stroke=\"currentColor\" stroke-width=\"1.00\" stroke-linecap=\"butt\" stroke-linejoin=\"miter\">\n\t<g transform=\"translate(491.59,73.33)\" stroke=\"none\" fill=\"black\" font-family=\"Arial\" font-size=\"14.00\"  text-anchor=\"end\">\n\t\t<text>cos(2*x)/2</text>\n\t</g>\n</g>\n<g fill=\"none\" color=\"black\" stroke=\"currentColor\" stroke-width=\"1.00\" stroke-linecap=\"butt\" stroke-linejoin=\"miter\">\n\t<path stroke='rgb(255,   0,   0)'  d='M501.38,68.78 L551.04,68.78 M63.63,130.48 L64.18,130.52 L64.72,130.61 L65.27,130.77 L65.82,130.99 L66.36,131.28\n\t\tL66.91,131.62 L67.45,132.03 L68.00,132.51 L68.55,133.04 L69.09,133.63 L69.64,134.29 L70.19,135.01 L70.73,135.79\n\t\tL71.28,136.62 L71.82,137.52 L72.37,138.47 L72.92,139.48 L73.46,140.55 L74.01,141.68 L74.56,142.86 L75.10,144.09\n\t\tL75.65,145.38 L76.20,146.72 L76.74,148.11 L77.29,149.55 L77.83,151.04 L78.38,152.58 L78.93,154.16 L79.47,155.80\n\t\tL80.02,157.47 L80.57,159.19 L81.11,160.96 L81.66,162.76 L82.21,164.61 L82.75,166.49 L83.30,168.41 L83.84,170.36\n\t\tL84.39,172.35 L84.94,174.37 L85.48,176.42 L86.03,178.51 L86.58,180.62 L87.12,182.76 L87.67,184.92 L88.21,187.10\n\t\tL88.76,189.31 L89.31,191.54 L89.85,193.79 L90.40,196.05 L90.95,198.33 L91.49,200.62 L92.04,202.92 L92.59,205.24\n\t\tL93.13,207.56 L93.68,209.89 L94.22,212.23 L94.77,214.56 L95.32,216.91 L95.86,219.25 L96.41,221.58 L96.96,223.92\n\t\tL97.50,226.25 L98.05,228.57 L98.59,230.89 L99.14,233.19 L99.69,235.48 L100.23,237.76 L100.78,240.02 L101.33,242.27\n\t\tL101.87,244.50 L102.42,246.71 L102.97,248.89 L103.51,251.05 L104.06,253.19 L104.60,255.30 L105.15,257.39 L105.70,259.44\n\t\tL106.24,261.46 L106.79,263.45 L107.34,265.40 L107.88,267.32 L108.43,269.20 L108.98,271.05 L109.52,272.85 L110.07,274.62\n\t\tL110.61,276.34 L111.16,278.01 L111.71,279.65 L112.25,281.23 L112.80,282.77 L113.35,284.26 L113.89,285.70 L114.44,287.09\n\t\tL114.98,288.43 L115.53,289.72 L116.08,290.95 L116.62,292.13 L117.17,293.26 L117.72,294.33 L118.26,295.34 L118.81,296.29\n\t\tL119.36,297.19 L119.90,298.02 L120.45,298.80 L120.99,299.52 L121.54,300.18 L122.09,300.77 L122.63,301.30 L123.18,301.78\n\t\tL123.73,302.19 L124.27,302.53 L124.82,302.82 L125.36,303.04 L125.91,303.20 L126.46,303.29 L127.00,303.33 L127.55,303.29\n\t\tL128.10,303.20 L128.64,303.04 L129.19,302.82 L129.74,302.53 L130.28,302.19 L130.83,301.78 L131.37,301.30 L131.92,300.77\n\t\tL132.47,300.18 L133.01,299.52 L133.56,298.80 L134.11,298.02 L134.65,297.19 L135.20,296.29 L135.74,295.34 L136.29,294.33\n\t\tL136.84,293.26 L137.38,292.13 L137.93,290.95 L138.48,289.72 L139.02,288.43 L139.57,287.09 L140.12,285.70 L140.66,284.26\n\t\tL141.21,282.77 L141.75,281.23 L142.30,279.65 L142.85,278.01 L143.39,276.34 L143.94,274.62 L144.49,272.85 L145.03,271.05\n\t\tL145.58,269.20 L146.13,267.32 L146.67,265.40 L147.22,263.45 L147.76,261.46 L148.31,259.44 L148.86,257.39 L149.40,255.30\n\t\tL149.95,253.19 L150.50,251.05 L151.04,248.89 L151.59,246.71 L152.13,244.50 L152.68,242.27 L153.23,240.02 L153.77,237.76\n\t\tL154.32,235.48 L154.87,233.19 L155.41,230.89 L155.96,228.57 L156.51,226.25 L157.05,223.92 L157.60,221.58 L158.14,219.25\n\t\tL158.69,216.90 L159.24,214.56 L159.78,212.23 L160.33,209.89 L160.88,207.56 L161.42,205.24 L161.97,202.92 L162.51,200.62\n\t\tL163.06,198.33 L163.61,196.05 L164.15,193.79 L164.70,191.54 L165.25,189.31 L165.79,187.10 L166.34,184.92 L166.89,182.76\n\t\tL167.43,180.62 L167.98,178.51 L168.52,176.42 L169.07,174.37 L169.62,172.35 L170.16,170.36 L170.71,168.41 L171.26,166.49\n\t\tL171.80,164.61 L172.35,162.76 L172.90,160.96 L173.44,159.19 L173.99,157.47 L174.53,155.80 L175.08,154.16 L175.63,152.58\n\t\tL176.17,151.04 L176.72,149.55 L177.27,148.11 L178.36,145.38 L179.45,142.86 L180.54,140.55 L181.64,138.47 L182.73,136.62\n\t\tL183.82,135.01 L184.91,133.63 L186.01,132.51 L187.10,131.62 L188.19,130.99 L189.28,130.61 L190.38,130.48 L190.92,130.52\n\t\tL191.47,130.61 L192.02,130.77 L192.56,130.99 L193.11,131.28 L193.66,131.62 L194.20,132.03 L194.75,132.51 L195.29,133.04\n\t\tL195.84,133.63 L196.39,134.29 L196.93,135.01 L197.48,135.79 L198.03,136.62 L198.57,137.52 L199.12,138.47 L199.67,139.48\n\t\tL200.21,140.55 L200.76,141.68 L201.30,142.86 L201.85,144.09 L202.40,145.38 L202.94,146.72 L203.49,148.11 L204.04,149.55\n\t\tL204.58,151.04 L205.13,152.58 L205.67,154.16 L206.22,155.80 L206.77,157.47 L207.31,159.19 L207.86,160.96 L208.41,162.76\n\t\tL208.95,164.61 L209.50,166.49 L210.05,168.41 L210.59,170.36 L211.14,172.35 L211.68,174.37 L212.23,176.42 L212.78,178.51\n\t\tL213.32,180.62 L213.87,182.76 L214.42,184.92 L214.96,187.10 L215.51,189.31 L216.05,191.54 L216.60,193.79 L217.15,196.05\n\t\tL217.69,198.33 L218.24,200.62 L218.79,202.92 L219.33,205.24 L219.88,207.56 L220.43,209.89 L220.97,212.23 L221.52,214.56\n\t\tL222.06,216.90 L222.61,219.25 L223.16,221.58 L223.70,223.92 L224.25,226.25 L224.80,228.57 L225.34,230.89 L225.89,233.19\n\t\tL226.43,235.48 L226.98,237.76 L227.53,240.02 L228.07,242.27 L228.62,244.50 L229.17,246.71 L229.71,248.89 L230.26,251.05\n\t\tL230.81,253.19 L231.35,255.30 L231.90,257.39 L232.44,259.44 L232.99,261.46 L233.54,263.45 L234.08,265.40 L234.63,267.32\n\t\tL235.18,269.20 L235.72,271.05 L236.27,272.85 L236.82,274.62 L237.36,276.34 L237.91,278.01 L238.45,279.65 L239.00,281.23\n\t\tL239.55,282.77 L240.09,284.26 L240.64,285.70 L241.19,287.09 L241.73,288.43 L242.28,289.72 L242.82,290.95 L243.37,292.13\n\t\tL243.92,293.26 L244.46,294.33 L245.01,295.34 L245.56,296.29 L246.10,297.19 L246.65,298.02 L247.20,298.80 L247.74,299.52\n\t\tL248.29,300.18 L248.83,300.77 L249.38,301.30 L249.93,301.78 L250.47,302.19 L251.02,302.53 L251.57,302.82 L252.11,303.04\n\t\tL252.66,303.20 L253.20,303.29 L253.75,303.33 L254.30,303.29 L254.84,303.20 L255.39,303.04 L255.94,302.82 L256.48,302.53\n\t\tL257.03,302.19 L257.58,301.78 L258.12,301.30 L258.67,300.77 L259.21,300.18 L259.76,299.52 L260.31,298.80 L260.85,298.02\n\t\tL261.40,297.19 L261.95,296.29 L262.49,295.34 L263.04,294.33 L263.59,293.26 L264.13,292.13 L264.68,290.95 L265.22,289.72\n\t\tL265.77,288.43 L266.32,287.09 L266.86,285.70 L267.41,284.26 L267.96,282.77 L268.50,281.23 L269.05,279.65 L269.59,278.01\n\t\tL270.14,276.34 L270.69,274.62 L271.23,272.85 L271.78,271.05 L272.33,269.20 L272.87,267.32 L273.42,265.40 L273.97,263.45\n\t\tL274.51,261.46 L275.06,259.44 L275.60,257.39 L276.15,255.30 L276.70,253.19 L277.24,251.05 L277.79,248.89 L278.34,246.71\n\t\tL278.88,244.50 L279.43,242.27 L279.97,240.02 L280.52,237.76 L281.07,235.48 L281.61,233.19 L282.16,230.89 L282.71,228.57\n\t\tL283.25,226.25 L283.80,223.92 L284.35,221.58 L284.89,219.25 L285.44,216.90 L285.98,214.56 L286.53,212.23 L287.08,209.89\n\t\tL287.62,207.56 L288.17,205.24 L288.72,202.92 L289.26,200.62 L289.81,198.33 L290.36,196.05 L290.90,193.79 L291.45,191.54\n\t\tL291.99,189.31 L292.54,187.10 L293.09,184.92 L293.63,182.76 L294.18,180.62 L294.73,178.51 L295.27,176.42 L295.82,174.37\n\t\tL296.36,172.35 L296.91,170.36 L297.46,168.41 L298.00,166.49 L298.55,164.61 L299.10,162.76 L299.64,160.96 L300.19,159.19\n\t\tL300.74,157.47 L301.28,155.80 L301.83,154.16 L302.37,152.58 L302.92,151.04 L303.47,149.55 L304.01,148.11 L305.11,145.38\n\t\tL306.20,142.86 L307.29,140.55 L308.38,138.47 L309.48,136.62 L310.57,135.01 L311.66,133.63 L312.75,132.51 L313.85,131.62\n\t\tL314.94,130.99 L316.03,130.61 L317.13,130.48 L317.67,130.52 L318.22,130.61 L318.76,130.77 L319.31,130.99 L319.86,131.28\n\t\tL320.40,131.62 L320.95,132.03 L321.50,132.51 L322.04,133.04 L322.59,133.63 L323.13,134.29 L323.68,135.01 L324.23,135.79\n\t\tL324.77,136.62 L325.32,137.52 L325.87,138.47 L326.41,139.48 L326.96,140.55 L327.51,141.68 L328.05,142.86 L328.60,144.09\n\t\tL329.14,145.38 L329.69,146.72 L330.24,148.11 L330.78,149.55 L331.33,151.04 L331.88,152.58 L332.42,154.16 L332.97,155.80\n\t\tL333.51,157.47 L334.06,159.19 L334.61,160.96 L335.15,162.76 L335.70,164.61 L336.25,166.49 L336.79,168.41 L337.34,170.36\n\t\tL337.89,172.35 L338.43,174.37 L338.98,176.42 L339.52,178.51 L340.07,180.62 L340.62,182.76 L341.16,184.92 L341.71,187.10\n\t\tL342.26,189.31 L342.80,191.54 L343.35,193.79 L343.89,196.05 L344.44,198.33 L344.99,200.62 L345.53,202.92 L346.08,205.24\n\t\tL346.63,207.56 L347.17,209.89 L347.72,212.23 L348.27,214.56 L348.81,216.91 L349.36,219.25 L349.90,221.58 L350.45,223.92\n\t\tL351.00,226.25 L351.54,228.57 L352.09,230.89 L352.64,233.19 L353.18,235.48 L353.73,237.76 L354.28,240.02 L354.82,242.27\n\t\tL355.37,244.50 L355.91,246.71 L356.46,248.89 L357.01,251.05 L357.55,253.19 L358.10,255.30 L358.65,257.39 L359.19,259.44\n\t\tL359.74,261.46 L360.28,263.45 L360.83,265.40 L361.38,267.32 L361.92,269.20 L362.47,271.05 L363.02,272.85 L363.56,274.62\n\t\tL364.11,276.34 L364.66,278.01 L365.20,279.65 L365.75,281.23 L366.29,282.77 L366.84,284.26 L367.39,285.70 L367.93,287.09\n\t\tL368.48,288.43 L369.03,289.72 L369.57,290.95 L370.12,292.13 L370.66,293.26 L371.21,294.33 L371.76,295.34 L372.30,296.29\n\t\tL372.85,297.19 L373.40,298.02 L373.94,298.80 L374.49,299.52 L375.04,300.18 L375.58,300.77 L376.13,301.30 L376.67,301.78\n\t\tL377.22,302.19 L377.77,302.53 L378.31,302.82 L378.86,303.04 L379.41,303.20 L379.95,303.29 L380.50,303.33 L381.05,303.29\n\t\tL381.59,303.20 L382.14,303.04 L382.68,302.82 L383.23,302.53 L383.78,302.19 L384.32,301.78 L384.87,301.30 L385.42,300.77\n\t\tL385.96,300.18 L386.51,299.52 L387.05,298.80 L387.60,298.02 L388.15,297.19 L388.69,296.29 L389.24,295.34 L389.79,294.33\n\t\tL390.33,293.26 L390.88,292.13 L391.43,290.95 L391.97,289.72 L392.52,288.43 L393.06,287.09 L393.61,285.70 L394.16,284.26\n\t\tL394.70,282.77 L395.25,281.23 L395.80,279.65 L396.34,278.01 L396.89,276.34 L397.43,274.62 L397.98,272.85 L398.53,271.05\n\t\tL399.07,269.20 L399.62,267.32 L400.17,265.40 L400.71,263.45 L401.26,261.46 L401.81,259.44 L402.35,257.39 L402.90,255.30\n\t\tL403.44,253.19 L403.99,251.05 L404.54,248.89 L405.08,246.71 L405.63,244.50 L406.18,242.27 L406.72,240.02 L407.27,237.76\n\t\tL407.82,235.48 L408.36,233.19 L408.91,230.89 L409.45,228.57 L410.00,226.25 L410.55,223.92 L411.09,221.58 L411.64,219.25\n\t\tL412.19,216.90 L412.73,214.56 L413.28,212.23 L413.82,209.89 L414.37,207.56 L414.92,205.24 L415.46,202.92 L416.01,200.62\n\t\tL416.56,198.33 L417.10,196.05 L417.65,193.79 L418.20,191.54 L418.74,189.31 L419.29,187.10 L419.83,184.92 L420.38,182.76\n\t\tL420.93,180.62 L421.47,178.51 L422.02,176.42 L422.57,174.37 L423.11,172.35 L423.66,170.36 L424.20,168.41 L424.75,166.49\n\t\tL425.30,164.61 L425.84,162.76 L426.39,160.96 L426.94,159.19 L427.48,157.47 L428.03,155.80 L428.58,154.16 L429.12,152.58\n\t\tL429.67,151.04 L430.21,149.55 L430.76,148.11 L431.85,145.38 L432.95,142.86 L434.04,140.55 L435.13,138.47 L436.22,136.62\n\t\tL437.32,135.01 L438.41,133.63 L439.50,132.51 L440.59,131.62 L441.69,130.99 L442.78,130.61 L443.87,130.48 L444.42,130.52\n\t\tL444.97,130.61 L445.51,130.77 L446.06,130.99 L446.60,131.28 L447.15,131.62 L447.70,132.03 L448.24,132.51 L448.79,133.04\n\t\tL449.34,133.63 L449.88,134.29 L450.43,135.01 L450.97,135.79 L451.52,136.62 L452.07,137.52 L452.61,138.47 L453.16,139.48\n\t\tL453.71,140.55 L454.25,141.68 L454.80,142.86 L455.35,144.09 L455.89,145.38 L456.44,146.72 L456.98,148.11 L457.53,149.55\n\t\tL458.08,151.04 L458.62,152.58 L459.17,154.16 L459.72,155.80 L460.26,157.47 L460.81,159.19 L461.35,160.96 L461.90,162.76\n\t\tL462.45,164.61 L462.99,166.49 L463.54,168.41 L464.09,170.36 L464.63,172.35 L465.18,174.37 L465.73,176.42 L466.27,178.51\n\t\tL466.82,180.62 L467.36,182.76 L467.91,184.92 L468.46,187.10 L469.00,189.31 L469.55,191.54 L470.10,193.79 L470.64,196.05\n\t\tL471.19,198.33 L471.74,200.62 L472.28,202.92 L472.83,205.24 L473.37,207.56 L473.92,209.89 L474.47,212.23 L475.01,214.56\n\t\tL475.56,216.90 L476.11,219.25 L476.65,221.58 L477.20,223.92 L477.74,226.25 L478.29,228.57 L478.84,230.89 L479.38,233.19\n\t\tL479.93,235.48 L480.48,237.76 L481.02,240.02 L481.57,242.27 L482.12,244.50 L482.66,246.71 L483.21,248.89 L483.75,251.05\n\t\tL484.30,253.19 L484.85,255.30 L485.39,257.39 L485.94,259.44 L486.49,261.46 L487.03,263.45 L487.58,265.40 L488.12,267.32\n\t\tL488.67,269.20 L489.22,271.05 L489.76,272.85 L490.31,274.62 L490.86,276.34 L491.40,278.01 L491.95,279.65 L492.50,281.23\n\t\tL493.04,282.77 L493.59,284.26 L494.13,285.70 L494.68,287.09 L495.23,288.43 L495.77,289.72 L496.32,290.95 L496.87,292.13\n\t\tL497.41,293.26 L497.96,294.33 L498.51,295.34 L499.05,296.29 L499.60,297.19 L500.14,298.02 L500.69,298.80 L501.24,299.52\n\t\tL501.78,300.18 L502.33,300.77 L502.88,301.30 L503.42,301.78 L503.97,302.19 L504.51,302.53 L505.06,302.82 L505.61,303.04\n\t\tL506.15,303.20 L506.70,303.29 L507.25,303.33 L507.79,303.29 L508.34,303.20 L508.89,303.04 L509.43,302.82 L509.98,302.53\n\t\tL510.52,302.19 L511.07,301.78 L511.62,301.30 L512.16,300.77 L512.71,300.18 L513.26,299.52 L513.80,298.80 L514.35,298.02\n\t\tL514.89,297.19 L515.44,296.29 L515.99,295.34 L516.53,294.33 L517.08,293.26 L517.63,292.13 L518.17,290.95 L518.72,289.72\n\t\tL519.27,288.43 L519.81,287.09 L520.36,285.70 L520.90,284.26 L521.45,282.77 L522.00,281.23 L522.54,279.65 L523.09,278.01\n\t\tL523.64,276.34 L524.18,274.62 L524.73,272.85 L525.27,271.05 L525.82,269.20 L526.37,267.32 L526.91,265.40 L527.46,263.45\n\t\tL528.01,261.46 L528.55,259.44 L529.10,257.39 L529.65,255.30 L530.19,253.19 L530.74,251.05 L531.28,248.89 L531.83,246.71\n\t\tL532.38,244.50 L532.92,242.27 L533.47,240.02 L534.02,237.76 L534.56,235.48 L535.11,233.19 L535.66,230.89 L536.20,228.57\n\t\tL536.75,226.25 L537.29,223.92 L537.84,221.58 L538.39,219.25 L538.93,216.91 L539.48,214.56 L540.03,212.23 L540.57,209.89\n\t\tL541.12,207.56 L541.66,205.24 L542.21,202.92 L542.76,200.62 L543.30,198.33 L543.85,196.05 L544.40,193.79 L544.94,191.54\n\t\tL545.49,189.31 L546.04,187.10 L546.58,184.92 L547.13,182.76 L547.67,180.62 L548.22,178.51 L548.77,176.42 L549.31,174.37\n\t\tL549.86,172.35 L550.41,170.36 L550.95,168.41 L551.50,166.49 L552.04,164.61 L552.59,162.76 L553.14,160.96 L553.68,159.19\n\t\tL554.23,157.47 L554.78,155.80 L555.32,154.16 L555.87,152.58 L556.42,151.04 L556.96,149.55 L557.51,148.11 L558.60,145.38\n\t\tL559.69,142.86 L560.79,140.55 L561.88,138.47 L562.97,136.62 L564.06,135.01 L565.16,133.63 L566.25,132.51 L567.34,131.62\n\t\tL568.43,130.99 L569.53,130.61 L570.62,130.48  '/></g>\n\t</g>\n<g fill=\"none\" color=\"black\" stroke=\"currentColor\" stroke-width=\"1.00\" stroke-linecap=\"butt\" stroke-linejoin=\"miter\">\n\t<path stroke='black'  d='M63.63,389.75 L74.13,389.75 M570.62,389.75 L560.12,389.75  '/>\t<g transform=\"translate(53.84,394.30)\" stroke=\"none\" fill=\"black\" font-family=\"Arial\" font-size=\"14.00\"  text-anchor=\"end\">\n\t\t<text>-1</text>\n\t</g>\n</g>\n<g fill=\"none\" color=\"black\" stroke=\"currentColor\" stroke-width=\"1.00\" stroke-linecap=\"butt\" stroke-linejoin=\"miter\">\n\t<path stroke='black'  d='M63.63,303.33 L74.13,303.33 M570.62,303.33 L560.12,303.33  '/>\t<g transform=\"translate(53.84,307.88)\" stroke=\"none\" fill=\"black\" font-family=\"Arial\" font-size=\"14.00\"  text-anchor=\"end\">\n\t\t<text>-0.5</text>\n\t</g>\n</g>\n<g fill=\"none\" color=\"black\" stroke=\"currentColor\" stroke-width=\"1.00\" stroke-linecap=\"butt\" stroke-linejoin=\"miter\">\n\t<path stroke='black'  d='M63.63,216.90 L74.13,216.90 M570.62,216.90 L560.12,216.90  '/>\t<g transform=\"translate(53.84,221.45)\" stroke=\"none\" fill=\"black\" font-family=\"Arial\" font-size=\"14.00\"  text-anchor=\"end\">\n\t\t<text> 0</text>\n\t</g>\n</g>\n<g fill=\"none\" color=\"black\" stroke=\"currentColor\" stroke-width=\"1.00\" stroke-linecap=\"butt\" stroke-linejoin=\"miter\">\n\t<path stroke='black'  d='M63.63,130.48 L74.13,130.48 M570.62,130.48 L560.12,130.48  '/>\t<g transform=\"translate(53.84,135.03)\" stroke=\"none\" fill=\"black\" font-family=\"Arial\" font-size=\"14.00\"  text-anchor=\"end\">\n\t\t<text> 0.5</text>\n\t</g>\n</g>\n<g fill=\"none\" color=\"black\" stroke=\"currentColor\" stroke-width=\"1.00\" stroke-linecap=\"butt\" stroke-linejoin=\"miter\">\n\t<path stroke='black'  d='M63.63,44.06 L74.13,44.06 M570.62,44.06 L560.12,44.06  '/>\t<g transform=\"translate(53.84,48.61)\" stroke=\"none\" fill=\"black\" font-family=\"Arial\" font-size=\"14.00\"  text-anchor=\"end\">\n\t\t<text> 1</text>\n\t</g>\n</g>\n<g fill=\"none\" color=\"black\" stroke=\"currentColor\" stroke-width=\"1.00\" stroke-linecap=\"butt\" stroke-linejoin=\"miter\">\n\t<path stroke='black'  d='M75.06,407.03 L75.06,396.53 M75.06,26.78 L75.06,37.28  '/>\t<g transform=\"translate(75.06,432.58)\" stroke=\"none\" fill=\"black\" font-family=\"Arial\" font-size=\"14.00\"  text-anchor=\"middle\">\n\t\t<text>-6</text>\n\t</g>\n</g>\n<g fill=\"none\" color=\"black\" stroke=\"currentColor\" stroke-width=\"1.00\" stroke-linecap=\"butt\" stroke-linejoin=\"miter\">\n\t<path stroke='black'  d='M155.75,407.03 L155.75,396.53 M155.75,26.78 L155.75,37.28  '/>\t<g transform=\"translate(155.75,432.58)\" stroke=\"none\" fill=\"black\" font-family=\"Arial\" font-size=\"14.00\"  text-anchor=\"middle\">\n\t\t<text>-4</text>\n\t</g>\n</g>\n<g fill=\"none\" color=\"black\" stroke=\"currentColor\" stroke-width=\"1.00\" stroke-linecap=\"butt\" stroke-linejoin=\"miter\">\n\t<path stroke='black'  d='M236.44,407.03 L236.44,396.53 M236.44,26.78 L236.44,37.28  '/>\t<g transform=\"translate(236.44,432.58)\" stroke=\"none\" fill=\"black\" font-family=\"Arial\" font-size=\"14.00\"  text-anchor=\"middle\">\n\t\t<text>-2</text>\n\t</g>\n</g>\n<g fill=\"none\" color=\"black\" stroke=\"currentColor\" stroke-width=\"1.00\" stroke-linecap=\"butt\" stroke-linejoin=\"miter\">\n\t<path stroke='black'  d='M317.13,407.03 L317.13,396.53 M317.13,26.78 L317.13,37.28  '/>\t<g transform=\"translate(317.13,432.58)\" stroke=\"none\" fill=\"black\" font-family=\"Arial\" font-size=\"14.00\"  text-anchor=\"middle\">\n\t\t<text> 0</text>\n\t</g>\n</g>\n<g fill=\"none\" color=\"black\" stroke=\"currentColor\" stroke-width=\"1.00\" stroke-linecap=\"butt\" stroke-linejoin=\"miter\">\n\t<path stroke='black'  d='M397.81,407.03 L397.81,396.53 M397.81,26.78 L397.81,37.28  '/>\t<g transform=\"translate(397.81,432.58)\" stroke=\"none\" fill=\"black\" font-family=\"Arial\" font-size=\"14.00\"  text-anchor=\"middle\">\n\t\t<text> 2</text>\n\t</g>\n</g>\n<g fill=\"none\" color=\"black\" stroke=\"currentColor\" stroke-width=\"1.00\" stroke-linecap=\"butt\" stroke-linejoin=\"miter\">\n\t<path stroke='black'  d='M478.50,407.03 L478.50,396.53 M478.50,26.78 L478.50,37.28  '/>\t<g transform=\"translate(478.50,432.58)\" stroke=\"none\" fill=\"black\" font-family=\"Arial\" font-size=\"14.00\"  text-anchor=\"middle\">\n\t\t<text> 4</text>\n\t</g>\n</g>\n<g fill=\"none\" color=\"black\" stroke=\"currentColor\" stroke-width=\"1.00\" stroke-linecap=\"butt\" stroke-linejoin=\"miter\">\n\t<path stroke='black'  d='M559.19,407.03 L559.19,396.53 M559.19,26.78 L559.19,37.28  '/>\t<g transform=\"translate(559.19,432.58)\" stroke=\"none\" fill=\"black\" font-family=\"Arial\" font-size=\"14.00\"  text-anchor=\"middle\">\n\t\t<text> 6</text>\n\t</g>\n</g>\n<g fill=\"none\" color=\"black\" stroke=\"currentColor\" stroke-width=\"1.00\" stroke-linecap=\"butt\" stroke-linejoin=\"miter\">\n</g>\n<g fill=\"none\" color=\"gray\" stroke=\"currentColor\" stroke-width=\"1.00\" stroke-linecap=\"butt\" stroke-linejoin=\"miter\">\n\t<path stroke='black' stroke-dasharray='2,4'  d='M63.63,216.90 L570.62,216.90  '/></g>\n<g fill=\"none\" color=\"gray\" stroke=\"currentColor\" stroke-width=\"1.00\" stroke-linecap=\"butt\" stroke-linejoin=\"miter\">\n\t<path stroke='black' stroke-dasharray='2,4'  d='M317.13,407.03 L317.13,26.78  '/></g>\n<g fill=\"none\" color=\"gray\" stroke=\"black\" stroke-width=\"2.00\" stroke-linecap=\"butt\" stroke-linejoin=\"miter\">\n</g>\n<g fill=\"none\" color=\"black\" stroke=\"currentColor\" stroke-width=\"2.00\" stroke-linecap=\"butt\" stroke-linejoin=\"miter\">\n</g>\n<g fill=\"none\" color=\"black\" stroke=\"black\" stroke-width=\"1.00\" stroke-linecap=\"butt\" stroke-linejoin=\"miter\">\n</g>\n<g fill=\"none\" color=\"black\" stroke=\"currentColor\" stroke-width=\"1.00\" stroke-linecap=\"butt\" stroke-linejoin=\"miter\">\n\t<path stroke='black'  d='M63.63,26.78 L63.63,407.03 L570.62,407.03 L570.62,26.78 L63.63,26.78 Z  '/>\t<g transform=\"translate(317.12,464.08)\" stroke=\"none\" fill=\"black\" font-family=\"Arial\" font-size=\"14.00\"  text-anchor=\"middle\">\n\t\t<text>x</text>\n\t</g>\n</g>\n<g fill=\"none\" color=\"black\" stroke=\"currentColor\" stroke-width=\"1.00\" stroke-linecap=\"butt\" stroke-linejoin=\"miter\">\n</g>\n<g fill=\"none\" color=\"black\" stroke=\"currentColor\" stroke-width=\"1.00\" stroke-linecap=\"butt\" stroke-linejoin=\"miter\">\n</g>\n</g>\n</svg>\n\n"
+   },
+   {
+    "type": "heading",
+    "attrs": {
+     "level": 2
+    },
+    "content": [
+     {
+      "type": "text",
+      "text": "Definitions"
+     }
+    ]
+   },
+   {
+    "type": "paragraph",
+    "content": [
+     {
+      "type": "text",
+      "text": ":=",
+      "marks": [
+       {
+        "type": "code"
+       }
+      ]
+     },
+     {
+      "type": "text",
+      "text": " and "
+     },
+     {
+      "type": "text",
+      "text": "Tab",
+      "marks": [
+       {
+        "type": "strong"
+       }
+      ]
+     },
+     {
+      "type": "text",
+      "text": " defines a variable or a function in Maxima:"
+     }
+    ]
+   },
+   {
+    "type": "math_block",
+    "attrs": {
+     "id": "538a5e9f3377",
+     "source": "f(x) := x^2*sin(x);",
+     "outputs": [],
+     "inputs": [],
+     "latex": "f\\left(x\\right)\\coloneq x^2\\sin x",
+     "run": false,
+     "result": {
+      "text": "defined"
+     }
     }
-   ],
-   "inputs": [
-    10
-   ]
-  },
-  {
-   "id": "w13",
-   "type": "markdown",
-   "source": "## Questions from Maxima\n\nSometimes Maxima needs to know more, for example the sign of a parameter. The question appears in the notebook; answer it there."
-  },
-  {
-   "id": "w14",
-   "type": "code",
-   "source": "integrate(x^a, x);",
-   "outputs": []
-  },
-  {
-   "id": "w15",
-   "type": "markdown",
-   "source": "## Sharing your work\n\n**Export** writes LaTeX (with figures), a self-contained HTML page, Markdown, a Maxima batch file or a wxMaxima document. wxMaxima files (`.wxm`, `.wxmx`) and Maxima batch files open directly."
-  }
- ],
+   },
+   {
+    "type": "paragraph",
+    "content": [
+     {
+      "type": "text",
+      "text": "From then on every formula and Maxima block can use it, for example "
+     },
+     {
+      "type": "math_inline",
+      "attrs": {
+       "id": "ab66138295d9",
+       "latex": "f\\left(\\frac{\\pi}{2}\\right)=",
+       "source": "f(%pi/2);",
+       "result": {
+        "latex": "\\frac{\\pi^2}{4}",
+        "semantic": "\\frac{\\class{mbk-sym mbk-constant mbk-n-002500700069}{\\pi}^2}{4}",
+        "text": "%pi^2/4"
+       }
+      }
+     },
+     {
+      "type": "text",
+      "text": "."
+     }
+    ]
+   },
+   {
+    "type": "heading",
+    "attrs": {
+     "level": 2
+    },
+    "content": [
+     {
+      "type": "text",
+      "text": "Maxima blocks"
+     }
+    ]
+   },
+   {
+    "type": "paragraph",
+    "content": [
+     {
+      "type": "text",
+      "text": "Type "
+     },
+     {
+      "type": "text",
+      "text": ">>",
+      "marks": [
+       {
+        "type": "code"
+       }
+      ]
+     },
+     {
+      "type": "text",
+      "text": " and a space for a block of ordinary Maxima input. "
+     },
+     {
+      "type": "text",
+      "text": "Shift+Enter",
+      "marks": [
+       {
+        "type": "strong"
+       }
+      ]
+     },
+     {
+      "type": "text",
+      "text": " runs it; each result keeps its "
+     },
+     {
+      "type": "text",
+      "text": "%o",
+      "marks": [
+       {
+        "type": "code"
+       }
+      ]
+     },
+     {
+      "type": "text",
+      "text": " label and can be copied as LaTeX or as Maxima text."
+     }
+    ]
+   },
+   {
+    "type": "maxima",
+    "attrs": {
+     "id": "95981dd5e3df",
+     "source": "integrate(f(x), x);\ndiff(f(x), x, 2);",
+     "outputs": [
+      {
+       "kind": "result",
+       "label": "%o5",
+       "latex": "2\\,x\\,\\sin x+\\left(2-x^2\\right)\\,\\cos x",
+       "text": "2*x*sin(x)+(2-x^2)*cos(x)",
+       "semantic": "2\\,\\class{mbk-sym mbk-free mbk-n-0078}{x}\\,\\sin \\class{mbk-sym mbk-free mbk-n-0078}{x}+\\left(2-\\class{mbk-sym mbk-free mbk-n-0078}{x}^2\\right)\\,\\cos \\class{mbk-sym mbk-free mbk-n-0078}{x}"
+      },
+      {
+       "kind": "result",
+       "label": "%o6",
+       "latex": "-\\left(x^2\\,\\sin x\\right)+2\\,\\sin x+4\\,x\\,\\cos x",
+       "text": "-(x^2*sin(x))+2*sin(x)+4*x*cos(x)",
+       "semantic": "-\\left(\\class{mbk-sym mbk-free mbk-n-0078}{x}^2\\,\\sin \\class{mbk-sym mbk-free mbk-n-0078}{x}\\right)+2\\,\\sin \\class{mbk-sym mbk-free mbk-n-0078}{x}+4\\,\\class{mbk-sym mbk-free mbk-n-0078}{x}\\,\\cos \\class{mbk-sym mbk-free mbk-n-0078}{x}"
+      }
+     ],
+     "inputs": [
+      5,
+      6
+     ]
+    }
+   },
+   {
+    "type": "heading",
+    "attrs": {
+     "level": 2
+    },
+    "content": [
+     {
+      "type": "text",
+      "text": "Symbols"
+     }
+    ]
+   },
+   {
+    "type": "paragraph",
+    "content": [
+     {
+      "type": "text",
+      "text": "Every name has its own colour in formulas and results, and constants such as "
+     },
+     {
+      "type": "math_inline",
+      "attrs": {
+       "id": "ad7fb5e25796",
+       "latex": "\\pi",
+       "source": "",
+       "result": null
+      }
+     },
+     {
+      "type": "text",
+      "text": " are marked. Hover a symbol to see what Maxima knows about it. The "
+     },
+     {
+      "type": "text",
+      "text": "Objects",
+      "marks": [
+       {
+        "type": "strong"
+       }
+      ]
+     },
+     {
+      "type": "text",
+      "text": " panel lists the variables and functions of the session; ✎ adds a description that is saved in the notebook."
+     }
+    ]
+   },
+   {
+    "type": "maxima",
+    "attrs": {
+     "id": "7404d0d2cdcc",
+     "source": "A: matrix([2, 1], [1, 3])$\neigenvalues(A);\nA^^-1;",
+     "outputs": [
+      {
+       "kind": "result",
+       "label": "%o8",
+       "latex": "\\left[ \\left[ -\\left(\\frac{\\sqrt{5}-5}{2}\\right) , \\frac{\\sqrt{5}+5}{2} \\right]  , \\left[ 1 , 1 \\right]  \\right]",
+       "text": "[[-((sqrt(5)-5)/2),(sqrt(5)+5)/2],[1,1]]"
+      },
+      {
+       "kind": "result",
+       "label": "%o9",
+       "latex": "\\begin{pmatrix} \\frac{3}{5}&-\\left(\\frac{1}{5}\\right)\\\\ -\\left(\\frac{1}{5}\\right)&\\frac{2}{5}\\end{pmatrix}",
+       "text": "matrix([3/5,-(1/5)],[-(1/5),2/5])"
+      }
+     ],
+     "inputs": [
+      7,
+      8,
+      9
+     ]
+    }
+   },
+   {
+    "type": "heading",
+    "attrs": {
+     "level": 2
+    },
+    "content": [
+     {
+      "type": "text",
+      "text": "Menus"
+     }
+    ]
+   },
+   {
+    "type": "paragraph",
+    "content": [
+     {
+      "type": "text",
+      "text": "The "
+     },
+     {
+      "type": "text",
+      "text": "Equations",
+      "marks": [
+       {
+        "type": "strong"
+       }
+      ]
+     },
+     {
+      "type": "text",
+      "text": ", "
+     },
+     {
+      "type": "text",
+      "text": "Algebra",
+      "marks": [
+       {
+        "type": "strong"
+       }
+      ]
+     },
+     {
+      "type": "text",
+      "text": ", "
+     },
+     {
+      "type": "text",
+      "text": "Calculus",
+      "marks": [
+       {
+        "type": "strong"
+       }
+      ]
+     },
+     {
+      "type": "text",
+      "text": ", "
+     },
+     {
+      "type": "text",
+      "text": "Matrix",
+      "marks": [
+       {
+        "type": "strong"
+       }
+      ]
+     },
+     {
+      "type": "text",
+      "text": " and "
+     },
+     {
+      "type": "text",
+      "text": "Plot",
+      "marks": [
+       {
+        "type": "strong"
+       }
+      ]
+     },
+     {
+      "type": "text",
+      "text": " menus open short forms that write the Maxima code for you. "
+     },
+     {
+      "type": "text",
+      "text": "Ctrl+K",
+      "marks": [
+       {
+        "type": "strong"
+       }
+      ]
+     },
+     {
+      "type": "text",
+      "text": " searches all commands, forms and formula templates."
+     }
+    ]
+   },
+   {
+    "type": "heading",
+    "attrs": {
+     "level": 2
+    },
+    "content": [
+     {
+      "type": "text",
+      "text": "Inline plots"
+     }
+    ]
+   },
+   {
+    "type": "paragraph",
+    "content": [
+     {
+      "type": "text",
+      "text": "iplot2d",
+      "marks": [
+       {
+        "type": "code"
+       }
+      ]
+     },
+     {
+      "type": "text",
+      "text": ", "
+     },
+     {
+      "type": "text",
+      "text": "iplot3d",
+      "marks": [
+       {
+        "type": "code"
+       }
+      ]
+     },
+     {
+      "type": "text",
+      "text": ", "
+     },
+     {
+      "type": "text",
+      "text": "idraw2d",
+      "marks": [
+       {
+        "type": "code"
+       }
+      ]
+     },
+     {
+      "type": "text",
+      "text": " and "
+     },
+     {
+      "type": "text",
+      "text": "idraw3d",
+      "marks": [
+       {
+        "type": "code"
+       }
+      ]
+     },
+     {
+      "type": "text",
+      "text": " take the arguments of "
+     },
+     {
+      "type": "text",
+      "text": "plot2d",
+      "marks": [
+       {
+        "type": "code"
+       }
+      ]
+     },
+     {
+      "type": "text",
+      "text": ", "
+     },
+     {
+      "type": "text",
+      "text": "plot3d",
+      "marks": [
+       {
+        "type": "code"
+       }
+      ]
+     },
+     {
+      "type": "text",
+      "text": ", "
+     },
+     {
+      "type": "text",
+      "text": "draw2d",
+      "marks": [
+       {
+        "type": "code"
+       }
+      ]
+     },
+     {
+      "type": "text",
+      "text": " and "
+     },
+     {
+      "type": "text",
+      "text": "draw3d",
+      "marks": [
+       {
+        "type": "code"
+       }
+      ]
+     },
+     {
+      "type": "text",
+      "text": " and draw into the notebook. Worksheets written for wxMaxima keep working: "
+     },
+     {
+      "type": "text",
+      "text": "wxplot2d",
+      "marks": [
+       {
+        "type": "code"
+       }
+      ]
+     },
+     {
+      "type": "text",
+      "text": " and friends are aliases."
+     }
+    ]
+   },
+   {
+    "type": "maxima",
+    "attrs": {
+     "id": "d54c84ae2749",
+     "source": "iplot2d([sin(x), cos(2*x)/2], [x, -2*%pi, 2*%pi])$",
+     "outputs": [
+      {
+       "kind": "image",
+       "mime": "image/svg+xml",
+       "data": "<?xml version=\"1.0\" encoding=\"windows-1252\"  standalone=\"no\"?>\n<svg \n width=\"600\" height=\"480\"\n viewBox=\"0 0 600 480\"\n xmlns=\"http://www.w3.org/2000/svg\"\n xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n>\n\n<title>Gnuplot</title>\n<desc>Produced by GNUPLOT 6.0 patchlevel 5 </desc>\n\n<g id=\"gnuplot_canvas\">\n\n<rect x=\"0\" y=\"0\" width=\"600\" height=\"480\" fill=\"none\"/>\n<defs>\n\n\t<circle id='gpDot' r='0.5' stroke-width='0.5' stroke='currentColor'/>\n\t<path id='gpPt0' stroke-width='0.222' stroke='currentColor' d='M-1,0 h2 M0,-1 v2'/>\n\t<path id='gpPt1' stroke-width='0.222' stroke='currentColor' d='M-1,-1 L1,1 M1,-1 L-1,1'/>\n\t<path id='gpPt2' stroke-width='0.222' stroke='currentColor' d='M-1,0 L1,0 M0,-1 L0,1 M-1,-1 L1,1 M-1,1 L1,-1'/>\n\t<rect id='gpPt3' stroke-width='0.222' stroke='currentColor' x='-1' y='-1' width='2' height='2'/>\n\t<rect id='gpPt4' stroke-width='0.222' stroke='currentColor' fill='currentColor' x='-1' y='-1' width='2' height='2'/>\n\t<circle id='gpPt5' stroke-width='0.222' stroke='currentColor' cx='0' cy='0' r='1'/>\n\t<use xlink:href='#gpPt5' id='gpPt6' fill='currentColor' stroke='none'/>\n\t<path id='gpPt7' stroke-width='0.222' stroke='currentColor' d='M0,-1.33 L-1.33,0.67 L1.33,0.67 z'/>\n\t<use xlink:href='#gpPt7' id='gpPt8' fill='currentColor' stroke='none'/>\n\t<use xlink:href='#gpPt7' id='gpPt9' stroke='currentColor' transform='rotate(180)'/>\n\t<use xlink:href='#gpPt9' id='gpPt10' fill='currentColor' stroke='none'/>\n\t<use xlink:href='#gpPt3' id='gpPt11' stroke='currentColor' transform='rotate(45)'/>\n\t<use xlink:href='#gpPt11' id='gpPt12' fill='currentColor' stroke='none'/>\n\t<path id='gpPt13' stroke-width='0.222' stroke='currentColor' d='M0,1.330 L1.265,0.411 L0.782,-1.067 L-0.782,-1.076 L-1.265,0.411 z'/>\n\t<use xlink:href='#gpPt13' id='gpPt14' fill='currentColor' stroke='none'/>\n\t<filter id='textbox' filterUnits='objectBoundingBox' x='0' y='0' height='1' width='1'>\n\t  <feFlood flood-color='white' flood-opacity='1' result='bgnd'/>\n\t  <feComposite in='SourceGraphic' in2='bgnd' operator='atop'/>\n\t</filter>\n\t<filter id='greybox' filterUnits='objectBoundingBox' x='0' y='0' height='1' width='1'>\n\t  <feFlood flood-color='lightgrey' flood-opacity='1' result='grey'/>\n\t  <feComposite in='SourceGraphic' in2='grey' operator='atop'/>\n\t</filter>\n</defs>\n<g fill=\"none\" color=\"white\" stroke=\"currentColor\" stroke-width=\"1.00\" stroke-linecap=\"butt\" stroke-linejoin=\"miter\">\n</g>\n<g fill=\"none\" color=\"black\" stroke=\"currentColor\" stroke-width=\"1.00\" stroke-linecap=\"butt\" stroke-linejoin=\"miter\">\n\t<g stroke='none' shape-rendering='crispEdges'>\n\t\t<polygon fill = 'rgb(255, 255, 255)' points = '0.00,480.00 599.99,480.00 599.99,0.01 0.00,0.01 '/>\n\t</g>\n</g>\n<g fill=\"none\" color=\"gray\" stroke=\"currentColor\" stroke-width=\"1.00\" stroke-linecap=\"butt\" stroke-linejoin=\"miter\">\n\t<path stroke='black' stroke-dasharray='2,4'  d='M54.53,220.20 L574.82,220.20  '/></g>\n<g fill=\"none\" color=\"gray\" stroke=\"currentColor\" stroke-width=\"1.00\" stroke-linecap=\"butt\" stroke-linejoin=\"miter\">\n\t<path stroke='black' stroke-dasharray='2,4'  d='M314.68,415.31 L314.68,25.10  '/></g>\n<g fill=\"none\" color=\"black\" stroke=\"currentColor\" stroke-width=\"1.00\" stroke-linecap=\"butt\" stroke-linejoin=\"miter\">\n\t<path stroke='black'  d='M54.53,25.10 L54.53,415.31 L574.82,415.31 L574.82,25.10 L54.53,25.10 Z  '/></g>\n<g fill=\"none\" color=\"black\" stroke=\"currentColor\" stroke-width=\"1.00\" stroke-linecap=\"butt\" stroke-linejoin=\"miter\">\n</g>\n\t<g id=\"gnuplot_plot_1\" ><title>sin(x)</title>\n<g fill=\"none\" color=\"black\" stroke=\"currentColor\" stroke-width=\"1.00\" stroke-linecap=\"butt\" stroke-linejoin=\"miter\">\n\t<g transform=\"translate(507.09,47.00)\" stroke=\"none\" fill=\"black\" font-family=\"Arial\" font-size=\"12.00\"  text-anchor=\"end\">\n\t\t<text><tspan font-family=\"Arial\" >sin(x)</tspan></text>\n\t</g>\n</g>\n<g fill=\"none\" color=\"black\" stroke=\"currentColor\" stroke-width=\"1.00\" stroke-linecap=\"butt\" stroke-linejoin=\"miter\">\n\t<path stroke='rgb(  0,   0, 255)'  d='M515.48,43.10 L558.04,43.10 M54.53,220.20 L55.65,215.40 L56.77,210.60 L57.89,205.81 L59.02,201.03 L60.14,196.26\n\t\tL61.26,191.51 L62.38,186.78 L63.50,182.08 L64.62,177.40 L65.74,172.75 L66.86,168.14 L67.99,163.57 L69.11,159.04\n\t\tL70.23,154.55 L71.35,150.12 L72.47,145.73 L73.59,141.40 L74.71,137.12 L75.83,132.91 L76.96,128.76 L78.08,124.68\n\t\tL79.20,120.67 L80.32,116.73 L81.44,112.87 L82.56,109.08 L83.68,105.38 L84.81,101.76 L85.93,98.23 L87.05,94.79\n\t\tL88.17,91.44 L89.29,88.18 L90.41,85.02 L91.53,81.96 L92.65,79.00 L93.78,76.15 L94.90,73.40 L96.02,70.76\n\t\tL97.14,68.23 L98.26,65.81 L99.38,63.50 L100.50,61.31 L101.63,59.23 L102.75,57.27 L103.87,55.43 L104.99,53.72\n\t\tL106.11,52.12 L107.23,50.65 L108.35,49.30 L110.60,46.98 L112.84,45.17 L115.08,43.88 L117.32,43.10 L118.44,42.90\n\t\tL119.57,42.84 L120.69,42.90 L121.81,43.10 L122.93,43.42 L124.05,43.88 L125.17,44.46 L126.29,45.17 L127.42,46.01\n\t\tL128.54,46.98 L129.66,48.08 L130.78,49.30 L131.90,50.65 L133.02,52.12 L134.14,53.72 L135.26,55.43 L136.39,57.27\n\t\tL137.51,59.23 L138.63,61.31 L139.75,63.50 L140.87,65.81 L141.99,68.23 L143.11,70.76 L144.24,73.40 L145.36,76.15\n\t\tL146.48,79.00 L147.60,81.96 L148.72,85.02 L149.84,88.18 L150.96,91.44 L152.08,94.79 L153.21,98.23 L154.33,101.76\n\t\tL155.45,105.38 L156.57,109.08 L157.69,112.87 L158.81,116.73 L159.93,120.67 L161.05,124.68 L162.18,128.76 L163.30,132.91\n\t\tL164.42,137.12 L165.54,141.40 L166.66,145.73 L167.78,150.12 L168.90,154.55 L170.03,159.04 L171.15,163.57 L172.27,168.14\n\t\tL173.39,172.75 L174.51,177.40 L175.63,182.08 L176.75,186.78 L177.87,191.51 L179.00,196.26 L180.12,201.03 L181.24,205.81\n\t\tL182.36,210.60 L183.48,215.40 L184.60,220.21 L185.72,225.01 L186.85,229.81 L187.97,234.60 L189.09,239.38 L190.21,244.15\n\t\tL191.33,248.90 L192.45,253.63 L193.57,258.33 L194.69,263.01 L195.82,267.66 L196.94,272.27 L198.06,276.84 L199.18,281.37\n\t\tL200.30,285.86 L201.42,290.29 L202.54,294.68 L203.66,299.01 L204.79,303.29 L205.91,307.50 L207.03,311.65 L208.15,315.73\n\t\tL209.27,319.74 L210.39,323.68 L211.51,327.54 L212.64,331.33 L213.76,335.03 L214.88,338.65 L216.00,342.18 L217.12,345.62\n\t\tL218.24,348.97 L219.36,352.23 L220.48,355.39 L221.61,358.45 L222.73,361.41 L223.85,364.26 L224.97,367.01 L226.09,369.65\n\t\tL227.21,372.18 L228.33,374.60 L229.46,376.91 L230.58,379.10 L231.70,381.18 L232.82,383.14 L233.94,384.98 L235.06,386.69\n\t\tL236.18,388.29 L237.30,389.76 L238.43,391.11 L239.55,392.33 L240.67,393.43 L241.79,394.40 L242.91,395.24 L244.03,395.95\n\t\tL245.15,396.53 L246.27,396.99 L247.40,397.31 L247.96,397.43 L248.52,397.51 L249.08,397.56 L249.64,397.57 L250.20,397.56\n\t\tL250.76,397.51 L251.32,397.43 L251.88,397.31 L253.00,396.99 L254.12,396.53 L255.25,395.95 L256.37,395.24 L257.49,394.40\n\t\tL258.61,393.43 L259.73,392.33 L260.85,391.11 L261.97,389.76 L263.09,388.29 L264.22,386.69 L265.34,384.98 L266.46,383.14\n\t\tL267.58,381.18 L268.70,379.10 L269.82,376.91 L270.94,374.60 L272.07,372.18 L273.19,369.65 L274.31,367.01 L275.43,364.26\n\t\tL276.55,361.41 L277.67,358.45 L278.79,355.39 L279.91,352.23 L281.04,348.97 L282.16,345.62 L283.28,342.18 L284.40,338.65\n\t\tL285.52,335.03 L286.64,331.33 L287.76,327.54 L288.88,323.68 L290.01,319.74 L291.13,315.73 L292.25,311.65 L293.37,307.50\n\t\tL294.49,303.29 L295.61,299.01 L296.73,294.68 L297.86,290.29 L298.98,285.86 L300.10,281.37 L301.22,276.84 L302.34,272.27\n\t\tL303.46,267.66 L304.58,263.01 L305.70,258.33 L306.83,253.63 L307.95,248.90 L309.07,244.15 L310.19,239.38 L311.31,234.60\n\t\tL312.43,229.81 L313.55,225.01 L314.68,220.20 L315.80,215.40 L316.92,210.60 L318.04,205.81 L319.16,201.03 L320.28,196.26\n\t\tL321.40,191.51 L322.52,186.78 L323.65,182.08 L324.77,177.40 L325.89,172.75 L327.01,168.14 L328.13,163.57 L329.25,159.04\n\t\tL330.37,154.55 L331.49,150.12 L332.62,145.73 L333.74,141.40 L334.86,137.12 L335.98,132.91 L337.10,128.76 L338.22,124.68\n\t\tL339.34,120.67 L340.47,116.73 L341.59,112.87 L342.71,109.08 L343.83,105.38 L344.95,101.76 L346.07,98.23 L347.19,94.79\n\t\tL348.31,91.44 L349.44,88.18 L350.56,85.02 L351.68,81.96 L352.80,79.00 L353.92,76.15 L355.04,73.40 L356.16,70.76\n\t\tL357.28,68.23 L358.41,65.81 L359.53,63.50 L360.65,61.31 L361.77,59.23 L362.89,57.27 L364.01,55.43 L365.13,53.72\n\t\tL366.26,52.12 L367.38,50.65 L368.50,49.30 L370.74,46.98 L372.98,45.17 L375.23,43.88 L377.47,43.10 L378.59,42.90\n\t\tL379.71,42.84 L380.83,42.90 L381.95,43.10 L383.08,43.42 L384.20,43.88 L385.32,44.46 L386.44,45.17 L387.56,46.01\n\t\tL388.68,46.98 L389.80,48.08 L390.92,49.30 L392.05,50.65 L393.17,52.12 L394.29,53.72 L395.41,55.43 L396.53,57.27\n\t\tL397.65,59.23 L398.77,61.31 L399.89,63.50 L401.02,65.81 L402.14,68.23 L403.26,70.76 L404.38,73.40 L405.50,76.15\n\t\tL406.62,79.00 L407.74,81.96 L408.87,85.02 L409.99,88.18 L411.11,91.44 L412.23,94.79 L413.35,98.23 L414.47,101.76\n\t\tL415.59,105.38 L416.71,109.08 L417.84,112.87 L418.96,116.73 L420.08,120.67 L421.20,124.68 L422.32,128.76 L423.44,132.91\n\t\tL424.56,137.12 L425.69,141.40 L426.81,145.73 L427.93,150.12 L429.05,154.55 L430.17,159.04 L431.29,163.57 L432.41,168.14\n\t\tL433.53,172.75 L434.66,177.40 L435.78,182.08 L436.90,186.78 L438.02,191.51 L439.14,196.26 L440.26,201.03 L441.38,205.81\n\t\tL442.50,210.60 L443.63,215.40 L444.75,220.20 L445.87,225.01 L446.99,229.81 L448.11,234.60 L449.23,239.38 L450.35,244.15\n\t\tL451.48,248.90 L452.60,253.63 L453.72,258.33 L454.84,263.01 L455.96,267.66 L457.08,272.27 L458.20,276.84 L459.32,281.37\n\t\tL460.45,285.86 L461.57,290.29 L462.69,294.68 L463.81,299.01 L464.93,303.29 L466.05,307.50 L467.17,311.65 L468.30,315.73\n\t\tL469.42,319.74 L470.54,323.68 L471.66,327.54 L472.78,331.33 L473.90,335.03 L475.02,338.65 L476.14,342.18 L477.27,345.62\n\t\tL478.39,348.97 L479.51,352.23 L480.63,355.39 L481.75,358.45 L482.87,361.41 L483.99,364.26 L485.11,367.01 L486.24,369.65\n\t\tL487.36,372.18 L488.48,374.60 L489.60,376.91 L490.72,379.10 L491.84,381.18 L492.96,383.14 L494.09,384.98 L495.21,386.69\n\t\tL496.33,388.29 L497.45,389.76 L498.57,391.11 L499.69,392.33 L500.81,393.43 L501.93,394.40 L503.06,395.24 L504.18,395.95\n\t\tL505.30,396.53 L506.42,396.99 L507.54,397.31 L508.10,397.43 L508.66,397.51 L509.22,397.56 L509.78,397.57 L510.34,397.56\n\t\tL510.91,397.51 L511.47,397.43 L512.03,397.31 L513.15,396.99 L514.27,396.53 L515.39,395.95 L516.51,395.24 L517.63,394.40\n\t\tL518.75,393.43 L519.88,392.33 L521.00,391.11 L522.12,389.76 L523.24,388.29 L524.36,386.69 L525.48,384.98 L526.60,383.14\n\t\tL527.72,381.18 L528.85,379.10 L529.97,376.91 L531.09,374.60 L532.21,372.18 L533.33,369.65 L534.45,367.01 L535.57,364.26\n\t\tL536.70,361.41 L537.82,358.45 L538.94,355.39 L540.06,352.23 L541.18,348.97 L542.30,345.62 L543.42,342.18 L544.54,338.65\n\t\tL545.67,335.03 L546.79,331.33 L547.91,327.54 L549.03,323.68 L550.15,319.74 L551.27,315.73 L552.39,311.65 L553.52,307.50\n\t\tL554.64,303.29 L555.76,299.01 L556.88,294.68 L558.00,290.29 L559.12,285.86 L560.24,281.37 L561.36,276.84 L562.49,272.27\n\t\tL563.61,267.66 L564.73,263.01 L565.85,258.33 L566.97,253.63 L568.09,248.90 L569.21,244.15 L570.33,239.38 L571.46,234.60\n\t\tL572.58,229.81 L573.70,225.01 L574.82,220.21  '/></g>\n\t</g>\n\t<g id=\"gnuplot_plot_2\" ><title>cos(2*x)/2</title>\n<g fill=\"none\" color=\"black\" stroke=\"currentColor\" stroke-width=\"1.00\" stroke-linecap=\"butt\" stroke-linejoin=\"miter\">\n\t<g transform=\"translate(507.09,65.00)\" stroke=\"none\" fill=\"black\" font-family=\"Arial\" font-size=\"12.00\"  text-anchor=\"end\">\n\t\t<text><tspan font-family=\"Arial\" >cos(2*x)/2</tspan></text>\n\t</g>\n</g>\n<g fill=\"none\" color=\"black\" stroke=\"currentColor\" stroke-width=\"1.00\" stroke-linecap=\"butt\" stroke-linejoin=\"miter\">\n\t<path stroke='rgb(255,   0,   0)'  d='M515.48,61.10 L558.04,61.10 M54.53,131.52 L55.09,131.55 L55.65,131.65 L56.21,131.81 L56.77,132.04 L57.33,132.33\n\t\tL57.89,132.69 L58.45,133.11 L59.02,133.59 L59.58,134.14 L60.14,134.75 L60.70,135.43 L61.26,136.16 L61.82,136.96\n\t\tL62.38,137.82 L62.94,138.74 L63.50,139.72 L64.06,140.76 L64.62,141.85 L65.18,143.01 L65.74,144.22 L66.30,145.48\n\t\tL66.86,146.80 L67.43,148.18 L67.99,149.60 L68.55,151.08 L69.11,152.61 L69.67,154.19 L70.23,155.82 L70.79,157.50\n\t\tL71.35,159.22 L71.91,160.98 L72.47,162.79 L73.03,164.64 L73.59,166.54 L74.15,168.47 L74.71,170.44 L75.27,172.44\n\t\tL75.83,174.48 L76.40,176.56 L76.96,178.66 L77.52,180.80 L78.08,182.97 L78.64,185.16 L79.20,187.38 L79.76,189.62\n\t\tL80.32,191.89 L80.88,194.17 L81.44,196.48 L82.00,198.80 L82.56,201.14 L83.12,203.49 L83.68,205.86 L84.24,208.23\n\t\tL84.81,210.62 L85.37,213.01 L85.93,215.40 L86.49,217.80 L87.05,220.21 L87.61,222.61 L88.17,225.01 L88.73,227.40\n\t\tL89.29,229.79 L89.85,232.18 L90.41,234.55 L90.97,236.92 L91.53,239.27 L92.09,241.61 L92.65,243.93 L93.22,246.24\n\t\tL93.78,248.52 L94.34,250.79 L94.90,253.03 L95.46,255.25 L96.02,257.44 L96.58,259.61 L97.14,261.75 L97.70,263.85\n\t\tL98.26,265.93 L98.82,267.97 L99.38,269.97 L99.94,271.94 L100.50,273.87 L101.06,275.77 L101.63,277.62 L102.19,279.43\n\t\tL102.75,281.19 L103.31,282.91 L103.87,284.59 L104.43,286.22 L104.99,287.80 L105.55,289.33 L106.11,290.81 L106.67,292.23\n\t\tL107.23,293.61 L107.79,294.93 L108.35,296.19 L108.91,297.40 L109.47,298.56 L110.04,299.65 L110.60,300.69 L111.16,301.67\n\t\tL111.72,302.59 L112.28,303.45 L112.84,304.25 L113.40,304.98 L113.96,305.66 L114.52,306.27 L115.08,306.82 L115.64,307.30\n\t\tL116.20,307.72 L116.76,308.08 L117.32,308.37 L117.88,308.60 L118.44,308.76 L119.01,308.86 L119.57,308.89 L120.13,308.86\n\t\tL120.69,308.76 L121.25,308.60 L121.81,308.37 L122.37,308.08 L122.93,307.72 L123.49,307.30 L124.05,306.82 L124.61,306.27\n\t\tL125.17,305.66 L125.73,304.98 L126.29,304.25 L126.85,303.45 L127.42,302.59 L127.98,301.67 L128.54,300.69 L129.10,299.65\n\t\tL129.66,298.56 L130.22,297.40 L130.78,296.19 L131.34,294.93 L131.90,293.61 L132.46,292.23 L133.02,290.81 L133.58,289.33\n\t\tL134.14,287.80 L134.70,286.22 L135.26,284.59 L135.83,282.91 L136.39,281.19 L136.95,279.43 L137.51,277.62 L138.07,275.77\n\t\tL138.63,273.87 L139.19,271.94 L139.75,269.97 L140.31,267.97 L140.87,265.93 L141.43,263.85 L141.99,261.75 L142.55,259.61\n\t\tL143.11,257.44 L143.67,255.25 L144.24,253.03 L144.80,250.79 L145.36,248.52 L145.92,246.24 L146.48,243.93 L147.04,241.61\n\t\tL147.60,239.27 L148.16,236.92 L148.72,234.55 L149.28,232.18 L149.84,229.79 L150.40,227.40 L150.96,225.01 L151.52,222.61\n\t\tL152.08,220.20 L152.65,217.80 L153.21,215.40 L153.77,213.01 L154.33,210.62 L154.89,208.23 L155.45,205.86 L156.01,203.49\n\t\tL156.57,201.14 L157.13,198.80 L157.69,196.48 L158.25,194.17 L158.81,191.89 L159.37,189.62 L159.93,187.38 L160.49,185.16\n\t\tL161.05,182.97 L161.62,180.80 L162.18,178.66 L162.74,176.56 L163.30,174.48 L163.86,172.44 L164.42,170.44 L164.98,168.47\n\t\tL165.54,166.54 L166.10,164.64 L166.66,162.79 L167.22,160.98 L167.78,159.22 L168.34,157.50 L168.90,155.82 L169.46,154.19\n\t\tL170.03,152.61 L170.59,151.08 L171.15,149.60 L172.27,146.80 L173.39,144.22 L174.51,141.85 L175.63,139.72 L176.75,137.82\n\t\tL177.87,136.16 L179.00,134.75 L180.12,133.59 L181.24,132.69 L182.36,132.04 L183.48,131.65 L184.60,131.52 L185.16,131.55\n\t\tL185.72,131.65 L186.28,131.81 L186.85,132.04 L187.41,132.33 L187.97,132.69 L188.53,133.11 L189.09,133.59 L189.65,134.14\n\t\tL190.21,134.75 L190.77,135.43 L191.33,136.16 L191.89,136.96 L192.45,137.82 L193.01,138.74 L193.57,139.72 L194.13,140.76\n\t\tL194.69,141.85 L195.25,143.01 L195.82,144.22 L196.38,145.48 L196.94,146.80 L197.50,148.18 L198.06,149.60 L198.62,151.08\n\t\tL199.18,152.61 L199.74,154.19 L200.30,155.82 L200.86,157.50 L201.42,159.22 L201.98,160.98 L202.54,162.79 L203.10,164.64\n\t\tL203.66,166.54 L204.23,168.47 L204.79,170.44 L205.35,172.44 L205.91,174.48 L206.47,176.56 L207.03,178.66 L207.59,180.80\n\t\tL208.15,182.97 L208.71,185.16 L209.27,187.38 L209.83,189.62 L210.39,191.89 L210.95,194.17 L211.51,196.48 L212.07,198.80\n\t\tL212.64,201.14 L213.20,203.49 L213.76,205.86 L214.32,208.23 L214.88,210.62 L215.44,213.01 L216.00,215.40 L216.56,217.80\n\t\tL217.12,220.20 L217.68,222.61 L218.24,225.01 L218.80,227.40 L219.36,229.79 L219.92,232.18 L220.48,234.55 L221.05,236.92\n\t\tL221.61,239.27 L222.17,241.61 L222.73,243.93 L223.29,246.24 L223.85,248.52 L224.41,250.79 L224.97,253.03 L225.53,255.25\n\t\tL226.09,257.44 L226.65,259.61 L227.21,261.75 L227.77,263.85 L228.33,265.93 L228.89,267.97 L229.46,269.97 L230.02,271.94\n\t\tL230.58,273.87 L231.14,275.77 L231.70,277.62 L232.26,279.43 L232.82,281.19 L233.38,282.91 L233.94,284.59 L234.50,286.22\n\t\tL235.06,287.80 L235.62,289.33 L236.18,290.81 L236.74,292.23 L237.30,293.61 L237.86,294.93 L238.43,296.19 L238.99,297.40\n\t\tL239.55,298.56 L240.11,299.65 L240.67,300.69 L241.23,301.67 L241.79,302.59 L242.35,303.45 L242.91,304.25 L243.47,304.98\n\t\tL244.03,305.66 L244.59,306.27 L245.15,306.82 L245.71,307.30 L246.27,307.72 L246.84,308.08 L247.40,308.37 L247.96,308.60\n\t\tL248.52,308.76 L249.08,308.86 L249.64,308.89 L250.20,308.86 L250.76,308.76 L251.32,308.60 L251.88,308.37 L252.44,308.08\n\t\tL253.00,307.72 L253.56,307.30 L254.12,306.82 L254.68,306.27 L255.25,305.66 L255.81,304.98 L256.37,304.25 L256.93,303.45\n\t\tL257.49,302.59 L258.05,301.67 L258.61,300.69 L259.17,299.65 L259.73,298.56 L260.29,297.40 L260.85,296.19 L261.41,294.93\n\t\tL261.97,293.61 L262.53,292.23 L263.09,290.81 L263.66,289.33 L264.22,287.80 L264.78,286.22 L265.34,284.59 L265.90,282.91\n\t\tL266.46,281.19 L267.02,279.43 L267.58,277.62 L268.14,275.77 L268.70,273.87 L269.26,271.94 L269.82,269.97 L270.38,267.97\n\t\tL270.94,265.93 L271.50,263.85 L272.07,261.75 L272.63,259.61 L273.19,257.44 L273.75,255.25 L274.31,253.03 L274.87,250.79\n\t\tL275.43,248.52 L275.99,246.24 L276.55,243.93 L277.11,241.61 L277.67,239.27 L278.23,236.92 L278.79,234.55 L279.35,232.18\n\t\tL279.91,229.79 L280.47,227.40 L281.04,225.01 L281.60,222.61 L282.16,220.20 L282.72,217.80 L283.28,215.40 L283.84,213.01\n\t\tL284.40,210.62 L284.96,208.23 L285.52,205.86 L286.08,203.49 L286.64,201.14 L287.20,198.80 L287.76,196.48 L288.32,194.17\n\t\tL288.88,191.89 L289.45,189.62 L290.01,187.38 L290.57,185.16 L291.13,182.97 L291.69,180.80 L292.25,178.66 L292.81,176.56\n\t\tL293.37,174.48 L293.93,172.44 L294.49,170.44 L295.05,168.47 L295.61,166.54 L296.17,164.64 L296.73,162.79 L297.29,160.98\n\t\tL297.86,159.22 L298.42,157.50 L298.98,155.82 L299.54,154.19 L300.10,152.61 L300.66,151.08 L301.22,149.60 L302.34,146.80\n\t\tL303.46,144.22 L304.58,141.85 L305.70,139.72 L306.83,137.82 L307.95,136.16 L309.07,134.75 L310.19,133.59 L311.31,132.69\n\t\tL312.43,132.04 L313.55,131.65 L314.68,131.52 L315.24,131.55 L315.80,131.65 L316.36,131.81 L316.92,132.04 L317.48,132.33\n\t\tL318.04,132.69 L318.60,133.11 L319.16,133.59 L319.72,134.14 L320.28,134.75 L320.84,135.43 L321.40,136.16 L321.96,136.96\n\t\tL322.52,137.82 L323.08,138.74 L323.65,139.72 L324.21,140.76 L324.77,141.85 L325.33,143.01 L325.89,144.22 L326.45,145.48\n\t\tL327.01,146.80 L327.57,148.18 L328.13,149.60 L328.69,151.08 L329.25,152.61 L329.81,154.19 L330.37,155.82 L330.93,157.50\n\t\tL331.49,159.22 L332.06,160.98 L332.62,162.79 L333.18,164.64 L333.74,166.54 L334.30,168.47 L334.86,170.44 L335.42,172.44\n\t\tL335.98,174.48 L336.54,176.56 L337.10,178.66 L337.66,180.80 L338.22,182.97 L338.78,185.16 L339.34,187.38 L339.90,189.62\n\t\tL340.47,191.89 L341.03,194.17 L341.59,196.48 L342.15,198.80 L342.71,201.14 L343.27,203.49 L343.83,205.86 L344.39,208.23\n\t\tL344.95,210.62 L345.51,213.01 L346.07,215.40 L346.63,217.80 L347.19,220.21 L347.75,222.61 L348.31,225.01 L348.88,227.40\n\t\tL349.44,229.79 L350.00,232.18 L350.56,234.55 L351.12,236.92 L351.68,239.27 L352.24,241.61 L352.80,243.93 L353.36,246.24\n\t\tL353.92,248.52 L354.48,250.79 L355.04,253.03 L355.60,255.25 L356.16,257.44 L356.72,259.61 L357.28,261.75 L357.85,263.85\n\t\tL358.41,265.93 L358.97,267.97 L359.53,269.97 L360.09,271.94 L360.65,273.87 L361.21,275.77 L361.77,277.62 L362.33,279.43\n\t\tL362.89,281.19 L363.45,282.91 L364.01,284.59 L364.57,286.22 L365.13,287.80 L365.69,289.33 L366.26,290.81 L366.82,292.23\n\t\tL367.38,293.61 L367.94,294.93 L368.50,296.19 L369.06,297.40 L369.62,298.56 L370.18,299.65 L370.74,300.69 L371.30,301.67\n\t\tL371.86,302.59 L372.42,303.45 L372.98,304.25 L373.54,304.98 L374.10,305.66 L374.67,306.27 L375.23,306.82 L375.79,307.30\n\t\tL376.35,307.72 L376.91,308.08 L377.47,308.37 L378.03,308.60 L378.59,308.76 L379.15,308.86 L379.71,308.89 L380.27,308.86\n\t\tL380.83,308.76 L381.39,308.60 L381.95,308.37 L382.51,308.08 L383.08,307.72 L383.64,307.30 L384.20,306.82 L384.76,306.27\n\t\tL385.32,305.66 L385.88,304.98 L386.44,304.25 L387.00,303.45 L387.56,302.59 L388.12,301.67 L388.68,300.69 L389.24,299.65\n\t\tL389.80,298.56 L390.36,297.40 L390.92,296.19 L391.49,294.93 L392.05,293.61 L392.61,292.23 L393.17,290.81 L393.73,289.33\n\t\tL394.29,287.80 L394.85,286.22 L395.41,284.59 L395.97,282.91 L396.53,281.19 L397.09,279.43 L397.65,277.62 L398.21,275.77\n\t\tL398.77,273.87 L399.33,271.94 L399.89,269.97 L400.46,267.97 L401.02,265.93 L401.58,263.85 L402.14,261.75 L402.70,259.61\n\t\tL403.26,257.44 L403.82,255.25 L404.38,253.03 L404.94,250.79 L405.50,248.52 L406.06,246.24 L406.62,243.93 L407.18,241.61\n\t\tL407.74,239.27 L408.30,236.92 L408.87,234.55 L409.43,232.18 L409.99,229.79 L410.55,227.40 L411.11,225.01 L411.67,222.61\n\t\tL412.23,220.20 L412.79,217.80 L413.35,215.40 L413.91,213.01 L414.47,210.62 L415.03,208.23 L415.59,205.86 L416.15,203.49\n\t\tL416.71,201.14 L417.28,198.80 L417.84,196.48 L418.40,194.17 L418.96,191.89 L419.52,189.62 L420.08,187.38 L420.64,185.16\n\t\tL421.20,182.97 L421.76,180.80 L422.32,178.66 L422.88,176.56 L423.44,174.48 L424.00,172.44 L424.56,170.44 L425.12,168.47\n\t\tL425.69,166.54 L426.25,164.64 L426.81,162.79 L427.37,160.98 L427.93,159.22 L428.49,157.50 L429.05,155.82 L429.61,154.19\n\t\tL430.17,152.61 L430.73,151.08 L431.29,149.60 L432.41,146.80 L433.53,144.22 L434.66,141.85 L435.78,139.72 L436.90,137.82\n\t\tL438.02,136.16 L439.14,134.75 L440.26,133.59 L441.38,132.69 L442.50,132.04 L443.63,131.65 L444.75,131.52 L445.31,131.55\n\t\tL445.87,131.65 L446.43,131.81 L446.99,132.04 L447.55,132.33 L448.11,132.69 L448.67,133.11 L449.23,133.59 L449.79,134.14\n\t\tL450.35,134.75 L450.91,135.43 L451.48,136.16 L452.04,136.96 L452.60,137.82 L453.16,138.74 L453.72,139.72 L454.28,140.76\n\t\tL454.84,141.85 L455.40,143.01 L455.96,144.22 L456.52,145.48 L457.08,146.80 L457.64,148.18 L458.20,149.60 L458.76,151.08\n\t\tL459.32,152.61 L459.89,154.19 L460.45,155.82 L461.01,157.50 L461.57,159.22 L462.13,160.98 L462.69,162.79 L463.25,164.64\n\t\tL463.81,166.54 L464.37,168.47 L464.93,170.44 L465.49,172.44 L466.05,174.48 L466.61,176.56 L467.17,178.66 L467.73,180.80\n\t\tL468.30,182.97 L468.86,185.16 L469.42,187.38 L469.98,189.62 L470.54,191.89 L471.10,194.17 L471.66,196.48 L472.22,198.80\n\t\tL472.78,201.14 L473.34,203.49 L473.90,205.86 L474.46,208.23 L475.02,210.62 L475.58,213.01 L476.14,215.40 L476.70,217.80\n\t\tL477.27,220.20 L477.83,222.61 L478.39,225.01 L478.95,227.40 L479.51,229.79 L480.07,232.18 L480.63,234.55 L481.19,236.92\n\t\tL481.75,239.27 L482.31,241.61 L482.87,243.93 L483.43,246.24 L483.99,248.52 L484.55,250.79 L485.11,253.03 L485.68,255.25\n\t\tL486.24,257.44 L486.80,259.61 L487.36,261.75 L487.92,263.85 L488.48,265.93 L489.04,267.97 L489.60,269.97 L490.16,271.94\n\t\tL490.72,273.87 L491.28,275.77 L491.84,277.62 L492.40,279.43 L492.96,281.19 L493.52,282.91 L494.09,284.59 L494.65,286.22\n\t\tL495.21,287.80 L495.77,289.33 L496.33,290.81 L496.89,292.23 L497.45,293.61 L498.01,294.93 L498.57,296.19 L499.13,297.40\n\t\tL499.69,298.56 L500.25,299.65 L500.81,300.69 L501.37,301.67 L501.93,302.59 L502.50,303.45 L503.06,304.25 L503.62,304.98\n\t\tL504.18,305.66 L504.74,306.27 L505.30,306.82 L505.86,307.30 L506.42,307.72 L506.98,308.08 L507.54,308.37 L508.10,308.60\n\t\tL508.66,308.76 L509.22,308.86 L509.78,308.89 L510.34,308.86 L510.91,308.76 L511.47,308.60 L512.03,308.37 L512.59,308.08\n\t\tL513.15,307.72 L513.71,307.30 L514.27,306.82 L514.83,306.27 L515.39,305.66 L515.95,304.98 L516.51,304.25 L517.07,303.45\n\t\tL517.63,302.59 L518.19,301.67 L518.75,300.69 L519.31,299.65 L519.88,298.56 L520.44,297.40 L521.00,296.19 L521.56,294.93\n\t\tL522.12,293.61 L522.68,292.23 L523.24,290.81 L523.80,289.33 L524.36,287.80 L524.92,286.22 L525.48,284.59 L526.04,282.91\n\t\tL526.60,281.19 L527.16,279.43 L527.72,277.62 L528.29,275.77 L528.85,273.87 L529.41,271.94 L529.97,269.97 L530.53,267.97\n\t\tL531.09,265.93 L531.65,263.85 L532.21,261.75 L532.77,259.61 L533.33,257.44 L533.89,255.25 L534.45,253.03 L535.01,250.79\n\t\tL535.57,248.52 L536.13,246.24 L536.70,243.93 L537.26,241.61 L537.82,239.27 L538.38,236.92 L538.94,234.55 L539.50,232.18\n\t\tL540.06,229.79 L540.62,227.40 L541.18,225.01 L541.74,222.61 L542.30,220.21 L542.86,217.80 L543.42,215.40 L543.98,213.01\n\t\tL544.54,210.62 L545.11,208.23 L545.67,205.86 L546.23,203.49 L546.79,201.14 L547.35,198.80 L547.91,196.48 L548.47,194.17\n\t\tL549.03,191.89 L549.59,189.62 L550.15,187.38 L550.71,185.16 L551.27,182.97 L551.83,180.80 L552.39,178.66 L552.95,176.56\n\t\tL553.52,174.48 L554.08,172.44 L554.64,170.44 L555.20,168.47 L555.76,166.54 L556.32,164.64 L556.88,162.79 L557.44,160.98\n\t\tL558.00,159.22 L558.56,157.50 L559.12,155.82 L559.68,154.19 L560.24,152.61 L560.80,151.08 L561.36,149.60 L562.49,146.80\n\t\tL563.61,144.22 L564.73,141.85 L565.85,139.72 L566.97,137.82 L568.09,136.16 L569.21,134.75 L570.33,133.59 L571.46,132.69\n\t\tL572.58,132.04 L573.70,131.65 L574.82,131.52  '/></g>\n\t</g>\n<g fill=\"none\" color=\"black\" stroke=\"currentColor\" stroke-width=\"1.00\" stroke-linecap=\"butt\" stroke-linejoin=\"miter\">\n\t<path stroke='black'  d='M54.53,397.57 L63.53,397.57 M574.82,397.57 L565.82,397.57  '/>\t<g transform=\"translate(46.14,401.47)\" stroke=\"none\" fill=\"black\" font-family=\"Arial\" font-size=\"12.00\"  text-anchor=\"end\">\n\t\t<text><tspan font-family=\"Arial\" >-1</tspan></text>\n\t</g>\n</g>\n<g fill=\"none\" color=\"black\" stroke=\"currentColor\" stroke-width=\"1.00\" stroke-linecap=\"butt\" stroke-linejoin=\"miter\">\n\t<path stroke='black'  d='M54.53,308.89 L63.53,308.89 M574.82,308.89 L565.82,308.89  '/>\t<g transform=\"translate(46.14,312.79)\" stroke=\"none\" fill=\"black\" font-family=\"Arial\" font-size=\"12.00\"  text-anchor=\"end\">\n\t\t<text><tspan font-family=\"Arial\" >-0.5</tspan></text>\n\t</g>\n</g>\n<g fill=\"none\" color=\"black\" stroke=\"currentColor\" stroke-width=\"1.00\" stroke-linecap=\"butt\" stroke-linejoin=\"miter\">\n\t<path stroke='black'  d='M54.53,220.20 L63.53,220.20 M574.82,220.20 L565.82,220.20  '/>\t<g transform=\"translate(46.14,224.10)\" stroke=\"none\" fill=\"black\" font-family=\"Arial\" font-size=\"12.00\"  text-anchor=\"end\">\n\t\t<text><tspan font-family=\"Arial\" > 0</tspan></text>\n\t</g>\n</g>\n<g fill=\"none\" color=\"black\" stroke=\"currentColor\" stroke-width=\"1.00\" stroke-linecap=\"butt\" stroke-linejoin=\"miter\">\n\t<path stroke='black'  d='M54.53,131.52 L63.53,131.52 M574.82,131.52 L565.82,131.52  '/>\t<g transform=\"translate(46.14,135.42)\" stroke=\"none\" fill=\"black\" font-family=\"Arial\" font-size=\"12.00\"  text-anchor=\"end\">\n\t\t<text><tspan font-family=\"Arial\" > 0.5</tspan></text>\n\t</g>\n</g>\n<g fill=\"none\" color=\"black\" stroke=\"currentColor\" stroke-width=\"1.00\" stroke-linecap=\"butt\" stroke-linejoin=\"miter\">\n\t<path stroke='black'  d='M54.53,42.84 L63.53,42.84 M574.82,42.84 L565.82,42.84  '/>\t<g transform=\"translate(46.14,46.74)\" stroke=\"none\" fill=\"black\" font-family=\"Arial\" font-size=\"12.00\"  text-anchor=\"end\">\n\t\t<text><tspan font-family=\"Arial\" > 1</tspan></text>\n\t</g>\n</g>\n<g fill=\"none\" color=\"black\" stroke=\"currentColor\" stroke-width=\"1.00\" stroke-linecap=\"butt\" stroke-linejoin=\"miter\">\n\t<path stroke='black'  d='M66.25,415.31 L66.25,406.31 M66.25,25.10 L66.25,34.10  '/>\t<g transform=\"translate(66.25,437.21)\" stroke=\"none\" fill=\"black\" font-family=\"Arial\" font-size=\"12.00\"  text-anchor=\"middle\">\n\t\t<text><tspan font-family=\"Arial\" >-6</tspan></text>\n\t</g>\n</g>\n<g fill=\"none\" color=\"black\" stroke=\"currentColor\" stroke-width=\"1.00\" stroke-linecap=\"butt\" stroke-linejoin=\"miter\">\n\t<path stroke='black'  d='M149.06,415.31 L149.06,406.31 M149.06,25.10 L149.06,34.10  '/>\t<g transform=\"translate(149.06,437.21)\" stroke=\"none\" fill=\"black\" font-family=\"Arial\" font-size=\"12.00\"  text-anchor=\"middle\">\n\t\t<text><tspan font-family=\"Arial\" >-4</tspan></text>\n\t</g>\n</g>\n<g fill=\"none\" color=\"black\" stroke=\"currentColor\" stroke-width=\"1.00\" stroke-linecap=\"butt\" stroke-linejoin=\"miter\">\n\t<path stroke='black'  d='M231.87,415.31 L231.87,406.31 M231.87,25.10 L231.87,34.10  '/>\t<g transform=\"translate(231.87,437.21)\" stroke=\"none\" fill=\"black\" font-family=\"Arial\" font-size=\"12.00\"  text-anchor=\"middle\">\n\t\t<text><tspan font-family=\"Arial\" >-2</tspan></text>\n\t</g>\n</g>\n<g fill=\"none\" color=\"black\" stroke=\"currentColor\" stroke-width=\"1.00\" stroke-linecap=\"butt\" stroke-linejoin=\"miter\">\n\t<path stroke='black'  d='M314.68,415.31 L314.68,406.31 M314.68,25.10 L314.68,34.10  '/>\t<g transform=\"translate(314.68,437.21)\" stroke=\"none\" fill=\"black\" font-family=\"Arial\" font-size=\"12.00\"  text-anchor=\"middle\">\n\t\t<text><tspan font-family=\"Arial\" > 0</tspan></text>\n\t</g>\n</g>\n<g fill=\"none\" color=\"black\" stroke=\"currentColor\" stroke-width=\"1.00\" stroke-linecap=\"butt\" stroke-linejoin=\"miter\">\n\t<path stroke='black'  d='M397.48,415.31 L397.48,406.31 M397.48,25.10 L397.48,34.10  '/>\t<g transform=\"translate(397.48,437.21)\" stroke=\"none\" fill=\"black\" font-family=\"Arial\" font-size=\"12.00\"  text-anchor=\"middle\">\n\t\t<text><tspan font-family=\"Arial\" > 2</tspan></text>\n\t</g>\n</g>\n<g fill=\"none\" color=\"black\" stroke=\"currentColor\" stroke-width=\"1.00\" stroke-linecap=\"butt\" stroke-linejoin=\"miter\">\n\t<path stroke='black'  d='M480.29,415.31 L480.29,406.31 M480.29,25.10 L480.29,34.10  '/>\t<g transform=\"translate(480.29,437.21)\" stroke=\"none\" fill=\"black\" font-family=\"Arial\" font-size=\"12.00\"  text-anchor=\"middle\">\n\t\t<text><tspan font-family=\"Arial\" > 4</tspan></text>\n\t</g>\n</g>\n<g fill=\"none\" color=\"black\" stroke=\"currentColor\" stroke-width=\"1.00\" stroke-linecap=\"butt\" stroke-linejoin=\"miter\">\n\t<path stroke='black'  d='M563.10,415.31 L563.10,406.31 M563.10,25.10 L563.10,34.10  '/>\t<g transform=\"translate(563.10,437.21)\" stroke=\"none\" fill=\"black\" font-family=\"Arial\" font-size=\"12.00\"  text-anchor=\"middle\">\n\t\t<text><tspan font-family=\"Arial\" > 6</tspan></text>\n\t</g>\n</g>\n<g fill=\"none\" color=\"black\" stroke=\"currentColor\" stroke-width=\"1.00\" stroke-linecap=\"butt\" stroke-linejoin=\"miter\">\n</g>\n<g fill=\"none\" color=\"gray\" stroke=\"currentColor\" stroke-width=\"1.00\" stroke-linecap=\"butt\" stroke-linejoin=\"miter\">\n\t<path stroke='black' stroke-dasharray='2,4'  d='M54.53,220.20 L574.82,220.20  '/></g>\n<g fill=\"none\" color=\"gray\" stroke=\"currentColor\" stroke-width=\"1.00\" stroke-linecap=\"butt\" stroke-linejoin=\"miter\">\n\t<path stroke='black' stroke-dasharray='2,4'  d='M314.68,415.31 L314.68,25.10  '/></g>\n<g fill=\"none\" color=\"gray\" stroke=\"black\" stroke-width=\"2.00\" stroke-linecap=\"butt\" stroke-linejoin=\"miter\">\n</g>\n<g fill=\"none\" color=\"black\" stroke=\"currentColor\" stroke-width=\"2.00\" stroke-linecap=\"butt\" stroke-linejoin=\"miter\">\n</g>\n<g fill=\"none\" color=\"black\" stroke=\"black\" stroke-width=\"1.00\" stroke-linecap=\"butt\" stroke-linejoin=\"miter\">\n</g>\n<g fill=\"none\" color=\"black\" stroke=\"currentColor\" stroke-width=\"1.00\" stroke-linecap=\"butt\" stroke-linejoin=\"miter\">\n\t<path stroke='black'  d='M54.53,25.10 L54.53,415.31 L574.82,415.31 L574.82,25.10 L54.53,25.10 Z  '/>\t<g transform=\"translate(314.67,464.21)\" stroke=\"none\" fill=\"black\" font-family=\"Arial\" font-size=\"12.00\"  text-anchor=\"middle\">\n\t\t<text><tspan font-family=\"Arial\" >x</tspan></text>\n\t</g>\n</g>\n<g fill=\"none\" color=\"black\" stroke=\"currentColor\" stroke-width=\"1.00\" stroke-linecap=\"butt\" stroke-linejoin=\"miter\">\n</g>\n<g fill=\"none\" color=\"black\" stroke=\"currentColor\" stroke-width=\"1.00\" stroke-linecap=\"butt\" stroke-linejoin=\"miter\">\n</g>\n</g>\n</svg>\n\n"
+      }
+     ],
+     "inputs": [
+      10
+     ]
+    }
+   },
+   {
+    "type": "heading",
+    "attrs": {
+     "level": 2
+    },
+    "content": [
+     {
+      "type": "text",
+      "text": "Questions from Maxima"
+     }
+    ]
+   },
+   {
+    "type": "paragraph",
+    "content": [
+     {
+      "type": "text",
+      "text": "Sometimes Maxima needs to know more, for example the sign of a parameter. The question appears in the notebook; answer it there."
+     }
+    ]
+   },
+   {
+    "type": "maxima",
+    "attrs": {
+     "id": "945b964312fc",
+     "source": "integrate(x^a, x);",
+     "outputs": [
+      {
+       "kind": "text",
+       "text": "» no"
+      },
+      {
+       "kind": "result",
+       "label": "%o11",
+       "latex": "\\frac{x^{a+1}}{a+1}",
+       "text": "x^(a+1)/(a+1)",
+       "semantic": "\\frac{\\class{mbk-sym mbk-free mbk-n-0078}{x}^{\\class{mbk-sym mbk-free mbk-n-0061}{a}+1}}{\\class{mbk-sym mbk-free mbk-n-0061}{a}+1}"
+      }
+     ],
+     "inputs": [
+      11
+     ]
+    }
+   },
+   {
+    "type": "heading",
+    "attrs": {
+     "level": 2
+    },
+    "content": [
+     {
+      "type": "text",
+      "text": "Long computations"
+     }
+    ]
+   },
+   {
+    "type": "paragraph",
+    "content": [
+     {
+      "type": "text",
+      "text": "Stop",
+      "marks": [
+       {
+        "type": "strong"
+       }
+      ]
+     },
+     {
+      "type": "text",
+      "text": " interrupts a computation and Maxima keeps everything defined so far; "
+     },
+     {
+      "type": "text",
+      "text": "Restart",
+      "marks": [
+       {
+        "type": "strong"
+       }
+      ]
+     },
+     {
+      "type": "text",
+      "text": " starts a fresh Maxima."
+     }
+    ]
+   },
+   {
+    "type": "heading",
+    "attrs": {
+     "level": 2
+    },
+    "content": [
+     {
+      "type": "text",
+      "text": "Working together"
+     }
+    ]
+   },
+   {
+    "type": "paragraph",
+    "content": [
+     {
+      "type": "text",
+      "text": "Other windows on this computer stay in sync. Start Maxbook with "
+     },
+     {
+      "type": "text",
+      "text": "--share",
+      "marks": [
+       {
+        "type": "code"
+       }
+      ]
+     },
+     {
+      "type": "text",
+      "text": " to edit a notebook with others on your network: they can write, while only you run Maxima and save."
+     }
+    ]
+   },
+   {
+    "type": "heading",
+    "attrs": {
+     "level": 2
+    },
+    "content": [
+     {
+      "type": "text",
+      "text": "Sharing your work"
+     }
+    ]
+   },
+   {
+    "type": "paragraph",
+    "content": [
+     {
+      "type": "text",
+      "text": "Export",
+      "marks": [
+       {
+        "type": "strong"
+       }
+      ]
+     },
+     {
+      "type": "text",
+      "text": " writes LaTeX (with figures), a self-contained HTML page, Markdown, a Maxima batch file or a wxMaxima document. wxMaxima ("
+     },
+     {
+      "type": "text",
+      "text": ".wxm",
+      "marks": [
+       {
+        "type": "code"
+       }
+      ]
+     },
+     {
+      "type": "text",
+      "text": ", "
+     },
+     {
+      "type": "text",
+      "text": ".wxmx",
+      "marks": [
+       {
+        "type": "code"
+       }
+      ]
+     },
+     {
+      "type": "text",
+      "text": "), Maxima, Markdown and LaTeX files open directly."
+     }
+    ]
+   },
+   {
+    "type": "paragraph"
+   }
+  ]
+ },
  "metadata": {}
 }

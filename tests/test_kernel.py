@@ -177,31 +177,112 @@ def test_function_definition_round_trip(kernel):
     assert kernel.run_cell(latex_to_maxima("f(3)"))["outputs"][0]["text"] == "10"
 
 
+def _run_in_thread(k, source):
+    result, errors = {}, []
+
+    def run():
+        try:
+            result.update(k.run_cell(source))
+        except KernelError as exc:  # a hard stop surfaces as KernelError
+            errors.append(str(exc))
+
+    t = threading.Thread(target=run)
+    t.start()
+    return t, result, errors
+
+
 @pytest.mark.parametrize("source", ["for i: 1 thru 10^9 do x: i;", "integrate(1/x^b, x);"])
-def test_stop_busy_or_asking_kernel(source):
+def test_stop_in_place_keeps_state(source):
     k = MaximaKernel(MAXIMA)
     k.start()
     try:
-        result, errors = {}, []
-
-        def run():
-            try:
-                result.update(k.run_cell(source))
-            except KernelError as exc:  # a stop must surface as KernelError
-                errors.append(str(exc))
-
-        t = threading.Thread(target=run)
-        t.start()
+        if not k.can_interrupt():
+            pytest.skip(f"this Maxima build ({k.lisp}) cannot be interrupted in place")
+        k.run_cell("keep: 41$")
+        t, result, errors = _run_in_thread(k, source)
         time.sleep(2)
-        k.interrupt()
+        assert k.interrupt()
+        t.join(20)
+        assert not t.is_alive(), "Maxima did not come back after the interrupt"
+        assert not errors, errors
+        assert result["error"]
+        assert result["outputs"][-1].get("interrupted"), result
+        assert k.pending_question is None
+        assert k.run_cell("keep + 1;")["outputs"][0]["text"] == "42"
+    finally:
+        k.shutdown()
+
+
+def test_hard_stop_restarts():
+    k = MaximaKernel(MAXIMA)
+    k.start()
+    try:
+        t, _result, errors = _run_in_thread(k, "for i: 1 thru 10^9 do x: i;")
+        time.sleep(2)
+        k.hard_stop()
         t.join(30)
         assert not t.is_alive()
         assert errors and "stopped by you" in errors[0]
-        assert k.pending_question is None
         k.start()
         assert k.run_cell("1+1;")["outputs"][0]["text"] == "2"
     finally:
         k.shutdown()
+
+
+def test_semantic_latex_tags_symbols_by_kind(kernel):
+    kernel.run_cell("aa: 3$ g2(t) := t^2$")
+    res = kernel.run_cell("g2(y) + aa*%pi + z;")
+    out = res["outputs"][0]
+    sem = out["semantic"]
+    assert r"\class{mbk-sym mbk-constant" in sem         # %pi
+    assert r"\class{mbk-sym mbk-free" in sem             # y, z
+    assert "mbk-n-0079" in sem.lower() and "mbk-n-007a" in sem.lower()  # y, z as hex code points
+    assert r"\class" not in out["latex"]                 # plain LaTeX stays plain
+
+
+def test_symbol_table(kernel):
+    kernel.run_cell("vv: [1, 2]$ hh(u, w) := u + w$ declare(cc, constant)$")
+    table = kernel.symbols()
+    by_name = {e["name"]: e for e in table}
+    assert by_name["vv"]["kind"] == "variable" and by_name["vv"]["text"] == "[1,2]"
+    assert by_name["hh"]["kind"] == "function" and by_name["hh"]["text"] == "hh(u,w):=u+w"
+    assert by_name["cc"]["kind"] == "constant"
+    res = kernel.run_cell("cc + vv[1];")
+    assert r"\class{mbk-sym mbk-constant" in res["outputs"][0]["semantic"]
+    # values are cleaned up like displayed results (no plain-TeX \pmatrix tricks)
+    kernel.run_cell("mm: matrix([1, 2], [3, 4])$")
+    mm = next(e for e in kernel.symbols() if e["name"] == "mm")
+    assert "pmatrix" in mm["latex"] and "\\ifx" not in mm["latex"]
+    # Maxbook's own helpers are not the user's symbols
+    assert not {"maxbook_plot_dir", "iplot2d", "maxbook_ensure_draw"} & set(by_name)
+    # nor what a package defines when it loads (eigenvalues autoloads eigen);
+    # the user's own definitions made before the load stay theirs
+    kernel.run_cell("eigenvalues(mm);")
+    names = {e["name"] for e in kernel.symbols()}
+    assert {"vv", "hh", "mm"} <= names
+    assert not {"eigenvalues", "hermitianmatrix", "knowneigvals"} & names
+
+
+def test_run_waits_for_symbol_query_but_not_for_a_computation(kernel):
+    # a symbol-table query holds the kernel briefly: a run waits for it
+    kernel._run_lock.acquire()
+    kernel._symbols_query = True
+
+    def finish():
+        time.sleep(0.6)
+        kernel._symbols_query = False
+        kernel._run_lock.release()
+
+    threading.Thread(target=finish).start()
+    res = kernel.run_cell("1+1;")
+    assert res["outputs"][0]["text"] == "2"
+    # a computation holding the kernel: a second run is refused at once
+    kernel._run_lock.acquire()
+    try:
+        with pytest.raises(KernelError, match="busy"):
+            kernel.run_cell("1+1;")
+    finally:
+        kernel._run_lock.release()
 
 
 def test_restart_resets_state():

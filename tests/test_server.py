@@ -5,6 +5,7 @@
 import http.client
 import json
 import threading
+import time
 
 import pytest
 
@@ -50,6 +51,33 @@ def test_static_index_needs_no_token_but_has_csp(app):
     assert b"Maxbook" in resp.read()
 
 
+def test_naming_a_new_file_starts_a_notebook_that_saves_there(app, tmp_path):
+    target = tmp_path / "fresh.maxbook"
+    app.initial_file = str(target)
+    status, s = request(app, "GET", "/api/session")
+    assert status == 200 and s["path"] == str(target.resolve())
+    assert s["notebook"]["title"] == "fresh" and "New notebook" in s["note"]
+    assert request(app, "POST", "/api/save", {"path": s["path"], "notebook": s["notebook"]})[0] == 200
+    assert target.exists()
+    # a missing file of another type is still an error, not a silent new notebook
+    app.initial_file = str(tmp_path / "missing.wxm")
+    assert "not found" in request(app, "GET", "/api/session")[1]["note"]
+
+
+def test_stop_with_nothing_running_keeps_maxima(app, monkeypatch):
+    calls = []
+    monkeypatch.setattr(app.kernel, "interrupt", lambda: calls.append("interrupt") or True)
+    monkeypatch.setattr(app.kernel, "hard_stop", lambda: calls.append("hard_stop"))
+    monkeypatch.setattr(app.kernel, "start", lambda: calls.append("start"))
+    assert request(app, "POST", "/api/interrupt", {})[0] == 200
+    time.sleep(0.3)
+    assert calls == []
+    # Restart always restarts
+    assert request(app, "POST", "/api/restart", {})[0] == 200
+    time.sleep(0.3)
+    assert calls == ["hard_stop", "start"]
+
+
 def test_api_requires_token(app):
     assert request(app, "GET", "/api/session", token=False)[0] == 403
     assert request(app, "GET", "/api/session", token="wrong")[0] == 403
@@ -87,11 +115,12 @@ def test_convert_endpoint(app):
 def test_save_open_export_and_listing(app, tmp_path):
     _, data = request(app, "POST", "/api/new", {"title": "Demo"})
     nb = data["notebook"]
-    nb["cells"][1]["source"] = "1+1;"
+    assert nb["version"] == 2 and nb["doc"]["content"][0]["type"] == "heading"
+    nb["doc"]["content"].append({"type": "maxima", "attrs": {"id": "c1", "source": "1+1;"}})
     status, data = request(app, "POST", "/api/save", {"path": str(tmp_path / "demo"), "notebook": nb})
     assert status == 200 and data["path"].endswith("demo.maxbook")
     status, data = request(app, "POST", "/api/open", {"path": str(tmp_path / "demo.maxbook")})
-    assert data["notebook"]["cells"][1]["source"] == "1+1;"
+    assert data["notebook"]["doc"]["content"][-1]["attrs"]["source"] == "1+1;"
     status, data = request(app, "POST", "/api/export",
                            {"format": "mac", "path": str(tmp_path / "demo.mac"), "notebook": nb})
     assert status == 200 and (tmp_path / "demo.mac").read_text().strip().endswith("1+1;")

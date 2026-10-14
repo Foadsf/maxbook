@@ -1,6 +1,15 @@
-# Math cells: what the formula means to Maxima
+# Formulas: what they mean to Maxima
 
-A math cell is edited visually. Before it runs, Maxbook translates the formula to one Maxima statement and shows that statement under the formula. The rules below are the whole contract: anything not covered is reported as an error with a hint rather than guessed.
+Formulas, in the text (`$`) or on their own line (`$$`), are edited visually. Before anything is evaluated, Maxbook translates the formula to one Maxima statement; for a display formula that statement is shown under it while you edit. The rules below are the whole contract: anything not covered is reported as an error with a hint rather than guessed.
+
+## Computing in place
+
+| You write, then press Tab | Maxima runs | The document shows |
+|---|---|---|
+| a formula ending in `=`, such as `\int_0^1 x^2\,dx=` | `ev(integrate(x^2, x, 0, 1), nouns, simpsum);` | the result right after the `=` |
+| a definition with `:=` (`\coloneq`), such as `f(x) := x^2\sin x` | `f(x) := x^2*sin(x);` | a ✓; `f` is now defined for the rest of the session |
+
+For `=`, the expression is evaluated with `nouns` and `simpsum`, because asking for a value means asking Maxima to work it out: an integral, derivative or limit written as a formula is computed, and `\sum_{k=1}^{\infty}\frac{1}{k^2}=` gives `\frac{\pi^2}{6}` rather than the sum again. Errors show as ⚠ (hover for Maxima's message). **Run all** recomputes every such formula, together with the Maxima blocks and the display formulas marked *Evaluated*, in document order.
 
 ## Names, constants, indices
 
@@ -47,7 +56,7 @@ The body of a sum, product or limit is the product that follows it, up to the ne
 | `M^{-1}` on a written-out matrix | `M^^(-1)` (inverse) |
 | `M^{T}`, `M^{\top}`, `A^T` for a capital single letter | `transpose(…)` |
 
-For named matrices use a Maxima cell for products (`A . B`) and inverses (`A^^-1`); in a math cell `A\cdot B` means `A*B`, which Maxima applies element-wise.
+For named matrices use a Maxima block for products (`A . B`) and inverses (`A^^-1`); in a formula `A\cdot B` means `A*B`, which Maxima applies element-wise.
 
 ## Equations and definitions
 
@@ -59,4 +68,4 @@ For named matrices use a Maxima cell for products (`A . B`) and inverses (`A^^-1
 
 ## Not supported (yet)
 
-`\pm`, `\nabla`, contour integrals, primes (`f'`), norms `\|x\|`, `cases` environments and evaluation bars. Use a Maxima cell for these.
+`\pm`, `\nabla`, contour integrals, primes (`f'`), norms `\|x\|`, `cases` environments and evaluation bars. Use a Maxima block for these.
