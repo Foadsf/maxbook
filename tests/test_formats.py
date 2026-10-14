@@ -1,9 +1,11 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Copyright (C) 2026 Foad S. Farimani
 import base64
+import os
 import shutil
 import struct
 import subprocess
+import sys
 import zipfile
 import zlib
 from pathlib import Path
@@ -158,16 +160,26 @@ def test_markdown_to_latex_escapes_text_but_not_math():
     assert r"50\% \& $x_1$ \textbf{b} \texttt{a\_b}" in tex
 
 
-@pytest.mark.skipif(not (shutil.which("pdflatex") or Path(
-    r"~\scoop\apps\miktex\current\texmfs\install\miktex\bin\x64\pdflatex.exe").expanduser().exists()),
-    reason="pdflatex not installed")
+def find_pdflatex():
+    """pdflatex from MAXBOOK_PDFLATEX, PATH, or a MiKTeX install that is not on PATH."""
+    candidates = [os.environ.get("MAXBOOK_PDFLATEX"), shutil.which("pdflatex")]
+    if sys.platform.startswith("win"):
+        candidates += [str(p) for p in Path.home().glob(
+            "scoop/apps/miktex/current/texmfs/install/miktex/bin/x64/pdflatex.exe")]
+        candidates += [str(p) for p in Path(os.environ.get("ProgramFiles", r"C:\Program Files"))
+                       .glob("MiKTeX*/miktex/bin/x64/pdflatex.exe")]
+    return next((c for c in candidates if c and Path(c).exists()), None)
+
+
+PDFLATEX = find_pdflatex()
+
+
+@pytest.mark.skipif(PDFLATEX is None, reason="pdflatex not installed")
 def test_latex_export_compiles(tmp_path):
     nb, png = sample_notebook()
     written = formats.write_latex_bundle(nb, tmp_path / "doc.tex", ["data:image/png;base64," + png])
     assert written[1].name == "figure1.png"
-    exe = shutil.which("pdflatex") or str(Path(
-        r"~\scoop\apps\miktex\current\texmfs\install\miktex\bin\x64\pdflatex.exe").expanduser())
-    res = subprocess.run([exe, "-interaction=nonstopmode", "-halt-on-error", "doc.tex"],
+    res = subprocess.run([PDFLATEX, "-interaction=nonstopmode", "-halt-on-error", "doc.tex"],
                          cwd=tmp_path, capture_output=True, text=True, timeout=300, check=False)
     assert res.returncode == 0, res.stdout[-3000:]
     assert (tmp_path / "doc.pdf").stat().st_size > 1000
