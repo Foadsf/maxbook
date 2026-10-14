@@ -406,10 +406,24 @@ class MaximaKernel:
             self._answer = text.strip() or ";"
             self._cond.notify_all()
 
+    def _wait_for_file(self, p: Path, timeout: float = 15.0) -> bool:
+        """Wait until ``p`` exists and stops growing (gnuplot may still be
+        writing it).  Called with ``self._cond`` held; waiting releases it."""
+        deadline = time.monotonic() + timeout
+        last = -1
+        while time.monotonic() < deadline:
+            size = p.stat().st_size if p.exists() else -1
+            complete = size > 0 and (p.suffix.lower() != ".svg" or b"</svg>" in p.read_bytes()[-64:])
+            if complete and size == last:
+                return True
+            last = size
+            self._cond.wait(0.1)
+        return p.exists()
+
     def _image_output(self, path: str) -> Output:
         p = Path(path)
         mime = IMAGE_MIME.get(p.suffix.lower())
-        if not p.exists() or mime is None:
+        if mime is None or not self._wait_for_file(p):
             return Output("error", {"text": f"image not found or unsupported: {path}"})
         if mime == "image/svg+xml":
             return Output("image", {"mime": mime, "data": p.read_text(encoding="utf-8", errors="replace")})

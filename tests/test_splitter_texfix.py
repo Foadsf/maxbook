@@ -62,6 +62,10 @@ def test_unterminated_input_is_refused(src, msg):
     (r"{\it gr2d}\left({\it explicit}\right)", r"\mathit{gr2d}\left(\mathit{explicit}\right)"),
     (r"\mbox{ Is  }a\mbox{  equal to  }-1\mbox{ ? }", r"\text{ Is }a\text{ equal to }-1\text{ ? }"),
     (r"\mbox{   }", r"\;"),
+    # Maxima 5.47 typesets strings letter by letter with \verb
+    (r"\mbox{\verb|f|}\mbox{\verb|_|}\mbox{ draw }\mbox{\verb| |}\mbox{\verb|}|}",
+     r"\text{f\_ draw  \}}"),
+    (r"\mbox{\verb|a|}+\mbox{\verb|b|}", r"\text{a}+\text{b}"),
     (r"$$x$$", "x"),
 ])
 def test_tex_cleanup(tex, latex):

@@ -16,12 +16,15 @@ maxbook_next_plot_file(ext) := (
   maxbook_plot_count : maxbook_plot_count + 1,
   sconcat(maxbook_plot_dir, "/plot", maxbook_plot_count, ext))$
 
+/* An explicit file terminal makes Maxima run gnuplot synchronously to write
+   the file.  [svg_file, f] goes through the viewer path instead, which on
+   some systems returns before the file exists. */
 iplot2d([args]) := block([f : maxbook_next_plot_file(".svg")],
-  apply(plot2d, append(args, [[svg_file, f]])),
+  apply(plot2d, append(args, [[gnuplot_term, svg], [gnuplot_out_file, f]])),
   maxbook_show_image(f))$
 
 iplot3d([args]) := block([f : maxbook_next_plot_file(".svg")],
-  apply(plot3d, append(args, [[svg_file, f]])),
+  apply(plot3d, append(args, [[gnuplot_term, svg], [gnuplot_out_file, f]])),
   maxbook_show_image(f))$
 
 maxbook_ensure_draw() := if not ?fboundp('draw) then load("draw")$

@@ -126,10 +126,36 @@ def _rewrite_mbox(s: str) -> str:
         i = end + 1
 
 
+_TEXT_ESCAPES = {"\\": r"\textbackslash ", "{": r"\{", "}": r"\}", "$": r"\$", "&": r"\&",
+                 "#": r"\#", "%": r"\%", "_": r"\_", "^": r"\textasciicircum ", "~": r"\textasciitilde "}
+
+
+def _rewrite_verb(s: str) -> str:
+    r"""Older Maxima (e.g. 5.47) typesets strings letter by letter as
+    ``\verb|f|``; renderers do not support ``\verb``.  Replace each with the
+    escaped text so the surrounding ``\mbox`` / ``\text`` holds plain text."""
+    return re.sub(r"\\verb(.)(.*?)\1",
+                  lambda m: "".join(_TEXT_ESCAPES.get(c, c) for c in m.group(2)), s)
+
+
+_TEXT_PAIR = re.compile(r"\\text\{((?:[^{}\\]|\\.)*)\}(\\;)?\\text\{((?:[^{}\\]|\\.)*)\}")
+
+
+def _merge_text(s: str) -> str:
+    r"""``\text{a}\text{b}`` -> ``\text{ab}`` (and ``\text{a}\;\text{b}`` -> ``\text{a b}``)."""
+    while True:
+        merged = _TEXT_PAIR.sub(lambda m: r"\text{" + m.group(1) + (" " if m.group(2) else "")
+                                + m.group(3) + "}", s)
+        if merged == s:
+            return s
+        s = merged
+
+
 def maxima_tex_to_latex(tex: str) -> str:
     s = tex.strip()
     if s.startswith("$$") and s.endswith("$$"):
         s = s[2:-2].strip()
+    s = _rewrite_verb(s)
     s = s.replace(_PMATRIX_OPEN, r"\begin{pmatrix}").replace(_PMATRIX_CLOSE, r"\end{pmatrix}")
     s = s.replace(r"\pmatrix{", r"\begin{pmatrix}")
     s = re.sub(r"\\cr\s*(?=\\end\{pmatrix\})", "", s)
@@ -137,4 +163,5 @@ def maxima_tex_to_latex(tex: str) -> str:
     s = _rewrite_over(s)
     s = _rewrite_font_groups(s)
     s = _rewrite_mbox(s)
+    s = _merge_text(s)
     return s.strip()
