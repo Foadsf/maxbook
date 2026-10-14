@@ -32,6 +32,9 @@ from .texfix import maxima_tex_to_latex
 
 STX, US, ETX = "\x02", "\x1f", "\x03"
 FRAME_RE = re.compile("\x02([A-Z]+)((?:\x1f[^\x02\x03]*)*)\x03")
+# gnuplot builds without a GUI (e.g. Debian's gnuplot-nox) warn about "set mouse"
+# in scripts that only write files; the warning says nothing about the result.
+HARMLESS_LINE = re.compile(r"line \d+: warning: this copy of gnuplot has no mouse support")
 LISP_DIR = Path(__file__).with_name("lisp")
 IS_WINDOWS = sys.platform.startswith("win")
 IMAGE_MIME = {".svg": "image/svg+xml", ".png": "image/png", ".jpg": "image/jpeg",
@@ -327,6 +330,7 @@ class MaximaKernel:
 
         def flush_text(text: str) -> None:
             nonlocal error
+            text = "\n".join(line for line in text.splitlines() if not HARMLESS_LINE.search(line))
             text = text.strip("\r\n")
             if not text.strip():
                 return

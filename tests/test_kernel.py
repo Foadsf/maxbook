@@ -112,6 +112,12 @@ def test_inline_draw_produces_svg(kernel):
     assert kinds(res) == ["image"], res
 
 
+def test_quiet_load_still_reports_failure(kernel):
+    res = kernel.run_cell('maxbook_quiet_load("no_such_package_xyz");')
+    assert res["error"]
+    assert "no_such_package_xyz" in " ".join(o.get("text", "") for o in res["outputs"])
+
+
 def test_wxmaxima_alias(kernel):
     res = kernel.run_cell("wxplot2d(x^2, [x, -1, 1])$")
     assert kinds(res) == ["image"], res

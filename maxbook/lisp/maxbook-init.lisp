@@ -60,6 +60,21 @@
 (setq *prompt-prefix* (mbk-frame "ASK"))
 (setq *prompt-suffix* (mbk-frame "ASKEND"))
 
+;; Load a package without its compiler chatter (";; Note: ..."), which some
+;; Lisps print while loading share packages such as draw.  If loading fails,
+;; the captured output is shown so the error stays explainable.
+(defmfun $maxbook_quiet_load (file)
+  (let ((captured (make-string-output-stream))
+        (ok nil))
+    (unwind-protect
+         (prog1 (let ((*standard-output* captured)
+                      (*error-output* captured))
+                  ($load file))
+           (setq ok t))
+      (unless ok
+        (write-string (get-output-stream-string captured))
+        (finish-output)))))
+
 (defmfun $maxbook_show_image (file)
   (unless (stringp file)
     (merror "maxbook_show_image: expected a file name string, got ~M" file))

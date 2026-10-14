@@ -27,7 +27,7 @@ iplot3d([args]) := block([f : maxbook_next_plot_file(".svg")],
   apply(plot3d, append(args, [[gnuplot_term, svg], [gnuplot_out_file, f]])),
   maxbook_show_image(f))$
 
-maxbook_ensure_draw() := if not ?fboundp('draw) then load("draw")$
+maxbook_ensure_draw() := if not ?fboundp('draw) then maxbook_quiet_load("draw")$
 
 idraw([args]) := block([f : maxbook_next_plot_file("")],
   maxbook_ensure_draw(),
