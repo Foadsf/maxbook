@@ -2,7 +2,7 @@
 
 Maxbook is a notebook for literate computing with the [Maxima](https://maxima.sourceforge.io/) computer algebra system: prose, formulas and live computations in one document. It is meant as a modern alternative to wxMaxima and TeXmacs for writing mathematics that is computed by Maxima.
 
-Status: **0.1.0, first MVP.** It is usable for real work on Windows with Maxima 5.50; other platforms are written for but not yet tested (see [Limitations](#limitations)).
+Status: **0.1.0, first MVP.** Used and tested by hand on Windows with Maxima 5.50; the automated tests also run on Linux against Maxima 5.46. macOS is untested (see [Limitations](#limitations)).
 
 ## What it does
 
@@ -61,7 +61,7 @@ Security: the server listens on localhost only and every API call needs a per-la
 
 These are known and intended to be addressed after the MVP:
 
-- **Tested on Windows only** (Windows 11, Maxima 5.50 with SBCL, Python 3.13, Edge/Chromium). The Linux and macOS code paths (process groups, Maxima discovery, launcher) are written but have not been run.
+- **Platforms.** The full UI was tested by hand on Windows 11 (Maxima 5.50 with SBCL, Python 3.13, Edge). On Linux the automated tests, including the real-Maxima ones, pass in CI (Ubuntu 24.04, Maxima 5.46, Python 3.9 and 3.12), but the desktop window has not been tried there. macOS is untested.
 - **Stop restarts Maxima.** There is no in-place interrupt yet, so variables and definitions are lost after Stop.
 - **One Maxima session per running Maxbook**, shared by whatever notebook is open. Opening another notebook does not reset Maxima; use Restart.
 - **Math cells cover a documented subset** of notation (see docs/math-input.md). Anything else is reported as an error with a hint, never guessed. Matrix multiplication with `\cdot` is only recognised between written-out matrices; use a Maxima cell (`A . B`) for named matrices.
@@ -76,7 +76,7 @@ python -m pytest
 ruff check maxbook tests
 ```
 
-`tests/test_kernel.py` drives a real Maxima and is skipped when Maxima is not installed; `tests/test_formats.py` compiles the LaTeX export when `pdflatex` is available. Front-end behaviour was checked by hand in a browser; there are no automated browser tests yet.
+`tests/test_kernel.py` drives a real Maxima and is skipped when Maxima is not installed; `tests/test_formats.py` compiles the LaTeX export when `pdflatex` is available (or set `MAXBOOK_PDFLATEX`). CI runs both on Linux. Front-end behaviour was checked by hand in a browser; there are no automated browser tests yet.
 
 Third-party code is listed in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). Contributions are welcome; please run the tests and `ruff` before opening a pull request.
 
