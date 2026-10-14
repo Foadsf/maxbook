@@ -1,0 +1,84 @@
+= Maxima blocks, plots and questions
+:description: Running Maxima input, answering Maxima's questions, stopping long computations and drawing plots.
+
+A *Maxima block* holds ordinary Maxima input, exactly what you would type at a Maxima prompt or in a wxMaxima input cell.
+
+== Creating and running blocks
+
+Make a block with any of:
+
+* `>>` and a space at the start of an empty line,
+* pass:[<code>```</code>] and a space (or pass:[<code>```maxima</code>]),
+* kbd:[Ctrl+Alt+M], or the `>_` button in the format bar.
+
+Then run it:
+
+[cols="1,3"]
+|===
+|kbd:[Shift+Enter] |Run, and move to the text after the block.
+|kbd:[Ctrl+Enter] |Run, and stay in the block.
+|kbd:[Alt+Enter] |Run, and insert a new block below.
+|▶ in the margin |Run (shown when you point at the block).
+|===
+
+Statements run one at a time, as in a Maxima session: a statement ending in `;` shows its result, one ending in `$` runs silently, and the block stops at the first error.
+The margin shows the input labels (`%i5`, or `%i3–4` for several statements) and each result its `%o` label, so `%`, `%o4` and everything you define work across the whole notebook.
+
+Inside a block, kbd:[Tab] indents, kbd:[Esc] selects the whole block (then kbd:[Delete] removes it, kbd:[Enter] goes back in), and the arrow keys at the first or last line move out into the text.
+Pointing at a result shows *LaTeX* and *Maxima* buttons that copy it in either form.
+
+== When Maxima asks a question
+
+Some computations depend on facts Maxima does not know, such as the sign of a parameter.
+Maxima then asks, and the question appears in the block:
+
+image::blocks-question.webp[Maxima asks: Is a equal to -1? with yes and no buttons and an answer field]
+
+Click one of the suggested answers or type your own (for example `positive`) and press kbd:[Enter].
+The computation continues with your answer:
+
+image::blocks-answered.webp[The answer no and the result x to the power a+1 over a+1]
+
+To avoid the question next time, tell Maxima beforehand, for example `assume(a > 0)$` or `declare(n, integer)$`.
+
+== Stopping a long computation
+
+While Maxima works, the block shows `+[*]+` and the pill at the top says *computing…*:
+
+image::blocks-running.webp[A loop to a billion is running; the kernel pill says computing]
+
+Click *Stop* (the square button).
+Maxima abandons the computation but keeps everything defined so far:
+
+image::blocks-stopped.webp[The block says Stopped by you. Maxima kept its state; the variable keep is still 42]
+
+If Maxima does not react within a few seconds (some long-running library code cannot be interrupted), Maxbook restarts it and the block says that earlier definitions are gone.
+*Restart* (the circular arrow) always starts a fresh Maxima; use it when you want a clean session.
+Stop while Maxima asks a question also works.
+
+== Plots in the notebook
+
+[cols="1,2"]
+|===
+|`iplot2d(...)` |like `plot2d`, drawn into the notebook
+|`iplot3d(...)` |like `plot3d`
+|`idraw2d(...)`, `idraw3d(...)`, `idraw(...)` |like `draw2d`, `draw3d`, `draw` (the `draw` package is loaded when needed)
+|`wxplot2d`, `wxplot3d`, `wxdraw2d`, `wxdraw3d`, `wxdraw` |aliases, so wxMaxima worksheets run unchanged
+|===
+
+[source,maxima]
+----
+iplot3d(sin(x)*cos(y), [x, -3, 3], [y, -3, 3])$
+----
+
+image::blocks-plot3d.webp[A 3D surface plot of sin(x) cos(y)]
+
+Plots are SVG images made by gnuplot, so they stay sharp when you zoom or print.
+The ordinary `plot2d` and `draw2d` still open gnuplot's own window, as they do in Maxima.
+
+TIP: End plot commands with `$`: the plot itself is the output, and the command's return value is not interesting.
+
+== Turning a result into a formula
+
+The *∑* button on a block inserts a display formula after it, so you can typeset a result or continue the derivation in mathematical notation.
+Copying a result *as LaTeX* and pasting it into a formula also works.

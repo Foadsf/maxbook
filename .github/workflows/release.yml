@@ -1,0 +1,68 @@
+name: release
+
+# Builds a single-file executable per platform with packaging/build.py, which
+# also smoke-tests each one.  Pushing a tag v* publishes them as a GitHub
+# release; running the workflow by hand only builds them (as artifacts).
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { os: windows-2022, tag: windows-x64 }
+          - { os: windows-11-arm, tag: windows-arm64 }
+          - { os: ubuntu-22.04, tag: linux-x64 }       # glibc 2.35: runs on Ubuntu 22.04 and newer distributions
+          - { os: ubuntu-22.04-arm, tag: linux-arm64 }
+          - { os: macos-14, tag: macos-arm64 }
+          - { os: macos-15-intel, tag: macos-x64 }
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install Maxbook (with the optional AI helper) and PyInstaller
+        run: python -m pip install "pyinstaller==6.22.3" ".[ai]"
+      - name: Build and smoke-test
+        run: python packaging/build.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: maxbook-${{ matrix.tag }}
+          path: |
+            dist/maxbook-*
+            dist/THIRD_PARTY_LICENSES.txt
+          if-no-files-found: error
+
+  publish:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: build
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+      - name: Checksums
+        run: |
+          cd dist
+          cat *.sha256 > SHA256SUMS.txt
+          rm *.sha256
+          cat SHA256SUMS.txt
+      - name: Create the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" dist/* \
+            --title "Maxbook ${GITHUB_REF_NAME#v}" \
+            --notes-file packaging/RELEASE_NOTES.md

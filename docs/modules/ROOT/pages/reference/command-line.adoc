@@ -1,0 +1,76 @@
+= Command line and settings
+:description: Maxbook's command-line options and environment variables.
+
+== Usage
+
+[source,console]
+----
+maxbook [FILE] [--maxima PATH] [--port N] [--window MODE] [--share]
+----
+
+With the single-file programs, use the program's file name instead of `maxbook`; from a source checkout, `python -m maxbook`.
+
+[cols="1,3",options="header"]
+|===
+|Argument |Meaning
+
+|`FILE`
+|A notebook to open (`.maxbook`), or a file to import (`.wxm`, `.wxmx`, `.mac`, `.md`, `.tex`).
+A `.maxbook` name that does not exist yet starts a new notebook that *Save* writes there.
+
+|`--maxima PATH`
+|The Maxima program to use, when it is not found automatically (on Windows, `maxima.bat` in Maxima's `bin` folder).
+
+|`--port N`
+|The port to listen on. By default any free port is used.
+
+|`--window MODE`
+|How to show the notebook: `auto` (the default: a native window if pywebview is installed, else a Chromium app window, else the default browser), `native`, `app`, `browser`, or `none` to only print the address.
+
+|`--share`
+|Also listen on the local network and print links others can use to edit the notebook with you.
+See xref:tutorials/together.adoc[Editing together].
+
+|`--version`, `--help`
+|Print the version or the help.
+|===
+
+Maxbook prints its address, the Maxima it uses and whether the AI helper is on, then keeps running until you close it with kbd:[Ctrl+C], close the console window, or choose *Quit Maxbook* (kbd:[Ctrl+K]).
+
+== Environment variables
+
+[cols="1,3",options="header"]
+|===
+|Variable |Meaning
+
+|`MAXBOOK_MAXIMA`
+|The Maxima program, like `--maxima`.
+
+|`MAXBOOK_HOME`
+|The folder for Maxbook's settings (the recent-notebooks list). Default: `.maxbook` in your home folder.
+
+|`ANTHROPIC_API_KEY`, `ANTHROPIC_AUTH_TOKEN`
+|Credentials for the xref:tutorials/ai-helper.adoc[AI helper].
+
+|`MAXBOOK_AI`
+|`1` turns the AI helper on with credentials from an `ant auth login` profile; `0` turns it off.
+
+|`MAXBOOK_AI_MODEL`
+|The Claude model for the AI helper (default `claude-opus-5-5`).
+|===
+
+== Where Maxbook looks for Maxima
+
+In this order: `--maxima`, `MAXBOOK_MAXIMA`, then
+
+* on Windows: Scoop's `maxima` app, `+C:\maxima-*+`, `+Program Files\Maxima-*+`, `+Program Files (x86)\Maxima-*+`, `+%LOCALAPPDATA%\Programs\Maxima-*+` (newest version first), and `maxima` on `PATH`;
+* on macOS and Linux: `maxima` on `PATH`, then `/opt/homebrew/bin`, `/usr/local/bin`, `/opt/local/bin` and `/Applications/Maxima.app`.
+
+On Windows, Maxbook uses the gnuplot that comes with Maxima for plots; elsewhere, `gnuplot` must be installed.
+
+== Security
+
+Maxbook is a local web server.
+Every request needs the secret key that is part of the address it prints (`#token=...`), and the `Host` header must name this computer, which protects against web pages trying to reach it.
+The host's key is accepted only from the same computer; with `--share`, a second key in the share links gives guests edit-only access.
+A new pair of keys is made every time Maxbook starts.

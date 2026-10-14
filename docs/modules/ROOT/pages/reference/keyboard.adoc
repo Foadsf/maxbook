@@ -1,0 +1,73 @@
+= Keyboard shortcuts
+:description: Every key in Maxbook on one page.
+
+On a Mac, use kbd:[Cmd] where this page says kbd:[Ctrl].
+kbd:[F1] in Maxbook shows the most important ones:
+
+[.text-center]
+image::keyboard-help.webp[The Keyboard and tips window,width=560]
+
+== Writing
+
+[cols="1,2"]
+|===
+|`$` |Formula in the text (inline)
+|`$` in an empty inline formula |Make it a display formula on its own line
+|kbd:[Ctrl+M] / kbd:[Ctrl+Shift+M] |Inline formula / display formula
+|`>>` and space, pass:[<code>```</code>] and space, kbd:[Ctrl+Alt+M] |Maxima block
+|`+#+`, `+##+`, `+###+`, `+####+` and space |Heading 1 to 4
+|`-`, `+*+` or `+` and space |Bulleted list
+|`1.` and space |Numbered list
+|`>` and space |Quote
+|`---` |Horizontal line
+|`+**text**+` |Bold
+|pass:[<code>`text`</code>] |Code
+|kbd:[Ctrl+B], kbd:[Ctrl+I], pass:[<kbd class="keyseq"><kbd>Ctrl</kbd>+<kbd>`</kbd></kbd>] |Bold, italic, code
+|kbd:[Ctrl+Alt+1] … kbd:[Ctrl+Alt+4], kbd:[Ctrl+Alt+0] |Heading 1–4, plain text
+|kbd:[Ctrl+[] / kbd:[Ctrl+\]] |Outdent / indent a list item
+|kbd:[Shift+Enter] in text |Line break
+|kbd:[Ctrl+Z], kbd:[Ctrl+Y] or kbd:[Ctrl+Shift+Z] |Undo, redo
+|===
+
+== In a formula
+
+[cols="1,2"]
+|===
+|`/` |Fraction
+|`+^+`, `_` |Exponent, subscript
+|kbd:[→] |Leave a fraction, exponent or subscript; at the end, leave the formula
+|a word (`int`, `frac`, `sum`, `prod`, `lim`, `sqrt`, `matrix`, `det`, ...) |Search templates; kbd:[Enter] or kbd:[Tab] inserts, kbd:[↑] kbd:[↓] choose, kbd:[Space] keeps the letters
+|kbd:[Tab] with empty boxes |Next box
+|`=` then kbd:[Tab] |Compute in place
+|`:=` then kbd:[Tab] |Define in Maxima
+|kbd:[Tab] otherwise |Leave the formula
+|kbd:[Esc] |Leave the formula
+|kbd:[Enter] |Leave an inline formula
+|kbd:[Shift+Enter] in a display formula |Evaluate it like a Maxima block, then move on
+|===
+
+== Maxima blocks
+
+[cols="1,2"]
+|===
+|kbd:[Shift+Enter] |Run, then move on
+|kbd:[Ctrl+Enter] |Run and stay
+|kbd:[Alt+Enter] |Run and insert a new block below
+|kbd:[Tab] / kbd:[Shift+Tab] |Indent / outdent
+|kbd:[Esc] |Select the block (kbd:[Enter] goes back in, kbd:[Delete] removes it)
+|kbd:[↑] on the first line, kbd:[↓] on the last |Move into the text
+|kbd:[Backspace] in an empty block |Remove it
+|===
+
+== Notebook
+
+[cols="1,2"]
+|===
+|kbd:[Ctrl+Shift+Enter] |Run everything in order
+|kbd:[Ctrl+S], kbd:[Ctrl+Shift+S] |Save, save as
+|kbd:[Ctrl+O] |Open or import
+|kbd:[Ctrl+Alt+N] |New notebook
+|kbd:[Ctrl+K] |Search commands, forms and templates
+|kbd:[F1] |Keyboard and tips
+|Ctrl-click a link |Open the link
+|===

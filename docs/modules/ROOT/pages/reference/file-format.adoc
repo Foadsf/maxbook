@@ -1,0 +1,52 @@
+= The .maxbook format
+:description: The structure of Maxbook's notebook files.
+
+A `.maxbook` file is UTF-8 JSON:
+
+[source,json]
+----
+{
+  "format": "maxbook",
+  "version": 2,
+  "title": "Free fall",
+  "doc": { "type": "doc", "attrs": { "title": "Free fall", "symbols": {} }, "content": [ ... ] },
+  "metadata": {}
+}
+----
+
+`doc` is the document as a tree of nodes, in the form used by the https://prosemirror.net/[ProseMirror] editor: each node has a `type`, optional `attrs` and, for containers, `content`.
+
+[cols="1,3",options="header"]
+|===
+|Node |Holds
+
+|`heading` (`level` 1–4), `paragraph`, `blockquote`, `bullet_list`, `ordered_list`, `list_item`, `code_block`, `horizontal_rule`
+|Text, as `text` nodes with optional `marks` (`strong`, `em`, `code`, `link`) and `hard_break`.
+
+|`math_inline`
+|A formula in the text: `latex`, the Maxima `source` it translates to, and the `result` of compute in place (`latex`, `text`, or `error`).
+
+|`math_block`
+|A display formula: like `math_inline`, plus `run` (true when it is evaluated), `outputs` and `inputs`.
+
+|`maxima`
+|A Maxima block: `source`, `outputs` and `inputs` (the input numbers of its statements).
+|===
+
+Each output is an object with a `kind`:
+
+* `result`: `label` (`%o4`), `latex`, `text` (Maxima's one-line form) and, when available, `semantic` (LaTeX with the symbol tags used for colouring);
+* `text`: printed output;
+* `error`: an error message (`interrupted: true` when you pressed Stop);
+* `image`: a plot, with `mime` (`image/svg+xml` or `image/png`) and `data`.
+
+Interactive questions are not saved.
+`doc.attrs.symbols` maps a name to `+{"description": "..."}+` (from the Objects panel).
+Every formula and block has an `id` that is unique in the notebook.
+
+== Compatibility
+
+* Notebooks from Maxbook 0.1 (`"version": 1`, a list of `cells`) open in 0.5; saving writes version 2.
+* The format is plain JSON on purpose: it diffs well in version control, and other tools can read it.
+`python -c "import json; print(json.load(open('notes.maxbook'))['title'])"` is all it takes.
+* For other programs, export instead (LaTeX, HTML, Markdown, `.mac`, `.wxm`, `.wxmx`): see xref:tutorials/files.adoc[Opening, saving and exporting].

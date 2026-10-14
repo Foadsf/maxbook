@@ -1,0 +1,12 @@
+name: ROOT
+title: Maxbook
+version: ~
+start_page: index.adoc
+nav:
+  - modules/ROOT/nav.adoc
+asciidoc:
+  attributes:
+    release-version: 0.5.0
+    repo-url: https://github.com/Foadsf/maxbook
+    releases-url: https://github.com/Foadsf/maxbook/releases/latest
+    maxima-url: https://maxima.sourceforge.io/download.html

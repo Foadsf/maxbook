@@ -1,0 +1,24 @@
+* xref:index.adoc[Overview]
+* xref:install.adoc[Install]
+
+.Tutorials
+* xref:tutorials/first-notebook.adoc[Your first notebook]
+* xref:tutorials/formulas.adoc[Computing with formulas]
+* xref:tutorials/maxima-blocks.adoc[Maxima blocks, plots and questions]
+* xref:tutorials/menus.adoc[Menus and the command search]
+* xref:tutorials/symbols.adoc[Symbols and the Objects panel]
+* xref:tutorials/files.adoc[Opening, saving and exporting]
+* xref:tutorials/together.adoc[Editing together]
+* xref:tutorials/ai-helper.adoc[The AI helper]
+
+.Reference
+* xref:reference/keyboard.adoc[Keyboard shortcuts]
+* xref:reference/formula-syntax.adoc[Formula syntax]
+* xref:reference/command-line.adoc[Command line and settings]
+* xref:reference/file-format.adoc[The .maxbook format]
+* xref:reference/troubleshooting.adoc[Troubleshooting]
+
+.Development
+* xref:development/architecture.adoc[Architecture]
+* xref:development/building.adoc[Building, testing and releasing]
+* xref:about.adoc[About and licence]

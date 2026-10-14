@@ -1,0 +1,55 @@
+name: docs
+
+# Builds the AsciiDoc documentation in docs/ with Antora and publishes the
+# HTML on the gh-pages branch, which GitHub Pages serves at
+# https://foadsf.github.io/maxbook/
+on:
+  push:
+    branches: [main]
+    paths: ["docs/**", ".github/workflows/docs.yml"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: docs
+  cancel-in-progress: true
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Build the site
+        working-directory: docs
+        run: |
+          npm ci
+          npm run build
+          touch build/site/.nojekyll
+      - name: Publish to the gh-pages branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git fetch origin gh-pages || true
+          git worktree add --detach /tmp/pages
+          cd /tmp/pages
+          if git rev-parse --verify --quiet origin/gh-pages >/dev/null; then
+            git checkout -B gh-pages origin/gh-pages
+          else
+            git checkout --orphan gh-pages
+          fi
+          git rm -rq --ignore-unmatch .
+          cp -a "$GITHUB_WORKSPACE/docs/build/site/." .
+          git add -A
+          if git diff --cached --quiet; then
+            echo "The site has not changed."
+          else
+            git commit -qm "docs: publish site for ${GITHUB_SHA::7}"
+            git push origin gh-pages
+          fi

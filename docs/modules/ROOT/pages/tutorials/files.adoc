@@ -1,0 +1,71 @@
+= Opening, saving and exporting
+:description: Open Maxbook notebooks, import wxMaxima, Maxima, Markdown and LaTeX files, save, and export to LaTeX, HTML, Markdown and wxMaxima.
+
+== Opening and importing
+
+*Open* (kbd:[Ctrl+O]) shows the folders on your computer:
+
+image::files-open.webp[The Open dialog listing free-fall.maxbook, kinematics.wxm and welcome.maxbook]
+
+Double-click a file, or select it and click *Open*.
+Type a folder into the path field and press kbd:[Enter] to jump there; on Windows, the drop-down switches drives.
+
+Maxbook opens:
+
+[cols="1,3"]
+|===
+|`.maxbook` |Maxbook notebooks (also those written by Maxbook 0.1, which are converted)
+|`.wxm`, `.wxmx` |wxMaxima documents: text cells become text, input cells become Maxima blocks, titles and sections become headings
+|`.mac` |Maxima batch files: comments become text, code becomes Maxima blocks
+|`.md` |Markdown, with pass:[<code>```maxima</code>] blocks as Maxima blocks and `$...$` / `$$...$$` as formulas
+|`.tex` |LaTeX: sections, paragraphs, lists, inline and display math
+|===
+
+An imported file is not changed: *Save* suggests a new `.maxbook` file next to it.
+
+You can also start Maxbook with a file: `maxbook notes.wxmx`.
+The *Recent* list on the left reopens the last notebooks.
+
+== Pasting
+
+Paste Markdown or LaTeX into the document and it becomes formatted text, formulas and Maxima blocks.
+Plain text stays plain text.
+
+== Saving
+
+*Save* (kbd:[Ctrl+S]) writes the notebook; *Save as…* (kbd:[Ctrl+Shift+S]) asks for a new name.
+Maxbook asks before replacing an existing file.
+A dot next to the title means there are unsaved changes, and closing the window asks first.
+
+A `.maxbook` file is plain JSON with the results included, so it opens exactly as you left it and works well in version control.
+Its structure is described in xref:reference/file-format.adoc[The .maxbook format].
+
+== Exporting
+
+*Export* offers six formats:
+
+image::files-export.webp[The Export chooser: LaTeX document, HTML page, Markdown, Maxima batch file, wxMaxima document, wxMaxima text file]
+
+[cols="1,3"]
+|===
+|*LaTeX document* (`.tex`)
+|A complete LaTeX document with your text, formulas, Maxima input and results; plots are written as PNG files into a folder next to it.
+It compiles with `pdflatex` (TeX Live or MiKTeX).
+
+|*HTML page* (`.html`)
+|One self-contained file with the fonts and plots inside, which looks like the notebook and works offline: easy to e-mail or put on a website.
+
+|*Markdown* (`.md`)
+|Text with `$math$`, pass:[<code>```maxima</code>] blocks and the results; good for README files and static-site generators.
+
+|*Maxima batch file* (`.mac`)
+|All computations in document order, with the text as comments: run it with `batch("file.mac")` in any Maxima.
+
+|*wxMaxima document* (`.wxmx`)
+|Opens in wxMaxima; wxMaxima recomputes the outputs.
+
+|*wxMaxima text file* (`.wxm`)
+|wxMaxima's plain-text format.
+|===
+
+To get a *PDF*, export LaTeX and compile it (`pdflatex file.tex`), or use *Print / save as PDF* from kbd:[Ctrl+K]: printing hides the toolbars and side panels.

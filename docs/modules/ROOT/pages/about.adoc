@@ -1,0 +1,27 @@
+= About and licence
+:description: Licence, credits and the third-party software Maxbook builds on.
+
+Maxbook is written by Foad S. Farimani and developed in the open at {repo-url}.
+Bug reports, ideas and contributions are welcome: please run the tests and `ruff` before opening a pull request (xref:development/building.adoc[Building, testing and releasing]).
+
+== Licence
+
+Copyright (C) 2026 Foad S. Farimani.
+
+Maxbook is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+It is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; see the {repo-url}/blob/main/LICENSE[licence] for details.
+
+Maxbook is an independent project and is not affiliated with or endorsed by any other notebook or math-editor product.
+
+== Built on
+
+* https://maxima.sourceforge.io/[Maxima] does all the mathematics.
+Maxbook talks to it as a separate program over a pipe and does not include it.
+* https://cortexjs.io/mathlive/[MathLive] (MIT) is the formula editor and renders the mathematics, with the KaTeX fonts (MIT).
+* https://prosemirror.net/[ProseMirror] (MIT) is the document editor, and https://github.com/markdown-it/markdown-it[markdown-it] (MIT) reads Markdown.
+* http://www.gnuplot.info/[gnuplot] draws the plots, through Maxima.
+* The optional AI helper uses Anthropic's Claude through the official `anthropic` Python package (MIT).
+* The single-file programs are built with https://pyinstaller.org/[PyInstaller].
+* This site is built with https://antora.org/[Antora], its default UI (MPL-2.0) and Asciidoctor Tabs (MIT).
+
+The full list, with versions and licence files, is in {repo-url}/blob/main/THIRD_PARTY_NOTICES.md[THIRD_PARTY_NOTICES.md].

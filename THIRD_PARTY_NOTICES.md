@@ -15,4 +15,12 @@ The document editor uses [ProseMirror](https://prosemirror.net/) and [markdown-i
 
 Versions were pinned to releases at least two weeks old at the time of vendoring (2026-10-14).
 
+## Single-file programs (GitHub releases)
+
+The programs built by `packaging/build.py` with [PyInstaller](https://pyinstaller.org/) contain a Python runtime (PSF License) and the optional AI helper's packages: `anthropic`, `anyio`, `annotated-types`, `docstring_parser`, `h11`, `httpcore2`, `httpx2`, `idna`, `jiter`, `opentelemetry-api`, `pydantic`, `pydantic_core`, `sniffio`, `truststore`, `typing-inspection` and `typing_extensions` (MIT, BSD-3-Clause, Apache-2.0 or PSF-2.0). Each release includes `THIRD_PARTY_LICENSES.txt` with the full licence texts, collected from the packages that went into the build. PyInstaller's bootloader is GPL-2.0-or-later with an exception that permits distributing it with programs under any licence.
+
+## Documentation site
+
+The site in `docs/` is built with [Antora](https://antora.org/) (MPL-2.0, a build tool, not shipped). It uses the [Antora default UI](https://gitlab.com/antora/antora-ui-default) (MPL-2.0): `docs/ui/ui-bundle.zip` is that bundle with the colours in `css/site.css` replaced by CSS variables by `docs/tools/theme-ui.py` (the only change; the script is the source of the modification). [Asciidoctor Tabs](https://github.com/asciidoctor/asciidoctor-tabs) 1.0.0-beta.6 (MIT, Copyright (c) 2018-present Dan Allen) provides the tabs; its stylesheet and script are copied into `docs/ui/supplemental` with their licence header, the stylesheet's colours replaced by the site's theme variables. Search uses [@antora/lunr-extension](https://gitlab.com/antora/antora-lunr-extension) (MPL-2.0).
+
 Maxbook talks to [Maxima](https://maxima.sourceforge.io/) as a separate program over a pipe and does not include or link Maxima code. Maxima and the gnuplot bundled with its installers are installed separately by the user.

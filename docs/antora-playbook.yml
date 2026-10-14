@@ -1,0 +1,39 @@
+# Builds the documentation site: cd docs && npm ci && npm run build
+# Output: docs/build/site (published to the gh-pages branch by .github/workflows/docs.yml)
+site:
+  title: Maxbook
+  url: https://foadsf.github.io/maxbook
+  start_page: ROOT::index.adoc
+  robots: allow
+content:
+  sources:
+    - url: ..
+      branches: HEAD
+      start_path: docs
+      edit_url: 'https://github.com/Foadsf/maxbook/edit/main/{path}'
+ui:
+  bundle:
+    url: ./ui/ui-bundle.zip
+    snapshot: false
+  supplemental_files: ./ui/supplemental
+antora:
+  extensions:
+    - require: '@antora/lunr-extension'
+asciidoc:
+  extensions:
+    - '@asciidoctor/tabs'
+  attributes:
+    experimental: ''
+    hide-uri-scheme: ''
+    page-pagination: ''
+    sectanchors: ''
+    idprefix: ''
+    idseparator: '-'
+urls:
+  html_extension_style: indexify
+output:
+  dir: ./build/site
+runtime:
+  fetch: false
+  log:
+    failure_level: warn

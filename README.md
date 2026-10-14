@@ -2,6 +2,10 @@
 
 Maxbook is a notebook for literate computing with the [Maxima](https://maxima.sourceforge.io/) computer algebra system: prose, formulas and live computations in one continuous document. It is meant as a modern alternative to wxMaxima and TeXmacs for writing mathematics that is computed by Maxima.
 
+**[Documentation, tutorials and screenshots](https://foadsf.github.io/maxbook/)** · **[Download](https://github.com/Foadsf/maxbook/releases/latest)** for Windows, macOS and Linux
+
+![The Maxbook window: prose, computed formulas and the Objects panel](docs/modules/ROOT/images/overview-light.webp)
+
 Status: **0.5.0, alpha.** Used and tested by hand on Windows with Maxima 5.50; the automated tests also run on Linux against Maxima 5.46. macOS is untested (see [Limitations](#limitations)).
 
 ## What it does
@@ -20,7 +24,9 @@ Status: **0.5.0, alpha.** Used and tested by hand on Windows with Maxima 5.50; t
 
 ## Install and run
 
-Requirements: Python 3.9+ and Maxima (any recent version; tested with 5.50 on Windows). No Python packages are required.
+The easiest way: install [Maxima](https://maxima.sourceforge.io/download.html), then download the single-file program for your computer from the [latest release](https://github.com/Foadsf/maxbook/releases/latest) and run it. Step-by-step instructions for each system are in the [install guide](https://foadsf.github.io/maxbook/install/).
+
+To run from source instead you need Python 3.9+ and Maxima (any recent version; tested with 5.50 on Windows). No Python packages are required.
 
 ```bash
 git clone https://github.com/Foadsf/maxbook
@@ -79,11 +85,11 @@ pip install -e .[ai]
 
 Credentials are read the way the Anthropic SDK reads them: `ANTHROPIC_API_KEY`, `ANTHROPIC_AUTH_TOKEN`, or a profile from `ant auth login` (then set `MAXBOOK_AI=1`). `MAXBOOK_AI=0` turns the helper off; `MAXBOOK_AI_MODEL` picks another model (default `claude-opus-5-5`). The key stays in the Maxbook server process and is never sent to the browser.
 
-**Privacy:** using the helper sends the selected text and formulas (for questions, also the notebook's Maxima definitions; for transcription, the image) to Anthropic's API. Maxbook asks before the first use in each browser. Nothing is sent unless you choose an AI command. Answers are inserted into the document as ordinary, editable content; check them like any other source.
+**Privacy:** using the helper sends the selected text and formulas together with the notebook's Maxima input (up to its last 6000 characters; for transcription, only the image) to Anthropic's API. Maxbook asks before the first use in each browser. Nothing is sent unless you choose an AI command. Answers are inserted into the document as ordinary, editable content; check them like any other source.
 
 ## How it works
 
-A small Python server (standard library only) runs one Maxima process and serves the web UI. A Lisp file loaded into Maxima at start-up frames every result, question, prompt and image so the server can parse them reliably, tags every symbol in results with its kind, and reports the session's symbol table; statements are sent one at a time. The editor is [ProseMirror](https://prosemirror.net/) with [MathLive](https://cortexjs.io/mathlive/) formula fields; collaboration uses ProseMirror's step protocol with the server as the authority. Details in [docs/architecture.md](docs/architecture.md). The formula translation rules are in [docs/math-input.md](docs/math-input.md).
+A small Python server (standard library only) runs one Maxima process and serves the web UI. A Lisp file loaded into Maxima at start-up frames every result, question, prompt and image so the server can parse them reliably, tags every symbol in results with its kind, and reports the session's symbol table; statements are sent one at a time. The editor is [ProseMirror](https://prosemirror.net/) with [MathLive](https://cortexjs.io/mathlive/) formula fields; collaboration uses ProseMirror's step protocol with the server as the authority. Details in [Architecture](https://foadsf.github.io/maxbook/development/architecture/). The formula translation rules are in [Formula syntax](https://foadsf.github.io/maxbook/reference/formula-syntax/).
 
 Security: every API call needs a per-launch secret plus a matching `Host` header, because a Maxima session can run shell commands. The host's secret is accepted only from the same computer.
 
@@ -92,7 +98,7 @@ Security: every API call needs a per-launch secret plus a matching `Host` header
 - **Platforms.** The full UI was tested by hand on Windows 11 (Maxima 5.50 with SBCL, Python 3.13, Edge and the built-in Chromium). On Linux the automated tests, including the real-Maxima ones, pass in CI (Ubuntu 24.04, Maxima 5.46, Python 3.9 and 3.12), but the desktop window has not been tried there. macOS is untested.
 - **Stop needs an interruptible Maxima.** In-place Stop uses Maxima's signal thread and `winkill` on Windows, and SIGINT elsewhere. If the computation does not stop within a few seconds, Maxima is restarted and definitions are lost; the block says which happened.
 - **One Maxima session per running Maxbook**, shared by whatever notebook is open. Opening another notebook does not reset Maxima; use Restart.
-- **Formulas cover a documented subset** of notation (see docs/math-input.md). Anything else is reported as an error with a hint, never guessed.
+- **Formulas cover a documented subset** of notation (see [Formula syntax](https://foadsf.github.io/maxbook/reference/formula-syntax/)). Anything else is reported as an error with a hint, never guessed.
 - **The Objects panel** lists Maxima's names that the notebook's own code mentions; names defined by loaded packages are left out.
 - **Collaboration is for a trusted local network.** No accounts, no encryption, no history beyond undo; the shared document lives in the running Maxbook until it is saved.
 - **The AI helper was tested against a simulated API only**, since no key was available during development; its requests follow the SDK documentation.

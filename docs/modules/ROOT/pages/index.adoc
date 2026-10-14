@@ -1,0 +1,81 @@
+= Maxbook
+:description: Literate notebooks for the Maxima computer algebra system: prose, formulas and live computations in one document.
+:page-role: home
+
+[.hero]
+--
+[.lead]
+Write mathematics the way you would write a paper, and let https://maxima.sourceforge.io/[Maxima] do the algebra.
+Maxbook is one continuous document in which prose, formulas and computations live together: a modern, free alternative to wxMaxima and TeXmacs for literate computing.
+
+[.hero-actions]
+xref:install.adoc[Download and install,role=button primary]
+xref:tutorials/first-notebook.adoc[Take the tour,role=button]
+{repo-url}[Source on GitHub,role=button]
+--
+
+image::overview-light.webp[The Maxbook window: a notebook with prose, computed formulas, a Maxima block and the Objects panel]
+
+[.features]
+--
+[.card]
+.Compute in place
+****
+End a formula with `=` and press kbd:[Tab]: Maxima writes the result right after it.
+With `:=` the formula becomes a definition you can use everywhere below.
+****
+
+[.card]
+.Real Maxima
+****
+Maxima blocks hold ordinary Maxima input.
+Results come back typeset, with their `%o` labels, inline plots and Maxima's own questions.
+****
+
+[.card]
+.Symbols that know what they are
+****
+Every name has its own colour, constants are marked, and hovering a symbol shows what Maxima knows about it.
+****
+
+[.card]
+.Feels like wxMaxima
+****
+Menus for solving, calculus, matrices and plots write the Maxima code for you.
+wxMaxima files open, and `.wxmx` export goes back.
+****
+
+[.card]
+.Edit together
+****
+Several windows stay in sync.
+With `--share`, people on your network edit the notebook with you, while only you run Maxima.
+****
+
+[.card]
+.Your files, your formats
+****
+Notebooks are plain JSON.
+Export LaTeX that compiles, a self-contained HTML page, Markdown or a Maxima batch file.
+****
+--
+
+== Where to start
+
+[cols="1,2",frame=none,grid=rows]
+|===
+|xref:install.adoc[Install]
+|Download the single-file program for Windows, macOS or Linux, and install Maxima if you do not have it yet.
+
+|xref:tutorials/first-notebook.adoc[Your first notebook]
+|A ten-minute, step-by-step tour: text, formulas, a definition, a Maxima block, a plot, saving.
+
+|xref:reference/keyboard.adoc[Keyboard shortcuts]
+|Everything you can type, on one page.
+
+|xref:reference/troubleshooting.adoc[Troubleshooting]
+|Maxima not found, the window does not open, macOS refuses to start the program...
+|===
+
+Maxbook is free software under the GNU GPL, version 3 or later.
+It is an independent project, not affiliated with any other notebook or math-editor product; it talks to Maxima as a separate program.

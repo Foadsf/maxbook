@@ -1,0 +1,53 @@
+= Menus and the command search
+:description: Let Maxbook write the Maxima code: wxMaxima-style menus, forms and the command search.
+
+You do not need to remember Maxima's function names and argument orders.
+The menus in the format bar open short forms that write the Maxima code for you, much like wxMaxima's dialogs.
+
+== The menus
+
+image::menus-calculus.webp[The Calculus menu: Integrate, Differentiate, Limit, Taylor series, Sum, Product, Laplace transform]
+
+[cols="1,4"]
+|===
+|*Equations* |Solve, solve numerically, linear systems, polynomial roots, ordinary differential equations with initial conditions
+|*Algebra* |Rational simplification, expand, factor, partial fractions, substitution, trigonometric simplification, rectangular and polar form, numerical value
+|*Calculus* |Integrate, differentiate, limit, Taylor series, sum, product, Laplace transform and its inverse
+|*Matrix* |New matrix, determinant, inverse, transpose, eigenvalues and eigenvectors, rank, characteristic polynomial
+|*Plot* |2D plots, parametric and implicit curves, 3D surfaces, data points
+|===
+
+== Filling in a form
+
+[.steps]
+. Choose an entry, for example *Calculus › Taylor series*.
+. Fill in the fields. The first is selected, ready for typing; `%` (the default) means "the last result".
+The box at the bottom shows the Maxima code as you type:
++
+image::menus-dialog.webp[The Taylor series form with expression exp(x)*cos(x), variable x, around 0, order 5]
+. Click *Insert and run* (or press kbd:[Enter]), or *Insert* to add the code without running it.
+
+The code is inserted as an ordinary Maxima block after the cursor, so you can read it, change it and run it again:
+
+image::menus-result.webp[The inserted taylor(...) block and its result]
+
+If the cursor is inside a Maxima block, the code is inserted there instead.
+
+== The command search: Ctrl+K
+
+kbd:[Ctrl+K] (or the magnifier at the top right) opens one search box for everything:
+
+* commands such as *Run everything*, *Export…*, *Toggle light/dark*, *Edit together*,
+* the menu forms (type `taylor`, `eigen`, `solve`...),
+* formula templates and Maxima snippets.
+
+image::menus-palette.webp[Searching for matrix lists the matrix forms, matrix templates and the Maxima matrix snippet]
+
+Use kbd:[↑] and kbd:[↓] and kbd:[Enter], or click.
+Each entry shows its keyboard shortcut, if it has one, on the right.
+
+== Formatting text
+
+The left part of the format bar formats text: bold (kbd:[Ctrl+B]), italic (kbd:[Ctrl+I]), code (pass:[<kbd class="keyseq"><kbd>Ctrl</kbd>+<kbd>`</kbd></kbd>]), headings 1–3 (kbd:[Ctrl+Alt+1] to kbd:[Ctrl+Alt+3]), plain text (kbd:[Ctrl+Alt+0]), bulleted and numbered lists, and quotes.
+Most of it also works by typing Markdown: `+#+` and a space for a heading, `-` or `1.` for lists, `>` for a quote, `+**bold**+`, pass:[<code>`code`</code>], `---` for a line.
+See xref:reference/keyboard.adoc[Keyboard shortcuts].

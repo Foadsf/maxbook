@@ -1,0 +1,120 @@
+= Architecture
+:description: How Maxbook is built: the Python server, the Maxima wire protocol, collaboration, the AI helper and the front end.
+
+[source,text]
+----
+browser / native window ──HTTP (token)──▶ maxbook.server ──stdin/stdout──▶ maxima (+ maxbook-init.lisp)
+  web/js/*.js (ProseMirror, MathLive)       kernel.py, collab.py, ai.py          gnuplot (plots)
+                                                     └──HTTPS (optional)──▶ Anthropic API
+----
+
+== Python side (`maxbook/`)
+
+The server uses only Python's standard library; the AI helper is the only optional dependency.
+
+[cols="1,3",options="header"]
+|===
+|Module |Responsibility
+|`cli.py`, `__main__.py` |command line; starts the server and the window; prints share links
+|`launcher.py` |pywebview window, Chromium `--app` window, or the default browser
+|`server.py` |static files, JSON API, token, role and Host checks, jobs, Stop and Restart
+|`kernel.py` |the Maxima process: start, send statements, parse frames, questions, interrupt, symbol table
+|`collab.py` |the shared document: orders ProseMirror steps from all windows, presence
+|`ai.py` |the optional AI helper (Anthropic SDK), off unless configured
+|`splitter.py` |splits Maxima input into statements (strings, nested comments, escapes, `:lisp`)
+|`texfix.py` |turns Maxima's `tex1` output into LaTeX that browser renderers accept
+|`latex2maxima.py` |formulas to Maxima statements (see xref:reference/formula-syntax.adoc[Formula syntax])
+|`document.py` |the document model shared with the editor: node types, normalisation, walking
+|`notebook.py` |the `.maxbook` format: validation, atomic save, load and import, 0.1 files
+|`formats.py` |import `.wxm`, `.wxmx`, `.mac`, `.md`, `.tex`; export `.mac`, `.wxm`, `.wxmx`, `.md`, `.tex`
+|===
+
+== Wire protocol with Maxima
+
+Maxima is started as `maxima --very-quiet -p lisp/maxbook-init.lisp`, with `MAXIMA_SIGNALS_THREAD=1` so it can be interrupted on Windows.
+The init file:
+
+* installs `+*alt-display2d*+` and `+*alt-display1d*+`, so every displayed result is written as a frame `STX OUT US label US tex US text US semtex ETX` (STX = U+0002, US = U+001F, ETX = U+0003).
+`semtex` is the same LaTeX with every symbol wrapped as `+\class{mbk-sym mbk-KIND mbk-n-HEX}{…}+`, where KIND is `variable`, `function`, `constant` or `free` and HEX spells the Maxima name as four hex digits per character;
+* replaces the main prompt with a `PROMPT n` frame, which is how the kernel knows a statement has finished;
+* sets `+*prompt-prefix*+` and `+*prompt-suffix*+` to `ASK` and `ASKEND` frames, so questions from `asksign`, `read()` and friends are recognisable;
+* defines `maxbook_show_image(file)`, which emits an `IMG` frame (used by the inline plot functions in `lisp/maxbook.mac`);
+* answers `:lisp (maxima::mbk-symbols)` with a `SYM` frame: JSON describing the session's user variables, functions and declared constants.
+Names Maxbook itself defines, and names that appear while a file is loading (`load`, and the autoloads behind functions such as `eigenvalues`), are recorded as library names and left out;
+* sends a `HELLO` frame with Maxima's own (possibly translated) error markers, the version, the Lisp and the Lisp process id.
+
+Text outside frames is ordinary output (print, warnings, error messages).
+A statement is an error when its text contains one of the markers from `HELLO`; the block then stops.
+Statements are sent one at a time, so input and output labels stay those of a normal Maxima session.
+
+=== Windows plotting workaround
+
+Maxima 5.50 with SBCL on Windows starts gnuplot as `gnuplot "-persist <file>"` (one quoted argument) when an output file is requested.
+gnuplot then ignores the script and waits on standard input, which hangs the session.
+Each session therefore sets `gnuplot_command` to the gnuplot bundled with Maxima followed by `-persist`, and `gnuplot_view_args` to `+"~a"+`.
+
+== Stopping
+
+Stop interrupts the computation inside Maxima: on Windows with `winkill -INT <pid>` (shipped with Maxima; it signals the thread started by `MAXIMA_SIGNALS_THREAD`), elsewhere with SIGINT to the Lisp process.
+Maxima abandons the statement and returns to its prompt with every definition intact.
+GCL acts on the signal only when a blocked read returns, so when Stop arrives while Maxima waits for an answer, Maxbook also sends an empty line.
+If Maxima is not back within six seconds, or cannot be interrupted, it is killed and restarted, and the block says that definitions are gone.
+Stop with nothing running does nothing; Restart always starts a fresh Maxima.
+
+== Collaboration
+
+Every window, including the host's own, edits through `collab.py`, so two windows on one computer stay in sync.
+The server keeps the current document as a snapshot plus the steps since then, and accepts a client's steps only if they are based on the latest version (prosemirror-collab's central-authority scheme); a client that is behind receives the missing steps by long polling, rebases its own and sends again.
+Opening or creating a notebook replaces the shared document and the other windows reload it.
+A new or reloaded window joins the document that is already open instead of replacing it.
+
+Roles: the host token printed by the CLI is accepted only from the same computer.
+With `--share`, the server also listens on the network and accepts a separate guest token from the share link.
+Guests may only read and edit the document (session, kernel status, job progress, symbols, formula translation and the collaboration endpoints); running Maxima, files, export, Stop and Restart and the AI helper are host-only.
+Both tokens are checked in constant time, and the `Host` header must name this computer (a defence against DNS rebinding).
+
+== AI helper
+
+`ai.py` builds prompts for a few tasks (explain, steps, simplify and check, write Maxima code, ask, transcribe an image) and calls the Messages API through the official `anthropic` package, with adaptive thinking.
+Refusals and API errors are reported as messages, not inserted as content.
+The credentials stay in the server process; the browser only sees the answer as Markdown, which is inserted as ordinary document content.
+The helper is disabled, and its endpoints answer 503, unless the package and credentials are present.
+
+== Front end (`maxbook/web/`)
+
+ES modules, no build step at run time.
+ProseMirror and markdown-it are vendored as one bundle (`vendor/prosemirror/prosemirror.mjs`, built by `tools/vendor/build.mjs`); MathLive is vendored as published.
+
+[cols="1,3",options="header"]
+|===
+|Module |Responsibility
+|`main.js` |the application shell: running blocks and compute in place, files, export, menus, command search, sharing, AI
+|`schema.js` |the document schema (mirrors `document.py`)
+|`editor.js` |the ProseMirror view: input rules (`$`, `>>`, `+#+`, lists...), keys, placeholder, unique ids
+|`nodeviews.js` |interactive nodes: Maxima blocks (code editor, outputs, questions) and formulas (MathLive)
+|`markdown.js` |Markdown and 0.1 notebooks to documents (pasting, AI answers, imports)
+|`collab.js` |the collaboration client
+|`symbols.js`, `mathrender.js` |symbol colours, hover cards, the Objects panel; static math rendering
+|`dialogs.js`, `templates.js` |command forms (the menus); template search
+|`export.js`, `highlight.js` |self-contained HTML export and PNG figures for LaTeX; Maxima syntax colouring
+|===
+
+The page has a strict Content Security Policy (`script-src 'self'`).
+
+== API
+
+All endpoints need the `X-Maxbook-Token` header.
+
+[cols="1,2",options="header"]
+|===
+|Endpoint |Purpose
+|`GET /api/session`, `GET /api/kernel` |start-up data, Maxima status
+|`POST /api/run`, `GET /api/job?id=&since=`, `POST /api/answer` |run Maxima input as a job, read its outputs incrementally, answer a question
+|`POST /api/interrupt`, `POST /api/restart` |Stop, Restart
+|`GET /api/symbols` |the symbol table
+|`POST /api/convert`, `POST /api/convert-latex` |formula to Maxima; LaTeX text to document content
+|`POST /api/open`, `POST /api/save`, `POST /api/export`, `POST /api/new`, `GET /api/fs` |files
+|`POST /api/collab/start\|steps\|snapshot\|presence\|leave`, `GET /api/collab/state\|events` |collaboration
+|`POST /api/ai/ask\|image` |AI helper
+|`POST /api/shutdown` |quit
+|===

@@ -1,0 +1,47 @@
+<header class="header">
+  <nav class="navbar" aria-label="Site">
+    <div class="navbar-brand">
+      <a class="navbar-item mbx-brand" href="{{{or site.url siteRootPath}}}/">
+        <img src="{{{uiRootPath}}}/img/maxbook.svg" alt="" width="28" height="28">
+        <span>{{site.title}}</span>
+      </a>
+      {{#if env.SITE_SEARCH_PROVIDER}}
+      <div class="navbar-item search hide-for-print">
+        <div id="search-field" class="field">
+          <input id="search-input" type="text" placeholder="Search the docs" aria-label="Search the documentation"{{#if page.home}} autofocus{{/if}}>
+        </div>
+      </div>
+      {{/if}}
+      <button class="navbar-burger" aria-controls="topbar-nav" aria-expanded="false" aria-label="Toggle main menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="{{{relativize '/install/'}}}">Install</a>
+        <a class="navbar-item" href="{{{relativize '/tutorials/first-notebook/'}}}">Tutorials</a>
+        <a class="navbar-item" href="https://github.com/Foadsf/maxbook">GitHub</a>
+        <div class="navbar-item">
+          <button class="mbx-theme" type="button" aria-label="Switch between light and dark" title="Light / dark">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 13A9 9 0 1 1 11 3a7 7 0 0 0 10 10z"/></svg>
+          </button>
+        </div>
+        <div class="navbar-item">
+          <span class="control">
+            <a class="button is-primary mbx-download" href="https://github.com/Foadsf/maxbook/releases/latest">Download</a>
+          </span>
+        </div>
+      </div>
+    </div>
+  </nav>
+  <script>
+    document.querySelector('.mbx-theme').addEventListener('click', function () {
+      var root = document.documentElement
+      var dark = root.dataset.theme ? root.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches
+      root.dataset.theme = dark ? 'light' : 'dark'
+      try { localStorage.setItem('maxbook-docs-theme', root.dataset.theme) } catch (e) {}
+    })
+  </script>
+</header>

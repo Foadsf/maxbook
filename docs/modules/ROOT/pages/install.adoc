@@ -1,0 +1,175 @@
+= Install
+:description: Download Maxbook for Windows, macOS or Linux and install Maxima.
+
+Maxbook has two parts:
+
+* *Maxima*, the computer algebra system that does the mathematics, and
+* *Maxbook*, the notebook you write in.
+
+Maxbook is a single file you download and run; it finds the Maxima installed on your computer.
+If you already use wxMaxima, you already have Maxima and can skip to <<download>>.
+
+== 1. Install Maxima
+
+[tabs]
+====
+Windows::
++
+--
+Download the Windows installer (`maxima-<version>-win64.exe`) from the {maxima-url}[Maxima download page] and run it.
+It includes gnuplot, which draws Maxbook's plots.
+
+Or, from a terminal, with the Windows package manager:
+
+[source,console]
+----
+winget install MaximaTeam.Maxima
+----
+
+Maxbook looks for Maxima in `+C:\maxima-*+`, `+Program Files\Maxima-*+`, `+%LOCALAPPDATA%\Programs\Maxima-*+` and on `PATH`.
+--
+macOS::
++
+--
+With https://brew.sh/[Homebrew]:
+
+[source,console]
+----
+brew install maxima gnuplot
+----
+
+Maxbook looks for Maxima on `PATH` and in Homebrew's and MacPorts' folders (`/opt/homebrew/bin`, `/usr/local/bin`, `/opt/local/bin`), so it also finds it when started from Finder.
+--
+Linux::
++
+--
+Use your distribution's packages:
+
+[source,console]
+----
+sudo apt install maxima maxima-share gnuplot   # Debian, Ubuntu, Mint
+sudo dnf install maxima gnuplot                # Fedora
+sudo pacman -S maxima gnuplot                  # Arch, Manjaro
+----
+
+On Debian and Ubuntu, `maxima-share` holds packages such as `draw`, which Maxbook's `idraw2d` and `idraw3d` use.
+--
+====
+
+Check that it works by running `maxima --version` in a terminal (on Windows, Maxbook does not need Maxima on `PATH`).
+
+[#download]
+== 2. Download Maxbook
+
+Download the file for your computer from the {releases-url}[latest release]:
+
+[cols="2,3,2",options="header"]
+|===
+|Computer |File |Notes
+
+|Windows, Intel or AMD |`maxbook-{release-version}-windows-x64.exe` |Windows 10 or 11
+|Windows on Arm |`maxbook-{release-version}-windows-arm64.exe` |Snapdragon laptops
+|Mac with Apple silicon (M1 or newer) |`maxbook-{release-version}-macos-arm64` |
+|Mac with an Intel processor |`maxbook-{release-version}-macos-x64` |
+|Linux, x86-64 |`maxbook-{release-version}-linux-x64` |glibc 2.35 or newer: Ubuntu 22.04, Debian 12, Fedora 36 and later
+|Linux, Arm 64-bit |`maxbook-{release-version}-linux-arm64` |the same; for example a Raspberry Pi 5 with a 64-bit OS
+|===
+
+Each file is the complete program: no installer, no Python, nothing to unpack.
+Put it wherever you like, for example in your home folder or on a USB stick.
+`SHA256SUMS.txt` in the release lets you check the download (`sha256sum -c SHA256SUMS.txt --ignore-missing` on Linux, `shasum -a 256 <file>` on macOS, `Get-FileHash <file>` in PowerShell).
+
+== 3. Start it
+
+[tabs]
+====
+Windows::
++
+--
+Double-click the `.exe`.
+
+The first time, Windows SmartScreen may say *Windows protected your PC*, because the program is new and not signed with a paid certificate.
+Click *More info*, then *Run anyway*.
+
+A console window opens and shows Maxbook's address; then the notebook opens in its own window (in Edge or Chrome app mode, or your default browser).
+Closing the console window quits Maxbook.
+
+To open a file directly, drag a `.maxbook` file onto the `.exe`, or run it from a terminal:
+
+[source,console]
+----
+.\maxbook-0.5.0-windows-x64.exe C:\Users\you\Documents\notes.maxbook
+----
+--
+macOS::
++
+--
+In Terminal, in the folder where you downloaded it:
+
+[source,console]
+----
+chmod +x maxbook-0.5.0-macos-arm64
+xattr -d com.apple.quarantine maxbook-0.5.0-macos-arm64
+./maxbook-0.5.0-macos-arm64
+----
+
+`chmod` makes the file runnable.
+`xattr` removes the "downloaded from the internet" mark; without it macOS refuses to start a program that is not signed by an Apple-registered developer (alternatively, try to run it once, then allow it in *System Settings › Privacy & Security*).
+--
+Linux::
++
+--
+[source,console]
+----
+chmod +x maxbook-0.5.0-linux-x64
+./maxbook-0.5.0-linux-x64
+----
+
+Maxbook opens in Chrome, Chromium, Edge or Brave in app mode if one is installed, otherwise in your default browser.
+--
+====
+
+When it starts, the terminal shows something like this:
+
+[source,console]
+----
+Maxbook 0.5.0 at http://127.0.0.1:51234/ (Maxima: /usr/bin/maxima)
+AI helper: off - no Anthropic credentials (set ANTHROPIC_API_KEY, or MAXBOOK_AI=1 after `ant auth login`)
+Press Ctrl+C to quit.
+If no window opened, open this URL in a browser: http://127.0.0.1:51234/#token=...
+----
+
+and the notebook window opens with an empty notebook.
+The pill at the top right says *Maxima {nbsp}·{nbsp}ready* once Maxima has started.
+If it says *not found*, see xref:reference/troubleshooting.adoc#maxima-not-found[Maxima not found].
+
+Now take the tour: xref:tutorials/first-notebook.adoc[Your first notebook].
+
+== Other ways to install
+
+=== With Python
+
+If you have Python 3.9 or newer, you can run Maxbook from its source instead of the single file.
+This is also how you get the newest changes.
+
+[source,console]
+----
+git clone https://github.com/Foadsf/maxbook
+cd maxbook
+python -m pip install -e .
+python -m maxbook
+----
+
+Optional extras: `pip install -e ".[desktop]"` opens Maxbook in a native window (pywebview) instead of a browser window, and `pip install -e ".[ai]"` adds the xref:tutorials/ai-helper.adoc[AI helper] (Python 3.10 or newer).
+The single-file programs include the AI helper but not the native window.
+
+`pip` also installs a `maxbook` command.
+If your shell says it does not know `maxbook`, the folder pip puts commands in is not on your `PATH`; `python -m maxbook` always works.
+
+== Updating and uninstalling
+
+To update, download the new file and delete the old one.
+Your notebooks are ordinary files and are not touched.
+
+Maxbook keeps a small settings file (the list of recent notebooks) in `.maxbook` in your home folder; delete it to forget them.
+Single-file programs unpack themselves into a temporary folder while they run and remove it when they quit.

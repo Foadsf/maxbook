@@ -1,0 +1,102 @@
+= Building, testing and releasing
+:description: Run Maxbook from source, run the tests, build the documentation and the single-file programs, and make a release.
+
+== Run from source
+
+[source,console]
+----
+git clone https://github.com/Foadsf/maxbook
+cd maxbook
+python -m pip install -e ".[dev]"
+python -m maxbook examples/welcome.maxbook
+----
+
+Maxbook itself needs only Python 3.9+ and Maxima.
+The front end has no build step; the vendored ProseMirror bundle is committed.
+
+== Tests
+
+[source,console]
+----
+python -m pytest
+ruff check maxbook tests
+----
+
+* `tests/test_kernel.py` drives a real Maxima and is skipped when none is installed.
+* `tests/test_formats.py` compiles the LaTeX export with `pdflatex` when it is available (or set `MAXBOOK_PDFLATEX`).
+* `tests/test_ai_collab.py` runs the AI helper against a fake client and tests the collaboration hub.
+
+CI (`.github/workflows/ci.yml`) runs the whole suite on Ubuntu with Maxima and TeX Live, and the Maxima-free part on Windows.
+The front end is checked by hand and by the screenshot tour below, which drives the real program.
+
+== The ProseMirror bundle
+
+`maxbook/web/vendor/prosemirror/prosemirror.mjs` bundles ProseMirror and markdown-it, unmodified.
+To change versions, edit `tools/vendor/package.json`, then:
+
+[source,console]
+----
+cd tools/vendor
+npm ci
+node build.mjs
+----
+
+The build also writes `PACKAGES.txt` and copies each package's licence file next to the bundle.
+
+== Documentation
+
+The documentation is AsciiDoc in `docs/` (an https://antora.org/[Antora] component).
+To build the site:
+
+[source,console]
+----
+cd docs
+npm ci
+npm run build
+----
+
+The site is written to `docs/build/site`; open `index.html` in a browser.
+Pushing to `main` builds it and publishes it on the `gh-pages` branch, which GitHub Pages serves at https://foadsf.github.io/maxbook/ (`.github/workflows/docs.yml`).
+
+The look comes from Antora's default UI with Maxbook's theme: `docs/ui/ui-bundle.zip` is the default UI with its colours turned into CSS variables by `docs/tools/theme-ui.py` (for the light and dark themes), and `docs/ui/supplemental` holds the header, footer and styles.
+
+=== Screenshots
+
+Every screenshot is taken from the real program by `docs/tools/screenshots.py`: it starts Maxbook and Maxima with a fresh settings folder and a demo folder, drives a browser with real key strokes, and saves WebP images into `docs/modules/ROOT/images`.
+Local paths, the computer's name and network addresses are replaced by neutral placeholders, and the script refuses to save a picture that still shows them.
+
+[source,console]
+----
+python -m pip install "playwright==1.63.0" pillow
+python docs/tools/screenshots.py                  # all scenarios
+python docs/tools/screenshots.py --only formulas  # one scenario
+----
+
+On Windows it drives the installed Microsoft Edge; elsewhere run `python -m playwright install chromium` once, or pass `--channel chrome`.
+
+== Single-file programs
+
+`packaging/build.py` builds the program for the computer it runs on with PyInstaller and then tests it: it starts the binary, fetches the page, the editor bundle and the session API, and shuts it down.
+
+[source,console]
+----
+python -m pip install "pyinstaller==6.22.3" ".[ai]"
+python packaging/build.py
+----
+
+The result is `dist/maxbook-<version>-<os>-<arch>` (`.exe` on Windows) with a `.sha256` file.
+
+== Releasing
+
+[.steps]
+. Update the version in `pyproject.toml`, `maxbook/__init__.py` and `docs/antora.yml` (`release-version`), and the notes in `packaging/RELEASE_NOTES.md`.
+. Commit, then tag and push:
++
+[source,console]
+----
+git tag v0.5.0
+git push origin v0.5.0
+----
+. The release workflow (`.github/workflows/release.yml`) builds and tests the program on Windows (x64, Arm), macOS (Apple silicon, Intel) and Linux (x64, Arm), and publishes a GitHub release with the six files and `SHA256SUMS.txt`.
+
+The programs are not code-signed, which is why Windows SmartScreen and macOS Gatekeeper ask for confirmation (see xref:install.adoc[Install]).

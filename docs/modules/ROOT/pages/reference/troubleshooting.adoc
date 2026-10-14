@@ -1,0 +1,77 @@
+= Troubleshooting
+:description: Solutions for common problems: Maxima not found, the program does not start, plots, questions and more.
+
+[#maxima-not-found]
+== Maxima not found
+
+The pill at the top right says *not found*, and the terminal says `warning: Maxima not found`.
+
+* Check that Maxima is installed: `maxima --version` in a terminal (on Windows, look for a `+maxima-*+` folder under `C:\` or `Program Files`).
+* Tell Maxbook where it is:
++
+[source,console]
+----
+maxbook --maxima "C:\maxima-5.47.0\bin\maxima.bat"
+maxbook --maxima /opt/homebrew/bin/maxima
+----
++
+or set the environment variable `MAXBOOK_MAXIMA` to the same path.
+See xref:reference/command-line.adoc#where-maxbook-looks-for-maxima[where Maxbook looks].
+
+== Windows says "Windows protected your PC"
+
+SmartScreen warns about new programs that are not signed with a paid certificate.
+Click *More info*, then *Run anyway*.
+You can check the download against `SHA256SUMS.txt` in the release first (`+Get-FileHash maxbook-*.exe+` in PowerShell).
+
+== macOS refuses to open the program
+
+Either "cannot be opened because the developer cannot be verified" or "is damaged".
+Remove the quarantine mark that macOS puts on downloads, and make the file runnable:
+
+[source,console]
+----
+xattr -d com.apple.quarantine maxbook-0.5.0-macos-arm64
+chmod +x maxbook-0.5.0-macos-arm64
+----
+
+Use the `-macos-arm64` file on Apple silicon (M1 and newer) and `-macos-x64` on Intel Macs.
+
+== Linux: "Permission denied" or "GLIBC not found"
+
+* Make the file runnable: `chmod +x maxbook-0.5.0-linux-x64`.
+* `GLIBC_2.35 not found` means the distribution is older than Ubuntu 22.04 or Debian 12.
+Run Maxbook from Python instead (xref:install.adoc#with-python[Install › With Python]).
+
+== The window does not open
+
+The terminal (on Windows, the console window) shows `If no window opened, open this URL in a browser: http://127.0.0.1:.../#token=...`.
+Open that address in a browser; the part after `#token=` is needed.
+To always open in your browser, use `--window browser`.
+
+== The page says "Session key rejected"
+
+The page belongs to an earlier Maxbook that has quit.
+Use the address printed by the Maxbook that is running now.
+
+== Plots do not appear
+
+* On Windows, Maxbook uses the gnuplot that comes with Maxima's installer; reinstall Maxima if its `gnuplot` folder is missing.
+* On macOS and Linux, install gnuplot (`brew install gnuplot`, `sudo apt install gnuplot`).
+* `idraw2d` and `idraw3d` need Maxima's `draw` package; on Debian and Ubuntu it is in `maxima-share`.
+
+== A computation does not finish
+
+Click *Stop*.
+Maxima stops and keeps your definitions; if it does not react within a few seconds, Maxbook restarts it (the block tells you which happened).
+If Maxima is waiting for an answer, the question is shown in the block: answer it there.
+
+== A formula shows ⚠ or the hint says "cannot translate"
+
+Maxbook understands a documented subset of notation (xref:reference/formula-syntax.adoc[Formula syntax]).
+The message says what is missing, for example "integral is missing its differential (dx)".
+For anything else, use a Maxima block.
+
+== Something else
+
+Run Maxbook from a terminal to see its messages, and open an issue at {repo-url}/issues with the Maxbook version (`maxbook --version`), your operating system, the Maxima version, and what you did.
