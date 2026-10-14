@@ -1,0 +1,41 @@
+name: tests
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  linux:
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.9", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Install Maxima and gnuplot
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends maxima gnuplot-nox
+          maxima --version
+      - name: Install test tools
+        run: python -m pip install pytest ruff
+      - name: Lint
+        run: ruff check maxbook tests
+      - name: Tests (real Maxima)
+        run: python -m pytest -v -rs
+
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install test tools
+        run: python -m pip install pytest
+      - name: Tests (Maxima-dependent tests are skipped)
+        run: python -m pytest -v -rs

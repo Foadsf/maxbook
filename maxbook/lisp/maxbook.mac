@@ -1,0 +1,41 @@
+/* SPDX-License-Identifier: GPL-3.0-or-later */
+/* Copyright (C) 2026 Foad S. Farimani */
+/* Maxbook helpers, loaded into every Maxima session started by Maxbook.
+
+   iplot2d / iplot3d / idraw / idraw2d / idraw3d take the same arguments as
+   plot2d / plot3d / draw / draw2d / draw3d but render the graphic inline in
+   the notebook (as SVG) instead of opening a gnuplot window.
+
+   wxplot2d & co. are provided as aliases when not already defined, so
+   worksheets written for wxMaxima run unchanged. */
+
+maxbook_plot_dir : "."$
+maxbook_plot_count : 0$
+
+maxbook_next_plot_file(ext) := (
+  maxbook_plot_count : maxbook_plot_count + 1,
+  sconcat(maxbook_plot_dir, "/plot", maxbook_plot_count, ext))$
+
+iplot2d([args]) := block([f : maxbook_next_plot_file(".svg")],
+  apply(plot2d, append(args, [[svg_file, f]])),
+  maxbook_show_image(f))$
+
+iplot3d([args]) := block([f : maxbook_next_plot_file(".svg")],
+  apply(plot3d, append(args, [[svg_file, f]])),
+  maxbook_show_image(f))$
+
+maxbook_ensure_draw() := if not ?fboundp('draw) then load("draw")$
+
+idraw([args]) := block([f : maxbook_next_plot_file("")],
+  maxbook_ensure_draw(),
+  apply(draw, append(args, [terminal = svg, file_name = f])),
+  maxbook_show_image(sconcat(f, ".svg")))$
+
+idraw2d([args]) := (maxbook_ensure_draw(), idraw(apply(gr2d, args)))$
+idraw3d([args]) := (maxbook_ensure_draw(), idraw(apply(gr3d, args)))$
+
+if not ?fboundp('wxplot2d) then wxplot2d([args]) := apply(iplot2d, args)$
+if not ?fboundp('wxplot3d) then wxplot3d([args]) := apply(iplot3d, args)$
+if not ?fboundp('wxdraw) then wxdraw([args]) := apply(idraw, args)$
+if not ?fboundp('wxdraw2d) then wxdraw2d([args]) := apply(idraw2d, args)$
+if not ?fboundp('wxdraw3d) then wxdraw3d([args]) := apply(idraw3d, args)$

@@ -1,0 +1,63 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (C) 2026 Foad S. Farimani
+"""Command line entry point: ``maxbook [FILE]``."""
+
+from __future__ import annotations
+
+import argparse
+import sys
+import threading
+
+from . import __version__
+from .kernel import find_maxima
+from .launcher import open_app_window, open_browser, run_native_window
+from .server import App, create_server
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(
+        prog="maxbook", description="Literate notebooks for the Maxima computer algebra system.")
+    parser.add_argument("file", nargs="?", help="notebook (.maxbook) or file to import (.wxm, .wxmx, .mac, .md)")
+    parser.add_argument("--maxima", metavar="PATH", help="Maxima executable (default: auto-detect)")
+    parser.add_argument("--port", type=int, default=0, help="port on 127.0.0.1 (default: any free port)")
+    parser.add_argument("--window", choices=["auto", "native", "app", "browser", "none"], default="auto",
+                        help="how to show the UI (default: native window if pywebview is installed, "
+                             "else a Chromium app window, else the default browser)")
+    parser.add_argument("--version", action="version", version=f"maxbook {__version__}")
+    args = parser.parse_args(argv)
+
+    maxima = args.maxima or find_maxima()
+    if not maxima:
+        print("warning: Maxima not found; the UI will open but cannot compute. "
+              "Install Maxima or use --maxima PATH.", file=sys.stderr)
+    app = App(maxima_path=maxima, initial_file=args.file)
+    httpd = create_server(app, args.port)
+    url = f"http://127.0.0.1:{app.port}/#token={app.token}"
+    app.start_kernel_async()
+    print(f"Maxbook {__version__} at http://127.0.0.1:{app.port}/ (Maxima: {maxima or 'not found'})")
+    print("Press Ctrl+C to quit.")
+
+    serve = threading.Thread(target=httpd.serve_forever, daemon=True)
+    serve.start()
+    try:
+        if args.window in ("auto", "native") and run_native_window(url, "Maxbook"):
+            return 0  # window closed
+        if args.window == "native":
+            print("pywebview is not installed; falling back to an app window.", file=sys.stderr)
+        if args.window == "none":
+            print(f"Open this URL: {url}")
+        elif args.window == "browser":
+            open_browser(url)
+        elif open_app_window(url) is None:  # auto, native or app
+            open_browser(url)
+        serve.join()
+    except KeyboardInterrupt:
+        pass
+    finally:
+        app.kernel.shutdown()
+        httpd.shutdown()
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
