@@ -475,7 +475,16 @@ class MaximaKernel:
                     emit(Output("question", q))
                     answer = self._await_answer(q)
                     if answer is None:
-                        continue  # stopped while asking: the interrupt ends the statement
+                        # Stopped while asking: the interrupt ends the statement.  GCL
+                        # only acts on it once its blocked read of the answer returns,
+                        # so give that read an empty line (where the interrupt was
+                        # already handled, it is just blank input at the prompt).
+                        self._cond.release()
+                        try:
+                            self._send("")
+                        finally:
+                            self._cond.acquire()
+                        continue
                     emit(Output("text", {"text": "» " + answer}))
                     self._cond.release()
                     try:
